@@ -1,6 +1,6 @@
-import Card from "../components/Card";
-import Container from "../components/Container";
-import TaskForm from "../components/TaskForm";
+import Card from "../components/base/Card";
+import Container from "../components/base/Container";
+import TaskForm from "../components/TaskGenerator/TaskForm";
 
 const TaskGenerator = () => {
   return (

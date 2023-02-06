@@ -1,7 +1,7 @@
 import { EditorState, Modifier } from "draft-js";
 import { useState } from "react";
 import Immutable from "immutable";
-import Button from "./Button";
+import Button from "../base/Button";
 import Dropdown from "react-dropdown";
 
 const AddTextVariable = ({
@@ -61,7 +61,7 @@ const AddTextVariable = ({
         value={option}
         placeholder="Text"
         onChange={(event) => setOption(event.target.value)}
-        className="mr-4 w-80 border-gray-600 border p-2"
+        className="mr-4 w-60 border-gray-600 border p-2"
       />
 
       <button
@@ -73,7 +73,7 @@ const AddTextVariable = ({
           });
           setOption("");
         }}
-        className={`shadow bg-green-800 hover:bg-gray-600 focus:shadow-outline focus:outline-none text-white px-4 text-md rounded`}
+        className={`shadow bg-green-800 hover:bg-gray-600 focus:shadow-outline focus:outline-none text-white px-3 text-md rounded`}
       >
         Add
       </button>
@@ -88,7 +88,7 @@ const AddTextVariable = ({
           addVariable();
         }}
         text="Add variable"
-        className="bg-blue-700 ml-auto mr-3"
+        className="bg-blue-700 ml-auto mr-3 px-5"
       />
     </div>
   );

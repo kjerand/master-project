@@ -2,23 +2,20 @@ import { useEffect, useState } from "react";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import { Editor } from "react-draft-wysiwyg";
-import {
-  EditorState,
-  CompositeDecorator,
-  SelectionState,
-  Modifier,
-  ContentState,
-} from "draft-js";
+import { EditorState, SelectionState, Modifier } from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import AddIntegerVariable from "./AddIntegerVariable";
-import Button from "./Button";
+import Button from "../base/Button";
 import AddTextVariable from "./AddTextVariable";
 import AddDecimalVariable from "./AddDecimalVariable";
-import { generateIntegerVariable } from "../utils/generateIntegerVariable";
+import { generateIntegerVariable } from "../../utils/generateIntegerVariable";
 import Immutable from "immutable";
 import DisplayTasks from "./DisplayTasks";
-import { generateStringVariable } from "../utils/generateStringVariable";
-import { generateDecimalVariable } from "../utils/generateDecimalVariable";
+import { generateStringVariable } from "../../utils/generateStringVariable";
+import { generateDecimalVariable } from "../../utils/generateDecimalVariable";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../app/store";
+import { addQuestion, addQuestions } from "../../app/questions";
 const options = ["Add variable", "Text", "Integer", "Decimal"];
 
 //Dropdown med valg av variabel (string, int, float osv), knapp legg til variabel, så dukker skjema opp
@@ -46,6 +43,8 @@ const TaskForm = () => {
   const [decimalVariables, setDecimalVariables] = useState<DecimalVariable[]>(
     []
   );
+
+  const dispatch = useDispatch();
 
   const addIntegerVariable = (variable: IntegerVariable) => {
     let exists = false;
@@ -158,7 +157,8 @@ const TaskForm = () => {
 
       tasks.push(state);
     }
-    setDisplayTasks(true);
+
+    dispatch(addQuestions(tasks));
   };
 
   const variableForm = () => {
@@ -201,66 +201,59 @@ const TaskForm = () => {
           if (submit) generate();
         }}
       >
-        {!displayTasks ? (
-          <>
-            <h3 className="font-medium leading-tight text-4xl mt-0 mb-2 text-gray-700 mb-12 text-center">
-              Genererate variants of question
-            </h3>
-            <Editor
-              toolbar={{
-                options: [
-                  "inline",
-                  "fontSize",
-                  "fontFamily",
-                  "list",
-                  "textAlign",
-                  "colorPicker",
-                  "history",
-                ],
-              }}
-              editorState={editorState}
-              toolbarClassName="toolbarClassName"
-              wrapperClassName="wrapperClassName"
-              editorClassName="editorClassName"
-              onEditorStateChange={setEditorState}
-            />
-            <Dropdown
-              options={options}
-              onChange={(data) => {
-                setDropdownOption(data.value);
-              }}
-              value={options[0]}
-              placeholder="Add variable"
-              className="mb-5 border-t-4 border-gray-700 pt-4"
-            />
-            {variableForm()}
-            <div className="flex my-5">
-              <h3 className="font-medium leading-tight text-lg text-gray-700 mr-4 my-auto">
-                Number of variants:
-              </h3>
-              <input
-                type={"number"}
-                value={numberOfTasks}
-                placeholder=""
-                onChange={(event) => {
-                  setNumberOfTasks(parseInt(event.target.value));
-                }}
-                className="w-24 border-gray-600 border px-2 my-auto"
-                required
-              />
-            </div>
-
-            <Button
-              text="Submit"
-              onClick={() => {
-                setSumbit(true);
-              }}
-              className="bg-gray-700"
-            />
-          </>
-        ) : (
-          <DisplayTasks tasks={tasks} />
-        )}
+        <h3 className="font-medium leading-tight text-4xl mt-0 mb-2 text-gray-700 mb-12 text-center">
+          Genererate variants of question
+        </h3>
+        <Editor
+          toolbar={{
+            options: [
+              "inline",
+              "fontSize",
+              "fontFamily",
+              "list",
+              "textAlign",
+              "colorPicker",
+              "history",
+            ],
+          }}
+          editorState={editorState}
+          toolbarClassName="toolbarClassName"
+          wrapperClassName="wrapperClassName"
+          editorClassName="editorClassName"
+          onEditorStateChange={setEditorState}
+        />
+        <Dropdown
+          options={options}
+          onChange={(data) => {
+            setDropdownOption(data.value);
+          }}
+          value={options[0]}
+          placeholder="Add variable"
+          className="mb-5 border-t-4 border-gray-700 pt-4"
+        />
+        {variableForm()}
+        <div className="flex my-5">
+          <h3 className="font-medium leading-tight text-lg text-gray-700 mr-4 my-auto">
+            Number of variants:
+          </h3>
+          <input
+            type={"number"}
+            value={numberOfTasks}
+            placeholder=""
+            onChange={(event) => {
+              setNumberOfTasks(parseInt(event.target.value));
+            }}
+            className="w-24 border-gray-600 border px-2 my-auto"
+            required
+          />
+        </div>
+        <Button
+          text="Submit"
+          onClick={() => {
+            setSumbit(true);
+          }}
+          className="bg-gray-700 px-5"
+        />
       </form>
     </>
   );

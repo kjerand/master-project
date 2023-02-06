@@ -1,7 +1,7 @@
 import { EditorState, Modifier } from "draft-js";
 import { useState } from "react";
 import Immutable from "immutable";
-import Button from "./Button";
+import Button from "../base/Button";
 
 const AddDecimalVariable = ({
   editorState,
@@ -87,7 +87,7 @@ const AddDecimalVariable = ({
           addVariable();
         }}
         text="Add variable"
-        className="bg-blue-700 ml-auto mr-3"
+        className="bg-blue-700 ml-auto mr-3 px-5"
       />
     </div>
   );
