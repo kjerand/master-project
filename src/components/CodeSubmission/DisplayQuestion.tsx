@@ -1,22 +1,28 @@
 import { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { useSelector } from "react-redux";
+import { Question } from "../../app/questions";
 import { RootState } from "../../app/store";
 import Header from "../base/Header";
 
-const DisplayQuestion = () => {
-  const questions = useSelector((state: RootState) => state.questions);
-  const [taskIndex, setTaskIndex] = useState<number>(0);
-
+const DisplayQuestion = ({
+  questions,
+  taskIndex,
+  setTaskIndex,
+}: {
+  questions: Question[];
+  taskIndex: number;
+  setTaskIndex: Function;
+}) => {
   return (
     <>
-      {questions.questions.length > 0 && (
+      {questions.length > 0 && (
         <>
           <h1 className="font-medium leading-tight text-lg mt-0 mb-2 text-gray-700 mt-10">
             Choose question
           </h1>
           <div className="flex">
-            {Array.from(Array(questions.questions.length)).map((v, index) => {
+            {Array.from(Array(questions.length)).map((v, index) => {
               return (
                 <p
                   key={v}
@@ -33,7 +39,7 @@ const DisplayQuestion = () => {
             toolbar={{
               options: [],
             }}
-            editorState={questions.questions[taskIndex]}
+            editorState={questions[taskIndex].questionBody}
             wrapperClassName="wrapperClassName"
             editorClassName="editorClassName"
           />

@@ -15,7 +15,7 @@ import { generateStringVariable } from "../../utils/generateStringVariable";
 import { generateDecimalVariable } from "../../utils/generateDecimalVariable";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import { addQuestion, addQuestions } from "../../app/questions";
+import { addQuestion, addQuestions, Question } from "../../app/questions";
 const options = ["Add variable", "Text", "Integer", "Decimal"];
 
 //Dropdown med valg av variabel (string, int, float osv), knapp legg til variabel, så dukker skjema opp
@@ -30,7 +30,7 @@ const TaskForm = () => {
   );
   const { OrderedSet } = Immutable;
   const [numberOfTasks, setNumberOfTasks] = useState<number>();
-  const [tasks, setTasks] = useState<EditorState[]>([]);
+  const [tasks, setTasks] = useState<Question[]>([]);
 
   const [dropdownOption, setDropdownOption] = useState<string>("");
 
@@ -43,6 +43,7 @@ const TaskForm = () => {
   const [decimalVariables, setDecimalVariables] = useState<DecimalVariable[]>(
     []
   );
+  const [solution, setSolution] = useState<string>();
 
   const dispatch = useDispatch();
 
@@ -155,7 +156,7 @@ const TaskForm = () => {
         state = EditorState.createWithContent(contentState);
       }
 
-      tasks.push(state);
+      tasks.push({ questionBody: state, solution: "meow" });
     }
 
     dispatch(addQuestions(tasks));
@@ -206,21 +207,17 @@ const TaskForm = () => {
         </h3>
         <Editor
           toolbar={{
-            options: [
-              "inline",
-              "fontSize",
-              "fontFamily",
-              "list",
-              "textAlign",
-              "colorPicker",
-              "history",
-            ],
+            options: ["inline", "list", "textAlign", "history"],
           }}
           editorState={editorState}
           toolbarClassName="toolbarClassName"
           wrapperClassName="wrapperClassName"
           editorClassName="editorClassName"
           onEditorStateChange={setEditorState}
+          style={{
+            fontFamily: '"Fira code", "Fira Mono", monospace',
+            fontSize: 12,
+          }}
         />
         <Dropdown
           options={options}
@@ -247,6 +244,13 @@ const TaskForm = () => {
             required
           />
         </div>
+        <input
+          type={"text"}
+          value={solution}
+          placeholder="Solution"
+          onChange={(event) => setSolution(event.target.value)}
+          className="mr-4 w-60 border-gray-600 border p-2"
+        />
         <Button
           text="Submit"
           onClick={() => {
