@@ -1,20 +1,10 @@
-import Button from "./base/Button";
+import Header from "./base/Header";
 
-const CodeOutput = ({
-  handleCompile,
-  output,
-}: {
-  handleCompile: Function;
-  output: Function;
-}) => {
+const CodeOutput = ({ output }: { output: Function }) => {
   return (
-    <div className="w-1/5 bg-blue">
-      <div className="overflow-scroll">{output()}</div>
-      <Button
-        text="Compile and run"
-        onClick={() => handleCompile()}
-        className="bg-blue-500 p-5 flex mt-4"
-      />
+    <div className="h-1/2 bg-gray-100 p-3 rounded-md">
+      <Header title="Output" size="lg" />
+      {output()}
     </div>
   );
 };

@@ -9,6 +9,7 @@ const LanguagesDropdown = ({ onSelectChange }) => {
       options={languages}
       defaultValue={languages[0]}
       onChange={(selectedOption) => onSelectChange(selectedOption)}
+      menuPlacement="top"
     />
   );
 };

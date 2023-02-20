@@ -1,5 +1,5 @@
 const Container = ({ children }: { children: JSX.Element | JSX.Element[] }) => {
-  return <div className="flex items-center justify-center">{children}</div>;
+  return <div className="flex justify-center">{children}</div>;
 };
 
 export default Container;

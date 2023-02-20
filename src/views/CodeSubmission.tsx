@@ -14,6 +14,8 @@ import { defineTheme, Theme } from "../utils/defineTheme";
 import LanguagesDropdown from "../components/LanguagesDropdown";
 import DropdownBar from "../components/DropdownBar";
 import CodeOutput from "../components/CodeOutput";
+import CompileButton from "../components/CompileButton";
+import Sidebar from "../components/Sidebar";
 
 const javascriptDefault = `// some comment`;
 
@@ -42,6 +44,7 @@ const CodeSubmission = () => {
   }, []);
 
   const handleCompile = () => {
+    setProcessing(true);
     const formData = {
       language_id: language.id,
       // encode source code in base64
@@ -111,6 +114,7 @@ const CodeSubmission = () => {
     let statusId = outputDetails?.status?.id;
 
     let msg = atob(outputDetails?.stdout);
+    console.log(msg);
     //let solution = questions.questions[taskIndex].solution;
 
     //if (msg.trim() === solution.trim()) console.log("CORRECT!");
@@ -124,7 +128,7 @@ const CodeSubmission = () => {
       );
     } else if (statusId === 3) {
       return (
-        <pre className="px-2 py-1 font-normal text-xs text-green-500">
+        <pre className="px-2 py-1 font-normal text-md text-green-500">
           {atob(outputDetails.stdout) !== null
             ? `${atob(outputDetails.stdout)}`
             : null}
@@ -176,7 +180,7 @@ const CodeSubmission = () => {
           taskIndex={taskIndex}
           setTaskIndex={setTaskIndex}
         />
-        <Header title="Solution" size="md" />
+
         <Container>
           <CodeEditor
             code={code}
@@ -184,7 +188,11 @@ const CodeSubmission = () => {
             language={language.value}
             onChange={onChange}
           />
-          <CodeOutput handleCompile={handleCompile} output={getOutput} />
+          <Sidebar
+            handleCompile={handleCompile}
+            processing={processing}
+            output={getOutput}
+          />
         </Container>
 
         <DropdownBar
