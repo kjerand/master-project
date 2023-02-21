@@ -23,7 +23,7 @@ const Menu = () => {
           onClick={() => {
             navigate(ROUTES.submitCode.path);
           }}
-          className="bg-blue-700 flex px-20"
+          className="bg-blue-700 flex px-20 mb-5"
         />
       </Card>
     </Container>

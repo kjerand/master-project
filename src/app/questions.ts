@@ -11,7 +11,7 @@ export interface QuestionState {
 }
 
 const initialState: QuestionState = {
-  questions: [],
+  questions: [{ questionBody: EditorState.createEmpty(), solution: "" }],
 };
 
 export const questionsSlice = createSlice({

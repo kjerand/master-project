@@ -10,12 +10,14 @@ import AddTextVariable from "./AddTextVariable";
 import AddDecimalVariable from "./AddDecimalVariable";
 import { generateIntegerVariable } from "../../utils/generateIntegerVariable";
 import Immutable from "immutable";
-import DisplayTasks from "./DisplayTasks";
+
 import { generateStringVariable } from "../../utils/generateStringVariable";
 import { generateDecimalVariable } from "../../utils/generateDecimalVariable";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import { addQuestion, addQuestions, Question } from "../../app/questions";
+import { addQuestions, Question } from "../../app/questions";
+import { useNavigate } from "react-router-dom";
+import ROUTES from "../../ROUTES";
 const options = ["Add variable", "Text", "Integer", "Decimal"];
 
 //Dropdown med valg av variabel (string, int, float osv), knapp legg til variabel, så dukker skjema opp
@@ -24,13 +26,13 @@ const options = ["Add variable", "Text", "Integer", "Decimal"];
 // Velge hvor mange varianter som skal genereres
 const TaskForm = () => {
   const [submit, setSumbit] = useState<boolean>(false);
-  const [displayTasks, setDisplayTasks] = useState<boolean>(false);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
   const { OrderedSet } = Immutable;
-  const [numberOfTasks, setNumberOfTasks] = useState<number>();
+  const [numberOfTasks, setNumberOfTasks] = useState<number>(10);
   const [tasks, setTasks] = useState<Question[]>([]);
+  const navigate = useNavigate();
 
   const [dropdownOption, setDropdownOption] = useState<string>("");
 
@@ -43,7 +45,6 @@ const TaskForm = () => {
   const [decimalVariables, setDecimalVariables] = useState<DecimalVariable[]>(
     []
   );
-  const [solution, setSolution] = useState<string>();
 
   const dispatch = useDispatch();
 
@@ -70,6 +71,7 @@ const TaskForm = () => {
       let state = EditorState.createWithContent(
         editorState.getCurrentContent()
       );
+
       for (let variable of integerVariables) {
         let contentState = state.getCurrentContent();
         const blockMap = state.getCurrentContent().getBlockMap();
@@ -156,10 +158,11 @@ const TaskForm = () => {
         state = EditorState.createWithContent(contentState);
       }
 
-      tasks.push({ questionBody: state, solution: "meow" });
+      tasks.push({ questionBody: state, solution: "" });
     }
 
     dispatch(addQuestions(tasks));
+    navigate(ROUTES.menu.path);
   };
 
   const variableForm = () => {
@@ -244,13 +247,7 @@ const TaskForm = () => {
             required
           />
         </div>
-        <input
-          type={"text"}
-          value={solution}
-          placeholder="Solution"
-          onChange={(event) => setSolution(event.target.value)}
-          className="mr-4 w-60 border-gray-600 border p-2"
-        />
+
         <Button
           text="Submit"
           onClick={() => {

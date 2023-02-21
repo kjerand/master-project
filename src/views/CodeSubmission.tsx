@@ -16,15 +16,11 @@ import DropdownBar from "../components/DropdownBar";
 import CodeOutput from "../components/CodeOutput";
 import CompileButton from "../components/CompileButton";
 import Sidebar from "../components/Sidebar";
-
-const javascriptDefault = `// some comment`;
+import { useNavigate } from "react-router-dom";
 
 const CodeSubmission = () => {
-  const [code, setCode] = useState(javascriptDefault);
-  const [theme, setTheme] = useState<Theme>({
-    value: "cobolt",
-    label: "cobolt",
-  });
+  const [code, setCode] = useState();
+  const [theme, setTheme] = useState<Theme>();
   const [processing, setProcessing] = useState(null);
   const [customInput, setCustomInput] = useState("");
   const [language, setLanguage] = useState<Language>(languages[0]);
@@ -47,7 +43,6 @@ const CodeSubmission = () => {
     setProcessing(true);
     const formData = {
       language_id: language.id,
-      // encode source code in base64
       source_code: btoa(code),
       stdin: btoa(""),
     };
@@ -56,7 +51,7 @@ const CodeSubmission = () => {
       url: "http://localhost:2358/submissions",
       params: { base64_encoded: "true", fields: "*" },
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json;charset=utf-8",
       },
       data: formData,
     };
@@ -105,59 +100,46 @@ const CodeSubmission = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(theme);
-  }, [theme]);
-
   const getOutput = () => {
     if (outputDetails === null) return;
     let statusId = outputDetails?.status?.id;
 
-    let msg = atob(outputDetails?.stdout);
-    console.log(msg);
-    //let solution = questions.questions[taskIndex].solution;
-
-    //if (msg.trim() === solution.trim()) console.log("CORRECT!");
-
     if (statusId === 6) {
       // compilation error
       return (
-        <pre className="px-2 py-1 font-normal text-xs text-red-500">
+        <p className="px-2 py-1 font-normal text-xs text-red-500">
           {atob(outputDetails?.compile_output)}
-        </pre>
+        </p>
       );
     } else if (statusId === 3) {
       return (
-        <pre className="px-2 py-1 font-normal text-md text-green-500">
+        <p className="px-2 py-1 font-normal text-md text-green-700">
           {atob(outputDetails.stdout) !== null
             ? `${atob(outputDetails.stdout)}`
             : null}
-        </pre>
+        </p>
       );
     } else if (statusId === 5) {
       return (
-        <pre className="px-2 py-1 font-normal text-xs text-red-500">
+        <p className="px-2 py-1 font-normal text-xs text-red-500">
           {`Time Limit Exceeded`}
-        </pre>
+        </p>
       );
     } else {
       return (
-        <pre className="px-2 py-1 font-normal text-xs text-red-500">
+        <p className="px-2 py-1 font-normal text-xs text-red-500">
           {atob(outputDetails?.stderr)}
-        </pre>
+        </p>
       );
     }
   };
 
   function handleThemeChange(th) {
     const theme = th;
-    console.log("theme...", theme);
 
     if (["light", "vs-dark"].includes(theme.value)) {
-      console.log("GALLO");
       setTheme(theme);
     } else {
-      console.log("GALLO");
       defineTheme(theme.value)
         .then((_) => {
           console.log(theme);
@@ -173,33 +155,43 @@ const CodeSubmission = () => {
 
   return (
     <Container>
-      <Card width="w-3/4">
-        <Header title="Submit solution" size="4xl" />
-        <DisplayQuestion
-          questions={questions.questions}
-          taskIndex={taskIndex}
-          setTaskIndex={setTaskIndex}
-        />
-
-        <Container>
-          <CodeEditor
-            code={code}
-            theme={theme.value}
-            language={language.value}
-            onChange={onChange}
+      <Card width="w-3/4 min-h-44">
+        {questions.questions.length > 0 && theme ? (
+          <>
+            <Header title="Submit solution" size="4xl" />
+            <DisplayQuestion
+              questions={questions.questions}
+              taskIndex={taskIndex}
+            />
+            <Container>
+              <CodeEditor
+                code={code}
+                theme={theme.value}
+                language={language.value}
+                onChange={onChange}
+              />
+              <Sidebar
+                handleCompile={handleCompile}
+                processing={processing}
+                output={getOutput}
+              />
+            </Container>
+            <DropdownBar
+              handleThemeChange={handleThemeChange}
+              theme={theme}
+              onSelectChange={onSelectChange}
+              taskIndex={taskIndex}
+              setTaskIndex={setTaskIndex}
+              length={questions.questions.length}
+            />
+          </>
+        ) : (
+          <Header
+            title="Waiting for questions to be added..."
+            size="2xl"
+            className="my-12"
           />
-          <Sidebar
-            handleCompile={handleCompile}
-            processing={processing}
-            output={getOutput}
-          />
-        </Container>
-
-        <DropdownBar
-          handleThemeChange={handleThemeChange}
-          theme={theme}
-          onSelectChange={onSelectChange}
-        />
+        )}
       </Card>
     </Container>
   );

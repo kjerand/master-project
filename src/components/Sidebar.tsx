@@ -11,7 +11,7 @@ const Sidebar = ({
   processing: boolean;
 }) => {
   return (
-    <div className="w-1/5 flex-row flex flex-col mx-2">
+    <div className="w-1/5 flex-row flex flex-col ml-2">
       <CodeOutput output={output} />
       <CompileButton handleCompile={handleCompile} processing={processing} />
     </div>
