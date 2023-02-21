@@ -39,6 +39,11 @@ const AddIntegerVariable = ({
           EditorState.push(editorState, newContent, "insert-characters")
         );
 
+        setIntegerVariable({
+          name: "",
+          min: integerVariable.min,
+          max: integerVariable.max,
+        });
         setIntegerVariables(integerVariable);
       }
   };

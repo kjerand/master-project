@@ -13,7 +13,7 @@ const DisplayQuestion = ({
     <>
       {questions.length > 0 && (
         <>
-          <div className="bg-gray-100 p-3 rounded-md my-3">
+          <div className="bg-gray-100 p-3 rounded-md my-4">
             <Editor
               editorState={questions[taskIndex].questionBody}
               toolbarClassName="hidden"

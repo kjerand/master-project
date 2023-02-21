@@ -4,6 +4,7 @@ import { EditorState } from "draft-js";
 export type Question = {
   questionBody: EditorState;
   solution: string;
+  initialCode?: string;
 };
 
 export interface QuestionState {
@@ -19,11 +20,11 @@ export const questionsSlice = createSlice({
   initialState,
   reducers: {
     addQuestion: (state, action: PayloadAction<Question>) => {
-      state.questions.push(action.payload);
+      state.questions.unshift(action.payload);
     },
     addQuestions: (state, action: PayloadAction<Question[]>) => {
       for (let q of action.payload) {
-        state.questions.push(q);
+        state.questions.unshift(q);
       }
     },
   },

@@ -17,17 +17,17 @@ import CodeOutput from "../components/CodeOutput";
 import CompileButton from "../components/CompileButton";
 import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
+import { encode, decode } from "js-base64";
 
 const CodeSubmission = () => {
-  const [code, setCode] = useState();
   const [theme, setTheme] = useState<Theme>();
   const [processing, setProcessing] = useState(null);
-  const [customInput, setCustomInput] = useState("");
   const [language, setLanguage] = useState<Language>(languages[0]);
   const [outputDetails, setOutputDetails] = useState(null);
 
   const questions = useSelector((state: RootState) => state.questions);
   const [taskIndex, setTaskIndex] = useState<number>(0);
+  const [code, setCode] = useState<string>();
 
   const onChange = (data) => {
     setCode(data);
@@ -43,8 +43,7 @@ const CodeSubmission = () => {
     setProcessing(true);
     const formData = {
       language_id: language.id,
-      source_code: btoa(code),
-      stdin: btoa(""),
+      source_code: encode(code),
     };
     const options = {
       method: "POST",
@@ -108,14 +107,14 @@ const CodeSubmission = () => {
       // compilation error
       return (
         <p className="px-2 py-1 font-normal text-xs text-red-500">
-          {atob(outputDetails?.compile_output)}
+          {decode(outputDetails?.compile_output)}
         </p>
       );
     } else if (statusId === 3) {
       return (
         <p className="px-2 py-1 font-normal text-md text-green-700">
-          {atob(outputDetails.stdout) !== null
-            ? `${atob(outputDetails.stdout)}`
+          {outputDetails?.stdout !== null
+            ? `${decode(outputDetails?.stdout)}`
             : null}
         </p>
       );
@@ -128,7 +127,7 @@ const CodeSubmission = () => {
     } else {
       return (
         <p className="px-2 py-1 font-normal text-xs text-red-500">
-          {atob(outputDetails?.stderr)}
+          {decode(outputDetails?.stderr)}
         </p>
       );
     }
@@ -142,7 +141,6 @@ const CodeSubmission = () => {
     } else {
       defineTheme(theme.value)
         .then((_) => {
-          console.log(theme);
           setTheme(theme);
         })
         .catch((err) => console.log(err));
@@ -153,12 +151,16 @@ const CodeSubmission = () => {
     setLanguage(sl);
   };
 
+  useEffect(() => {
+    setCode(questions.questions[taskIndex].initialCode);
+  }, [taskIndex]);
+
   return (
     <Container>
       <Card width="w-3/4 min-h-44">
         {questions.questions.length > 0 && theme ? (
           <>
-            <Header title="Submit solution" size="4xl" />
+            <Header title="Programming questions" size="4xl" />
             <DisplayQuestion
               questions={questions.questions}
               taskIndex={taskIndex}
@@ -169,6 +171,7 @@ const CodeSubmission = () => {
                 theme={theme.value}
                 language={language.value}
                 onChange={onChange}
+                initialCode={questions.questions[taskIndex].initialCode}
               />
               <Sidebar
                 handleCompile={handleCompile}

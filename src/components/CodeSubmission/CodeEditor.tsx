@@ -1,14 +1,26 @@
 import React, { useState } from "react";
 
 import Editor from "@monaco-editor/react";
+import { Language } from "../../utils/languages";
+import { Theme } from "../../utils/defineTheme";
 
-const CodeEditor = ({ onChange, language, code, theme }) => {
-  const [value, setValue] = useState(code || "");
-
+const CodeEditor = ({
+  onChange,
+  language,
+  code,
+  theme,
+  initialCode,
+}: {
+  onChange: Function;
+  language: string;
+  code: string;
+  theme: string;
+  initialCode?: string;
+}) => {
   const handleEditorChange = (value) => {
-    setValue(value);
     onChange(value);
   };
+  const empty = (value: string) => value !== undefined && value !== "";
 
   return (
     <div className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl">
@@ -16,19 +28,11 @@ const CodeEditor = ({ onChange, language, code, theme }) => {
         height="60vh"
         width={`100%`}
         language={language || "typecript"}
-        value={value}
+        value={code}
         theme={theme}
-        defaultValue="class Complex {
-          real: number;
-          imag: number;
-        
-          constructor(real: number, img: number) {
-            this.real = real;
-            this.imag = img;
-          }
+        defaultValue={
+          !empty(initialCode) ? initialCode : "// write your code here"
         }
-        
-        let v = [new Complex(2, 2), new Complex(1, 1)];"
         onChange={handleEditorChange}
       />
     </div>

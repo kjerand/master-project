@@ -44,8 +44,14 @@ const AddDecimalVariable = ({
         decimalVariables.forEach((v) => {
           if (v.name == decimalVariable.name) exists = true;
         });
-        if (!exists)
+        if (!exists) {
           setDecimalVariables([...decimalVariables, decimalVariable]);
+          setDecimalVariable({
+            name: "",
+            min: decimalVariable.min,
+            max: decimalVariable.max,
+          });
+        }
       }
   };
   return (

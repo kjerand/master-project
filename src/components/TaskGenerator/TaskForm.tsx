@@ -20,17 +20,16 @@ import { useNavigate } from "react-router-dom";
 import ROUTES from "../../ROUTES";
 const options = ["Add variable", "Text", "Integer", "Decimal"];
 
-//Dropdown med valg av variabel (string, int, float osv), knapp legg til variabel, så dukker skjema opp
-// Legge til alle variabler i en liste som kan gjemmes
-// Preview for en eksempel oppgave
-// Velge hvor mange varianter som skal genereres
 const TaskForm = () => {
   const [submit, setSumbit] = useState<boolean>(false);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+  const [codeEditorState, setCodeEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
   const { OrderedSet } = Immutable;
-  const [numberOfTasks, setNumberOfTasks] = useState<number>(10);
+  const [numberOfTasks, setNumberOfTasks] = useState<number>(5);
   const [tasks, setTasks] = useState<Question[]>([]);
   const navigate = useNavigate();
 
@@ -45,6 +44,8 @@ const TaskForm = () => {
   const [decimalVariables, setDecimalVariables] = useState<DecimalVariable[]>(
     []
   );
+
+  const [codeCheckbox, setCodeCheckbox] = useState<boolean>(false);
 
   const dispatch = useDispatch();
 
@@ -93,7 +94,8 @@ const TaskForm = () => {
           contentState = Modifier.replaceText(
             contentState,
             selectionState,
-            `${generateIntegerVariable(variable.min, variable.max)}`
+            `${generateIntegerVariable(variable.min, variable.max)}`,
+            OrderedSet.of("CODE")
           );
         });
 
@@ -122,7 +124,8 @@ const TaskForm = () => {
           contentState = Modifier.replaceText(
             contentState,
             selectionState,
-            `${generateStringVariable(variable.options)}`
+            `${generateStringVariable(variable.options)}`,
+            OrderedSet.of("CODE")
           );
         });
 
@@ -151,14 +154,21 @@ const TaskForm = () => {
           contentState = Modifier.replaceText(
             contentState,
             selectionState,
-            `${generateDecimalVariable(variable.min, variable.max, 2)}`
+            `${generateDecimalVariable(variable.min, variable.max, 2)}`,
+            OrderedSet.of("CODE")
           );
         });
 
         state = EditorState.createWithContent(contentState);
       }
 
-      tasks.push({ questionBody: state, solution: "" });
+      tasks.push({
+        questionBody: state,
+        solution: "",
+        initialCode: codeCheckbox
+          ? codeEditorState.getCurrentContent().getPlainText()
+          : undefined,
+      });
     }
 
     dispatch(addQuestions(tasks));
@@ -208,20 +218,22 @@ const TaskForm = () => {
         <h3 className="font-medium leading-tight text-4xl mt-0 mb-2 text-gray-700 mb-12 text-center">
           Genererate variants of question
         </h3>
-        <Editor
-          toolbar={{
-            options: ["inline", "list", "textAlign", "history"],
-          }}
-          editorState={editorState}
-          toolbarClassName="toolbarClassName"
-          wrapperClassName="wrapperClassName"
-          editorClassName="editorClassName"
-          onEditorStateChange={setEditorState}
-          style={{
-            fontFamily: '"Fira code", "Fira Mono", monospace',
-            fontSize: 12,
-          }}
-        />
+        <div className="items-center m-auto bg-gray-100 rounded-md p-3">
+          <Editor
+            toolbar={{
+              options: ["inline", "list", "textAlign", "history"],
+            }}
+            editorState={editorState}
+            toolbarClassName="toolbarClassName"
+            wrapperClassName="wrapperClassName"
+            editorClassName="editorClassName"
+            onEditorStateChange={setEditorState}
+            style={{
+              fontFamily: '"Fira code", "Fira Mono", monospace',
+              fontSize: 12,
+            }}
+          />
+        </div>
         <Dropdown
           options={options}
           onChange={(data) => {
@@ -247,6 +259,34 @@ const TaskForm = () => {
             required
           />
         </div>
+
+        <div className="flex items-center mb-3">
+          <input
+            onChange={(e) => setCodeCheckbox(!codeCheckbox)}
+            type={"checkbox"}
+            className="w-4 h-4 mr-4 pt-2"
+            checked={codeCheckbox}
+          />
+          <div className="text-md font-medium leading-tight text-gray-700">
+            {"Add question code"}
+          </div>
+        </div>
+
+        {codeCheckbox && (
+          <div className="w-2/3 items-center m-auto bg-gray-100 p-3 rounded-md mb-3">
+            <Editor
+              editorState={codeEditorState}
+              toolbarClassName="hidden"
+              wrapperClassName="wrapperClassName"
+              editorClassName="editorClassName"
+              onEditorStateChange={setCodeEditorState}
+              style={{
+                fontFamily: '"Fira code", "Fira Mono", monospace',
+                fontSize: 12,
+              }}
+            />
+          </div>
+        )}
 
         <Button
           text="Submit"

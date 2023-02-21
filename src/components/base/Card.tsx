@@ -9,7 +9,7 @@ const Card = ({
 }) => {
   return (
     <div
-      className={`py-4 px-8 bg-white shadow-lg rounded-lg my-5 ${
+      className={`py-4 px-8 bg-white shadow-lg rounded-lg my-3 ${
         width ? width : "w-1/2"
       }`}
     >
