@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState, SelectionState, Modifier } from "draft-js";
+import {
+  EditorState,
+  SelectionState,
+  Modifier,
+  ContentState,
+  RichUtils,
+} from "draft-js";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import AddIntegerVariable from "./AddIntegerVariable";
 import Button from "../base/Button";
@@ -20,7 +26,7 @@ import { useNavigate } from "react-router-dom";
 import ROUTES from "../../ROUTES";
 const options = ["Add variable", "Text", "Integer", "Decimal"];
 
-const TaskForm = () => {
+const QuestionForm = () => {
   const [submit, setSumbit] = useState<boolean>(false);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -28,9 +34,12 @@ const TaskForm = () => {
   const [codeEditorState, setCodeEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+  const [solutionEditorState, setSolutionEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
   const { OrderedSet } = Immutable;
-  const [numberOfTasks, setNumberOfTasks] = useState<number>(5);
-  const [tasks, setTasks] = useState<Question[]>([]);
+  const [numberOfTasks, setNumberOfTasks] = useState<number>(10);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const navigate = useNavigate();
 
   const [dropdownOption, setDropdownOption] = useState<string>("");
@@ -57,121 +66,71 @@ const TaskForm = () => {
     if (!exists) setIntegerVariables([...integerVariables, variable]);
   };
 
-  const findWithRegex = (regex, contentBlock, callback) => {
-    const text = contentBlock.getText();
-    let matchArr, start, end;
-    while ((matchArr = regex.exec(text)) !== null) {
-      start = matchArr.index;
-      end = start + matchArr[0].length;
-      callback(start, end);
-    }
+  const insertVariable = (
+    state: EditorState,
+    name: string,
+    value: string
+  ): EditorState => {
+    const str = "{{" + name + "}}";
+
+    const replacedText = state
+      .getCurrentContent()
+      .getPlainText()
+      .replaceAll(str, value);
+
+    let newState = EditorState.createWithContent(
+      ContentState.createFromText(replacedText)
+    );
+
+    const selectionState = newState.getSelection();
+    const newSelection = selectionState.merge({
+      anchorOffset: 0,
+      focusOffset: replacedText.length,
+    });
+    newState = EditorState.forceSelection(newState, newSelection);
+    newState = RichUtils.toggleInlineStyle(newState, "CODE");
+    newState = EditorState.forceSelection(newState, selectionState);
+    return newState;
   };
 
-  const generate = () => {
+  const generate = (currentState: EditorState) => {
     for (let i = 0; i < numberOfTasks; i++) {
       let state = EditorState.createWithContent(
-        editorState.getCurrentContent()
+        currentState.getCurrentContent()
       );
 
-      for (let variable of integerVariables) {
-        let contentState = state.getCurrentContent();
-        const blockMap = state.getCurrentContent().getBlockMap();
-        const regex = new RegExp("{{" + variable.name + "}}", "g");
-        const selectionsToReplace = [];
-
-        blockMap.forEach((contentBlock) =>
-          findWithRegex(regex, contentBlock, (start, end) => {
-            const blockKey = contentBlock.getKey();
-            const blockSelection = SelectionState.createEmpty(blockKey).merge({
-              anchorOffset: start,
-              focusOffset: end,
-            });
-            selectionsToReplace.push(blockSelection);
-          })
+      for (let variable of integerVariables)
+        state = insertVariable(
+          state,
+          variable.name,
+          `${generateIntegerVariable(variable.min, variable.max)}`
+        );
+      for (let variable of stringVariables)
+        state = insertVariable(
+          state,
+          variable.name,
+          `${generateStringVariable(variable.options)}`
+        );
+      for (let variable of decimalVariables)
+        state = insertVariable(
+          state,
+          variable.name,
+          `${generateDecimalVariable(variable.min, variable.max, 2)}`
         );
 
-        selectionsToReplace.forEach((selectionState) => {
-          contentState = Modifier.replaceText(
-            contentState,
-            selectionState,
-            `${generateIntegerVariable(variable.min, variable.max)}`,
-            OrderedSet.of("CODE")
-          );
-        });
+      let code = undefined;
+      if (codeCheckbox)
+        code = codeEditorState.getCurrentContent().getPlainText();
 
-        state = EditorState.createWithContent(contentState);
-      }
-
-      for (let variable of stringVariables) {
-        let contentState = state.getCurrentContent();
-        const blockMap = state.getCurrentContent().getBlockMap();
-        const regex = new RegExp("{{" + variable.name + "}}", "g");
-        const selectionsToReplace = [];
-
-        blockMap.forEach((contentBlock) =>
-          findWithRegex(regex, contentBlock, (start, end) => {
-            const blockKey = contentBlock.getKey();
-            const blockSelection = SelectionState.createEmpty(blockKey).merge({
-              anchorOffset: start,
-              focusOffset: end,
-            });
-
-            selectionsToReplace.push(blockSelection);
-          })
-        );
-
-        selectionsToReplace.forEach((selectionState) => {
-          contentState = Modifier.replaceText(
-            contentState,
-            selectionState,
-            `${generateStringVariable(variable.options)}`,
-            OrderedSet.of("CODE")
-          );
-        });
-
-        state = EditorState.createWithContent(contentState);
-      }
-
-      for (let variable of decimalVariables) {
-        let contentState = state.getCurrentContent();
-        const blockMap = state.getCurrentContent().getBlockMap();
-        const regex = new RegExp("{{" + variable.name + "}}", "g");
-        const selectionsToReplace = [];
-
-        blockMap.forEach((contentBlock) =>
-          findWithRegex(regex, contentBlock, (start, end) => {
-            const blockKey = contentBlock.getKey();
-            const blockSelection = SelectionState.createEmpty(blockKey).merge({
-              anchorOffset: start,
-              focusOffset: end,
-            });
-
-            selectionsToReplace.push(blockSelection);
-          })
-        );
-
-        selectionsToReplace.forEach((selectionState) => {
-          contentState = Modifier.replaceText(
-            contentState,
-            selectionState,
-            `${generateDecimalVariable(variable.min, variable.max, 2)}`,
-            OrderedSet.of("CODE")
-          );
-        });
-
-        state = EditorState.createWithContent(contentState);
-      }
-
-      tasks.push({
-        questionBody: state,
-        solution: "",
-        initialCode: codeCheckbox
-          ? codeEditorState.getCurrentContent().getPlainText()
-          : undefined,
+      questions.push({
+        questionBody: editorState,
+        solutionBody: state,
+        solution: state.getCurrentContent().getPlainText(),
+        initialCode: code,
       });
     }
 
-    dispatch(addQuestions(tasks));
+    dispatch(addQuestions(questions));
     navigate(ROUTES.menu.path);
   };
 
@@ -180,8 +139,8 @@ const TaskForm = () => {
       case "Text":
         return (
           <AddTextVariable
-            editorState={editorState}
-            setEditorState={setEditorState}
+            editorState={solutionEditorState}
+            setEditorState={setSolutionEditorState}
             stringVariables={stringVariables}
             setStringVariables={setStringVariables}
           />
@@ -189,8 +148,8 @@ const TaskForm = () => {
       case "Integer":
         return (
           <AddIntegerVariable
-            editorState={editorState}
-            setEditorState={setEditorState}
+            editorState={solutionEditorState}
+            setEditorState={setSolutionEditorState}
             integerVariables={integerVariables}
             setIntegerVariables={addIntegerVariable}
           />
@@ -198,8 +157,8 @@ const TaskForm = () => {
       case "Decimal":
         return (
           <AddDecimalVariable
-            editorState={editorState}
-            setEditorState={setEditorState}
+            editorState={solutionEditorState}
+            setEditorState={setSolutionEditorState}
             decimalVariables={decimalVariables}
             setDecimalVariables={setDecimalVariables}
           />
@@ -212,28 +171,44 @@ const TaskForm = () => {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          if (submit) generate();
+          if (submit) generate(solutionEditorState);
         }}
       >
         <h3 className="font-medium leading-tight text-4xl mt-0 mb-2 text-gray-700 mb-12 text-center">
           Genererate variants of question
         </h3>
-        <div className="items-center m-auto bg-gray-100 rounded-md p-3">
-          <Editor
-            toolbar={{
-              options: ["inline", "list", "textAlign", "history"],
-            }}
-            editorState={editorState}
-            toolbarClassName="toolbarClassName"
-            wrapperClassName="wrapperClassName"
-            editorClassName="editorClassName"
-            onEditorStateChange={setEditorState}
-            style={{
-              fontFamily: '"Fira code", "Fira Mono", monospace',
-              fontSize: 12,
-            }}
-          />
+        <div className="items-center m-auto ">
+          <div className="bg-gray-100 rounded-md p-3">
+            <Editor
+              toolbar={{
+                options: ["inline", "list", "textAlign", "history"],
+              }}
+              editorState={editorState}
+              toolbarClassName="toolbarClassName"
+              wrapperClassName="wrapperClassName"
+              editorClassName="editorClassName"
+              onEditorStateChange={setEditorState}
+              style={{
+                fontFamily: '"Fira code", "Fira Mono", monospace',
+                fontSize: 12,
+              }}
+            />
+          </div>
+          <div className="bg-gray-100 rounded-md p-3 mt-4">
+            <Editor
+              editorState={solutionEditorState}
+              toolbarClassName="hidden"
+              wrapperClassName="wrapperClassName"
+              editorClassName="border-1"
+              onEditorStateChange={setSolutionEditorState}
+              style={{
+                fontFamily: '"Fira code", "Fira Mono", monospace',
+                fontSize: 12,
+              }}
+            />
+          </div>
         </div>
+
         <Dropdown
           options={options}
           onChange={(data) => {
@@ -300,4 +275,4 @@ const TaskForm = () => {
   );
 };
 
-export default TaskForm;
+export default QuestionForm;

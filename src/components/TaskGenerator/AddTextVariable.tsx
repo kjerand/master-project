@@ -61,7 +61,7 @@ const AddTextVariable = ({
         value={option}
         placeholder="Text"
         onChange={(event) => setOption(event.target.value)}
-        className="mr-4 w-60 border-gray-600 border p-2"
+        className="mr-4 border-gray-600 border p-2 w-96"
       />
 
       <button
@@ -77,12 +77,7 @@ const AddTextVariable = ({
       >
         Add
       </button>
-      <Dropdown
-        options={["Easy", "Medium", "Hard"]}
-        onChange={() => {}}
-        placeholder="Difficulty"
-        className="ml-5 my-auto w-24"
-      />
+
       <Button
         onClick={() => {
           addVariable();

@@ -3,6 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { EditorState } from "draft-js";
 export type Question = {
   questionBody: EditorState;
+  solutionBody: EditorState;
   solution: string;
   initialCode?: string;
 };
@@ -12,7 +13,13 @@ export interface QuestionState {
 }
 
 const initialState: QuestionState = {
-  questions: [{ questionBody: EditorState.createEmpty(), solution: "" }],
+  questions: [
+    {
+      questionBody: EditorState.createEmpty(),
+      solutionBody: EditorState.createEmpty(),
+      solution: "",
+    },
+  ],
 };
 
 export const questionsSlice = createSlice({

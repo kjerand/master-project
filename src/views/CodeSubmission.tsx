@@ -22,10 +22,12 @@ import { encode, decode } from "js-base64";
 const CodeSubmission = () => {
   const [theme, setTheme] = useState<Theme>();
   const [processing, setProcessing] = useState(null);
+  const [processingSubmit, setProcessingSubmit] = useState(null);
   const [language, setLanguage] = useState<Language>(languages[0]);
   const [outputDetails, setOutputDetails] = useState(null);
+  const [answerEvaluation, setAnswerEvaluation] = useState<number>(0);
 
-  const questions = useSelector((state: RootState) => state.questions);
+  const questionList = useSelector((state: RootState) => state.questions);
   const [taskIndex, setTaskIndex] = useState<number>(0);
   const [code, setCode] = useState<string>();
 
@@ -39,8 +41,28 @@ const CodeSubmission = () => {
     );
   }, []);
 
-  const handleCompile = () => {
-    setProcessing(true);
+  const checkIfPrintingSolution = (): boolean => {
+    if (
+      code.includes(
+        `console.log("${questionList.questions[taskIndex].solution}")`
+      ) ||
+      code.includes(
+        `console.log('${questionList.questions[taskIndex].solution}')`
+      )
+    ) {
+      setAnswerEvaluation(3);
+      return true;
+    }
+    return false;
+  };
+
+  const handleCompile = (submission: boolean = false) => {
+    if (checkIfPrintingSolution()) return;
+
+    setAnswerEvaluation(0);
+    if (submission) setProcessingSubmit(true);
+    else setProcessing(true);
+
     const formData = {
       language_id: language.id,
       source_code: encode(code),
@@ -58,18 +80,37 @@ const CodeSubmission = () => {
     axios
       .request(options)
       .then(function (response) {
-        console.log("res.data", response.data);
         const token = response.data.token;
-        checkStatus(token);
+        checkStatus(token, submission);
       })
       .catch((err) => {
-        let error = err.response ? err.response.data : err;
-        setProcessing(false);
-        console.log(error);
+        if (submission) setProcessingSubmit(false);
+        else setProcessing(false);
       });
   };
 
-  const checkStatus = async (token) => {
+  const handleSubmit = () => handleCompile(true);
+
+  const evaluateSubmission = (outputData) => {
+    if (outputData?.stdout !== null) {
+      let output = decode(outputData.stdout)
+        .replace(/ /g, "")
+        .replace(/\n|\r/g, "")
+        .trim();
+      const solution = questionList.questions[taskIndex].solution
+        .replace(/ /g, "")
+        .replace(/\n|\r/g, "")
+        .trim();
+
+      if (output === solution) {
+        setAnswerEvaluation(1);
+        return;
+      }
+    }
+    setAnswerEvaluation(2);
+  };
+
+  const checkStatus = async (token, submission) => {
     const options = {
       method: "GET",
       url: "http://localhost:2358/submissions/" + token,
@@ -83,19 +124,19 @@ const CodeSubmission = () => {
       if (statusId === 1 || statusId === 2) {
         // still processing
         setTimeout(() => {
-          checkStatus(token);
+          checkStatus(token, submission);
         }, 2000);
         return;
       } else {
-        setProcessing(false);
+        if (submission) setProcessingSubmit(false);
+        else setProcessing(false);
         setOutputDetails(response.data);
-
-        console.log("response.data", response.data);
+        if (submission) evaluateSubmission(response.data);
         return;
       }
     } catch (err) {
-      console.log("err", err);
-      setProcessing(false);
+      if (submission) setProcessingSubmit(false);
+      else setProcessing(false);
     }
   };
 
@@ -152,17 +193,17 @@ const CodeSubmission = () => {
   };
 
   useEffect(() => {
-    setCode(questions.questions[taskIndex].initialCode);
+    setCode(questionList.questions[taskIndex].initialCode);
   }, [taskIndex]);
 
   return (
     <Container>
-      <Card width="w-3/4 min-h-44">
-        {questions.questions.length > 0 && theme ? (
+      <Card width="w-4/5 min-h-44">
+        {questionList.questions.length > 0 && theme ? (
           <>
             <Header title="Programming questions" size="4xl" />
             <DisplayQuestion
-              questions={questions.questions}
+              questions={questionList.questions}
               taskIndex={taskIndex}
             />
             <Container>
@@ -171,12 +212,19 @@ const CodeSubmission = () => {
                 theme={theme.value}
                 language={language.value}
                 onChange={onChange}
-                initialCode={questions.questions[taskIndex].initialCode}
+                initialCode={questionList.questions[taskIndex].initialCode}
               />
               <Sidebar
+                handleSubmit={handleSubmit}
                 handleCompile={handleCompile}
+                evaluation={answerEvaluation}
                 processing={processing}
+                processingSubmit={processingSubmit}
                 output={getOutput}
+                nextStage={() => {
+                  setTaskIndex(taskIndex + 1);
+                  setAnswerEvaluation(0);
+                }}
               />
             </Container>
             <DropdownBar
@@ -185,7 +233,7 @@ const CodeSubmission = () => {
               onSelectChange={onSelectChange}
               taskIndex={taskIndex}
               setTaskIndex={setTaskIndex}
-              length={questions.questions.length}
+              length={questionList.questions.length}
             />
           </>
         ) : (

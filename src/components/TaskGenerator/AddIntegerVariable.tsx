@@ -22,30 +22,20 @@ const AddIntegerVariable = ({
   });
 
   const addVariable = () => {
-    let exists = false;
-    integerVariables.forEach((v) => {
-      if (v.name == integerVariable.name) exists = true;
-    });
-    if (!exists)
-      if (integerVariable.name != "") {
-        let newContent = Modifier.insertText(
-          editorState.getCurrentContent(),
-          editorState.getSelection(),
-          `{{${integerVariable.name}}}`,
-          OrderedSet.of("BOLD")
-        );
+    if (integerVariable.name != "") {
+      let newContent = Modifier.insertText(
+        editorState.getCurrentContent(),
+        editorState.getSelection(),
+        `{{${integerVariable.name}}}`,
+        OrderedSet.of("BOLD")
+      );
 
-        setEditorState(
-          EditorState.push(editorState, newContent, "insert-characters")
-        );
+      setEditorState(
+        EditorState.push(editorState, newContent, "insert-characters")
+      );
 
-        setIntegerVariable({
-          name: "",
-          min: integerVariable.min,
-          max: integerVariable.max,
-        });
-        setIntegerVariables(integerVariable);
-      }
+      setIntegerVariables(integerVariable);
+    }
   };
   return (
     <div className="my-5 pt-4 flex">

@@ -1,12 +1,12 @@
 import Card from "../components/base/Card";
 import Container from "../components/base/Container";
-import TaskForm from "../components/TaskGenerator/TaskForm";
+import QuestionForm from "../components/TaskGenerator/QuestionForm";
 
 const TaskGenerator = () => {
   return (
     <Container>
       <Card>
-        <TaskForm />
+        <QuestionForm />
       </Card>
     </Container>
   );

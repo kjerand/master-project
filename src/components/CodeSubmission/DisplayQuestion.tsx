@@ -19,6 +19,11 @@ const DisplayQuestion = ({
               toolbarClassName="hidden"
               readOnly={true}
             />
+            <Editor
+              editorState={questions[taskIndex].solutionBody}
+              toolbarClassName="hidden"
+              readOnly={true}
+            />
           </div>
         </>
       )}
