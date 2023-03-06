@@ -29,6 +29,8 @@ import { Language, languages } from "../../utils/languages";
 import { defineTheme, Theme } from "../../utils/defineTheme";
 import CodeSolution from "./CodeSolution";
 import Header from "../base/Header";
+import axios from "axios";
+import { encode } from "js-base64";
 const options = ["Add variable", "Text", "Integer", "Decimal"];
 
 const QuestionForm = () => {
@@ -94,24 +96,32 @@ const QuestionForm = () => {
     return newState;
   };
 
-  const generate = (currentState: EditorState) => {
+  const generate = async (currentState: EditorState) => {
     for (let i = 0; i < numberOfTasks; i++) {
+      let values = [];
+      let types: ("str" | "num")[] = [];
       let state = EditorState.createWithContent(
         currentState.getCurrentContent()
       );
 
       for (let variable of variables) {
         let value;
+        let type;
         if (variable.type === "str") {
           const data = variable.data as StringVariable;
           value = generateStringVariable(data.options);
+          type = "str";
         } else if (variable.type === "int") {
           const data = variable.data as IntegerVariable;
           value = generateIntegerVariable(data.min, data.max);
+          type = "num";
         } else if (variable.type === "dec") {
           const data = variable.data as DecimalVariable;
           value = generateDecimalVariable(data.min, data.max, 2);
+          type = "num";
         }
+        values.push(value);
+        types.push(type);
 
         state = insertVariable(state, variable.name, value.toString());
       }
@@ -120,18 +130,33 @@ const QuestionForm = () => {
       if (codeCheckbox)
         code = codeEditorState.getCurrentContent().getPlainText();
 
-      let solution;
+      let solution = "";
+      if (codeSolutionCheckbox) solution = addInputData(values, types);
 
       questions.push({
         questionBody: editorState,
         solutionBody: state,
         solution: state.getCurrentContent().getPlainText(),
         initialCode: code,
+        codeSolution: solution,
       });
     }
 
     dispatch(addQuestions(questions));
     navigate(ROUTES.menu.path);
+  };
+  const addInputData = (
+    values: (string | number)[],
+    types: ("str" | "num")[]
+  ) => {
+    let val = "\nconsole.log(solution(";
+    for (let i = 0; i < values.length; i++) {
+      if (types[i] === "str") val += "'" + values[i] + "'" + ",";
+      else if (types[i] === "num") val += values[i] + ",";
+    }
+    if (values.length > 0) val = val.substring(0, val.length - 1);
+    val += "))";
+    return code + val;
   };
 
   const variableForm = () => {

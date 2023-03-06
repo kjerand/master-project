@@ -9,6 +9,24 @@ import { Language } from "../../utils/languages";
 import Button from "../base/Button";
 import Header from "../base/Header";
 
+/*export const addInputData = (code: string, values: (string | number)[], type: ("str" | "num")[]) => {
+  let val = "\nconsole.log(solution(";
+
+  for (let i = 0; i < values.length; i++) {
+ 
+    if (type[i] === "str") {
+        val += "'" +values[i]+  "'" + ",";
+      
+    } else if (type[i] === "num") {
+        val += values[i]+ ",";
+  }
+
+  if (values.length > 0) val = val.substring(0, val.length - 1);
+  val += "))";
+
+  return code + val;
+};*/
+
 const CodeSolution = ({
   onChange,
   language,
@@ -70,7 +88,6 @@ const CodeSolution = ({
     const formData = {
       language_id: language.id,
       source_code: encode(codeWithInput),
-      stdin: encode("3,test,2"),
     };
     const options = {
       method: "POST",
@@ -117,8 +134,8 @@ const CodeSolution = ({
       // Processed - we have a result
       if (statusId === 1 || statusId === 2) {
         // still processing
-        setTimeout(() => {
-          checkStatus(token, submission);
+        setTimeout(async () => {
+          await checkStatus(token, submission);
         }, 2000);
         return;
       } else {

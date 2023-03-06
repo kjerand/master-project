@@ -19,6 +19,8 @@ import Sidebar from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
 import { encode, decode } from "js-base64";
 
+import { FadeLoader } from "react-spinners";
+
 const CodeSubmission = () => {
   const [theme, setTheme] = useState<Theme>();
   const [processing, setProcessing] = useState(null);
@@ -30,6 +32,17 @@ const CodeSubmission = () => {
   const questionList = useSelector((state: RootState) => state.questions);
   const [taskIndex, setTaskIndex] = useState<number>(0);
   const [code, setCode] = useState<string>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [questionSolution, setQuestionSolution] = useState<string>("");
+
+  useEffect(() => {
+    if (questionList.questions[taskIndex].codeSolution !== "") {
+      handleCompile(false, true);
+    } else {
+      setQuestionSolution(questionList.questions[taskIndex].solution);
+      setLoading(false);
+    }
+  }, [taskIndex]);
 
   const onChange = (data) => {
     setCode(data);
@@ -43,7 +56,7 @@ const CodeSubmission = () => {
 
   const checkIfPrintingSolution = (): boolean => {
     const compressedCode = code.replace(/ /g, "").replace(/\n|\r/g, "").trim();
-    const compressedSolution = questionList.questions[taskIndex].solution
+    const compressedSolution = questionSolution
       .replace(/ /g, "")
       .replace(/\n|\r/g, "")
       .trim();
@@ -57,16 +70,26 @@ const CodeSubmission = () => {
     return false;
   };
 
-  const handleCompile = (submission: boolean = false) => {
+  const handleCompile = (
+    submission: boolean = false,
+    loadingSolution: boolean = false
+  ) => {
+    if (loadingSolution) {
+      setLoading(true);
+    }
     if (submission) if (checkIfPrintingSolution()) return;
+
+    const compilecode = loadingSolution
+      ? questionList.questions[taskIndex].codeSolution
+      : code;
 
     setAnswerEvaluation(0);
     if (submission) setProcessingSubmit(true);
-    else setProcessing(true);
+    else if (!submission && !loadingSolution) setProcessing(true);
 
     const formData = {
       language_id: language.id,
-      source_code: encode(code),
+      source_code: encode(compilecode),
     };
     const options = {
       method: "POST",
@@ -82,15 +105,15 @@ const CodeSubmission = () => {
       .request(options)
       .then(function (response) {
         const token = response.data.token;
-        checkStatus(token, submission);
+        checkStatus(token, submission, loadingSolution);
       })
       .catch((err) => {
         if (submission) setProcessingSubmit(false);
-        else setProcessing(false);
+        else if (!submission && !loadingSolution) setProcessing(false);
       });
   };
 
-  const handleSubmit = () => handleCompile(true);
+  const handleSubmit = () => handleCompile(true, false);
 
   const evaluateSubmission = (outputData) => {
     if (outputData?.stdout !== null) {
@@ -98,7 +121,7 @@ const CodeSubmission = () => {
         .replace(/ /g, "")
         .replace(/\n|\r/g, "")
         .trim();
-      const solution = questionList.questions[taskIndex].solution
+      const solution = questionSolution
         .replace(/ /g, "")
         .replace(/\n|\r/g, "")
         .trim();
@@ -111,7 +134,7 @@ const CodeSubmission = () => {
     setAnswerEvaluation(2);
   };
 
-  const checkStatus = async (token, submission) => {
+  const checkStatus = async (token, submission, loadingSolution) => {
     const options = {
       method: "GET",
       url: "http://localhost:2358/submissions/" + token,
@@ -125,14 +148,22 @@ const CodeSubmission = () => {
       if (statusId === 1 || statusId === 2) {
         // still processing
         setTimeout(() => {
-          checkStatus(token, submission);
+          checkStatus(token, submission, loadingSolution);
         }, 2000);
         return;
       } else {
+        if (loadingSolution) {
+          setQuestionSolution(decode(response.data.stdout));
+          setLoading(false);
+          return;
+        }
+
         if (submission) setProcessingSubmit(false);
         else setProcessing(false);
         setOutputDetails(response.data);
         if (submission) evaluateSubmission(response.data);
+
+        setLoading(false);
         return;
       }
     } catch (err) {
@@ -200,7 +231,7 @@ const CodeSubmission = () => {
   return (
     <Container>
       <Card width="w-4/5 min-h-44">
-        {questionList.questions.length > 0 && theme ? (
+        {!loading && questionList.questions.length > 0 && theme ? (
           <>
             <Header title="Programming questions" size="4xl" />
             <DisplayQuestion
@@ -238,11 +269,12 @@ const CodeSubmission = () => {
             />
           </>
         ) : (
-          <Header
-            title="Waiting for questions to be added..."
-            size="2xl"
-            className="my-12"
-          />
+          <div>
+            <div className="flex justify-center mt-10">
+              <FadeLoader className="" />
+            </div>
+            <Header title="Loading..." size="lg" className="my-10" />
+          </div>
         )}
       </Card>
     </Container>
