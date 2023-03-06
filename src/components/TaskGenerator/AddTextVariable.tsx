@@ -7,18 +7,21 @@ import Dropdown from "react-dropdown";
 const AddTextVariable = ({
   editorState,
   setEditorState,
-  stringVariables,
-  setStringVariables,
+  variables,
+  setVariables,
 }: {
   editorState: EditorState;
   setEditorState: Function;
-  stringVariables: StringVariable[];
-  setStringVariables: Function;
+  variables: Variable[];
+  setVariables: Function;
 }) => {
   const { OrderedSet } = Immutable;
-  const [stringVariable, setStringVariable] = useState<StringVariable>({
+  const [stringVariable, setStringVariable] = useState<Variable>({
+    data: {
+      options: [],
+    },
+    type: "str",
     name: "",
-    options: [],
   });
   const [option, setOption] = useState<string>("");
 
@@ -36,10 +39,10 @@ const AddTextVariable = ({
       );
 
       let exists = false;
-      stringVariables.forEach((v) => {
+      variables.forEach((v) => {
         if (v.name == stringVariable.name) exists = true;
       });
-      if (!exists) setStringVariables([...stringVariables, stringVariable]);
+      if (!exists) setVariables([...variables, stringVariable]);
     }
   };
   return (
@@ -67,9 +70,13 @@ const AddTextVariable = ({
       <button
         value={option}
         onClick={() => {
+          const data = stringVariable.data as StringVariable;
           setStringVariable({
             ...stringVariable,
-            options: [...stringVariable.options, option],
+            data: {
+              ...data,
+              options: [...data.options, option],
+            },
           });
           setOption("");
         }}

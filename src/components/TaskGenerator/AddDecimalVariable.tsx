@@ -6,53 +6,43 @@ import Button from "../base/Button";
 const AddDecimalVariable = ({
   editorState,
   setEditorState,
-  decimalVariables,
-  setDecimalVariables,
+  variables,
+  setVariables,
 }: {
   editorState: EditorState;
   setEditorState: Function;
-  decimalVariables: DecimalVariable[];
-  setDecimalVariables: Function;
+  variables: Variable[];
+  setVariables: Function;
 }) => {
   const { OrderedSet } = Immutable;
-  const [name, setName] = useState<string>("");
-  const [decimalVariable, setDecimalVariable] = useState<DecimalVariable>({
+  const [decimalVariable, setDecimalVariable] = useState<Variable>({
+    data: {
+      min: 0,
+      max: 0,
+    },
+    type: "dec",
     name: "",
-    min: 0,
-    max: 0,
   });
 
   const addVariable = () => {
-    let exists = false;
-    decimalVariables.forEach((v) => {
-      if (v.name == decimalVariable.name) exists = true;
-    });
-    if (!exists)
-      if (decimalVariable.name != "") {
-        let newContent = Modifier.insertText(
-          editorState.getCurrentContent(),
-          editorState.getSelection(),
-          `{{${decimalVariable.name}}}`,
-          OrderedSet.of("BOLD")
-        );
+    if (decimalVariable.name != "") {
+      let newContent = Modifier.insertText(
+        editorState.getCurrentContent(),
+        editorState.getSelection(),
+        `{{${decimalVariable.name}}}`,
+        OrderedSet.of("BOLD")
+      );
 
-        setEditorState(
-          EditorState.push(editorState, newContent, "insert-characters")
-        );
+      setEditorState(
+        EditorState.push(editorState, newContent, "insert-characters")
+      );
 
-        let exists = false;
-        decimalVariables.forEach((v) => {
-          if (v.name == decimalVariable.name) exists = true;
-        });
-        if (!exists) {
-          setDecimalVariables([...decimalVariables, decimalVariable]);
-          setDecimalVariable({
-            name: "",
-            min: decimalVariable.min,
-            max: decimalVariable.max,
-          });
-        }
-      }
+      let exists = false;
+      variables.forEach((v) => {
+        if (v.name == decimalVariable.name) exists = true;
+      });
+      if (!exists) setVariables([...variables, decimalVariable]);
+    }
   };
   return (
     <div className="my-5 pt-4 flex">
@@ -70,7 +60,10 @@ const AddDecimalVariable = ({
         onChange={(event) => {
           setDecimalVariable({
             ...decimalVariable,
-            min: parseInt(event.target.value),
+            data: {
+              ...decimalVariable.data,
+              min: parseInt(event.target.value),
+            },
           });
         }}
         step={0.01}
@@ -82,7 +75,10 @@ const AddDecimalVariable = ({
         onChange={(event) => {
           setDecimalVariable({
             ...decimalVariable,
-            max: parseInt(event.target.value),
+            data: {
+              ...decimalVariable.data,
+              max: parseInt(event.target.value),
+            },
           });
         }}
         step={0.01}

@@ -1,16 +1,19 @@
 type IntegerVariable = {
-  name: string;
   min: number;
   max: number;
 };
 
 type DecimalVariable = {
-  name: string;
   min: number;
   max: number;
 };
 
 type StringVariable = {
-  name: string;
   options: string[];
+};
+
+type Variable = {
+  data: IntegerVariable | DecimalVariable | StringVariable;
+  name: string;
+  type: "str" | "int" | "dec";
 };

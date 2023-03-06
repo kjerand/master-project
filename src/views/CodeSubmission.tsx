@@ -42,13 +42,14 @@ const CodeSubmission = () => {
   }, []);
 
   const checkIfPrintingSolution = (): boolean => {
+    const compressedCode = code.replace(/ /g, "").replace(/\n|\r/g, "").trim();
+    const compressedSolution = questionList.questions[taskIndex].solution
+      .replace(/ /g, "")
+      .replace(/\n|\r/g, "")
+      .trim();
     if (
-      code.includes(
-        `console.log("${questionList.questions[taskIndex].solution}")`
-      ) ||
-      code.includes(
-        `console.log('${questionList.questions[taskIndex].solution}')`
-      )
+      compressedCode.includes(`console.log("${compressedSolution}")`) ||
+      compressedCode.includes(`console.log('${compressedSolution}')`)
     ) {
       setAnswerEvaluation(3);
       return true;
@@ -57,7 +58,7 @@ const CodeSubmission = () => {
   };
 
   const handleCompile = (submission: boolean = false) => {
-    if (checkIfPrintingSolution()) return;
+    if (submission) if (checkIfPrintingSolution()) return;
 
     setAnswerEvaluation(0);
     if (submission) setProcessingSubmit(true);

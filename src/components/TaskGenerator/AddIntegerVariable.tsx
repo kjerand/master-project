@@ -6,19 +6,22 @@ import Button from "../base/Button";
 const AddIntegerVariable = ({
   editorState,
   setEditorState,
-  integerVariables,
-  setIntegerVariables,
+  variables,
+  setVariables,
 }: {
   editorState: EditorState;
   setEditorState: Function;
-  integerVariables: IntegerVariable[];
-  setIntegerVariables: Function;
+  variables: Variable[];
+  setVariables: Function;
 }) => {
   const { OrderedSet } = Immutable;
-  const [integerVariable, setIntegerVariable] = useState<IntegerVariable>({
+  const [integerVariable, setIntegerVariable] = useState<Variable>({
+    data: {
+      min: 0,
+      max: 0,
+    },
+    type: "int",
     name: "",
-    min: 0,
-    max: 0,
   });
 
   const addVariable = () => {
@@ -34,7 +37,11 @@ const AddIntegerVariable = ({
         EditorState.push(editorState, newContent, "insert-characters")
       );
 
-      setIntegerVariables(integerVariable);
+      let exists = false;
+      variables.forEach((v) => {
+        if (v.name == integerVariable.name) exists = true;
+      });
+      if (!exists) setVariables([...variables, integerVariable]);
     }
   };
   return (
@@ -54,7 +61,10 @@ const AddIntegerVariable = ({
         onChange={(event) => {
           setIntegerVariable({
             ...integerVariable,
-            min: parseInt(event.target.value),
+            data: {
+              ...integerVariable.data,
+              min: parseInt(event.target.value),
+            },
           });
         }}
         className="border-gray-600 border p-2 mr-2"
@@ -65,7 +75,10 @@ const AddIntegerVariable = ({
         onChange={(event) => {
           setIntegerVariable({
             ...integerVariable,
-            max: parseInt(event.target.value),
+            data: {
+              ...integerVariable.data,
+              max: parseInt(event.target.value),
+            },
           });
         }}
         className="border-gray-600 border p-2 mr-2"
