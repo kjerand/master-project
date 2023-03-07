@@ -1,7 +1,7 @@
 import React from "react";
 import CodeSubmission from "./views/CodeSubmission";
+import QuestionForm from "./views/QuestionForm";
 import Menu from "./views/Menu";
-import TaskGenerator from "./views/TaskGenerator";
 
 const ROUTES = {
   menu: {
@@ -13,7 +13,7 @@ const ROUTES = {
     exact: true,
     path: "/create",
     //component: Dashboard,
-    element: <TaskGenerator />,
+    element: <QuestionForm />,
   },
   submitCode: {
     exact: true,

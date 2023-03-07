@@ -7,6 +7,7 @@ export type Question = {
   solution: string;
   initialCode?: string;
   codeSolution: string;
+  title: string;
 };
 
 export interface QuestionState {
@@ -20,6 +21,7 @@ const initialState: QuestionState = {
       solutionBody: EditorState.createEmpty(),
       solution: "",
       codeSolution: "",
+      title: "Empty question",
     },
   ],
 };

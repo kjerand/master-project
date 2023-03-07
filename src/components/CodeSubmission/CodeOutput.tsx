@@ -1,4 +1,4 @@
-import Header from "./base/Header";
+import Header from "../base/Header";
 
 const CodeOutput = ({ output }: { output: Function }) => {
   return (

@@ -1,5 +1,5 @@
 import CodeOutput from "./CodeOutput";
-import EvaluationOutput from "./CodeSubmission/EvaluationOutput";
+import EvaluationOutput from "./EvaluationOutput";
 import CompileButton from "./CompileButton";
 
 const Sidebar = ({

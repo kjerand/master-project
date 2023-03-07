@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-import { languages } from "../utils/languages";
+import { languages } from "../../utils/languages";
 
 const LanguagesDropdown = ({ onSelectChange }) => {
   return (

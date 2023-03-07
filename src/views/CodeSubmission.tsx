@@ -4,21 +4,14 @@ import Container from "../components/base/Container";
 import Header from "../components/base/Header";
 import DisplayQuestion from "../components/CodeSubmission/DisplayQuestion";
 import axios from "axios";
-
 import CodeEditor from "../components/CodeSubmission/CodeEditor";
 import { Language, languages } from "../utils/languages";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
-import ThemeDropdown from "../components/ThemeDropdown";
 import { defineTheme, Theme } from "../utils/defineTheme";
-import LanguagesDropdown from "../components/LanguagesDropdown";
-import DropdownBar from "../components/DropdownBar";
-import CodeOutput from "../components/CodeOutput";
-import CompileButton from "../components/CompileButton";
-import Sidebar from "../components/Sidebar";
-import { useNavigate } from "react-router-dom";
+import DropdownBar from "../components/CodeSubmission/DropdownBar";
+import Sidebar from "../components/CodeSubmission/Sidebar";
 import { encode, decode } from "js-base64";
-
 import { FadeLoader } from "react-spinners";
 
 const CodeSubmission = () => {
@@ -185,7 +178,7 @@ const CodeSubmission = () => {
       );
     } else if (statusId === 3) {
       return (
-        <p className="px-2 py-1 font-normal text-md text-green-700">
+        <p className="px-2 py-1 font-normal text-lg font-mono text-green-700">
           {outputDetails?.stdout !== null
             ? `${decode(outputDetails?.stdout)}`
             : null}
@@ -226,6 +219,7 @@ const CodeSubmission = () => {
 
   useEffect(() => {
     setCode(questionList.questions[taskIndex].initialCode);
+    setOutputDetails(null);
   }, [taskIndex]);
 
   return (
@@ -265,7 +259,6 @@ const CodeSubmission = () => {
               onSelectChange={onSelectChange}
               taskIndex={taskIndex}
               setTaskIndex={setTaskIndex}
-              length={questionList.questions.length}
             />
           </>
         ) : (

@@ -57,14 +57,14 @@ const AddTextVariable = ({
             name: event.target.value,
           })
         }
-        className="w-24 border-gray-600 border p-2 mr-2"
+        className="w-24 border-gray-600 border p-2 rounded"
       />
       <input
         type={"text"}
         value={option}
         placeholder="Text"
         onChange={(event) => setOption(event.target.value)}
-        className="mr-4 border-gray-600 border p-2 w-96"
+        className="mx-2 border-gray-600 border p-2 w-96 rounded"
       />
 
       <button
@@ -80,7 +80,7 @@ const AddTextVariable = ({
           });
           setOption("");
         }}
-        className={`shadow bg-green-800 hover:bg-gray-600 focus:shadow-outline focus:outline-none text-white px-3 text-md rounded`}
+        className={`shadow bg-blue-900 hover:bg-blue-800 focus:shadow-outline focus:outline-none text-white px-3 text-md rounded`}
       >
         Add
       </button>
@@ -90,7 +90,7 @@ const AddTextVariable = ({
           addVariable();
         }}
         text="Add variable"
-        className="bg-blue-700 ml-auto mr-3 px-5"
+        className="bg-blue-700 hover:bg-blue-600 ml-auto mr-3 px-5"
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import Button from "./base/Button";
+import Button from "../base/Button";
 
 const CompileButton = ({
   handleCompile,
@@ -20,7 +20,11 @@ const CompileButton = ({
       <Button
         text={processing ? "Running..." : "Compile and run"}
         onClick={handleCompile}
-        className={`${processing ? "bg-gray-600" : "bg-blue-600"} w-full mb-2`}
+        className={`${
+          processing
+            ? "bg-gray-600 hover:bg-gray-500"
+            : "bg-blue-600 hover:bg-blue-500"
+        } w-full mb-2`}
       />
       <Button
         text={
@@ -36,10 +40,10 @@ const CompileButton = ({
         }}
         className={`${
           processingSubmit
-            ? "bg-gray-600"
+            ? "bg-gray-600 hover:bg-gray-500"
             : evaluation === 1
-            ? "bg-green-600"
-            : "bg-yellow-600"
+            ? "bg-green-600 hover:bg-green-500"
+            : "bg-yellow-600 hover:bg-yellow-500"
         } w-full `}
       />
     </div>

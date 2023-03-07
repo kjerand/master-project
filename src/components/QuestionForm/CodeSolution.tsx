@@ -197,23 +197,25 @@ const CodeSolution = ({
   };
 
   return (
-    <div>
-      <Editor
-        height="60vh"
-        width={`100%`}
-        language={language.value || "typecript"}
-        value={code}
-        theme={theme}
-        defaultValue={generateInitialValue()}
-        onChange={handleEditorChange}
-      />
+    <div className="mb-4">
+      <div className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl">
+        <Editor
+          height="60vh"
+          width={`100%`}
+          language={language.value || "typecript"}
+          value={code}
+          theme={theme}
+          defaultValue={generateInitialValue()}
+          onChange={handleEditorChange}
+        />
+      </div>
       <div className="">
         <Button
           text="See example solution"
           onClick={() => {
             handleCompile();
           }}
-          className="bg-blue-700 px-3 my-2"
+          className="bg-blue-700 hover:bg-blue-600 px-3 my-2"
         />
 
         <Button
@@ -221,10 +223,10 @@ const CodeSolution = ({
           onClick={() => {
             handleEditorChange(generateInitialValue());
           }}
-          className="bg-gray-800 px-3 my-2 ml-4"
+          className="bg-gray-800 hover:bg-gray-700 px-3 my-2 ml-4"
         />
       </div>
-      {exampleSolutionVariableNames.length > 0 && (
+      {(exampleSolutionVariableNames.length > 0 || outputDetails !== null) && (
         <div className="flex">
           <div className="bg-gray-200 rounded-md p-3">
             <Header title="Variables" size="sm" /> {printSolutionVariables()}

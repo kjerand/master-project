@@ -52,7 +52,7 @@ const AddDecimalVariable = ({
         onChange={(event) => {
           setDecimalVariable({ ...decimalVariable, name: event.target.value });
         }}
-        className="w-24 border-gray-600 border p-2 mr-2"
+        className="w-24 border-gray-600 border p-2 mr-2 rounded"
       />
       <input
         type={"number"}
@@ -62,12 +62,12 @@ const AddDecimalVariable = ({
             ...decimalVariable,
             data: {
               ...decimalVariable.data,
-              min: parseInt(event.target.value),
+              min: parseFloat(event.target.value),
             },
           });
         }}
         step={0.01}
-        className="border-gray-600 border p-2 mr-2"
+        className="border-gray-600 border p-2 mr-2 rounded"
       />
       <input
         type={"number"}
@@ -77,19 +77,19 @@ const AddDecimalVariable = ({
             ...decimalVariable,
             data: {
               ...decimalVariable.data,
-              max: parseInt(event.target.value),
+              max: parseFloat(event.target.value),
             },
           });
         }}
         step={0.01}
-        className="border-gray-600 border p-2 mr-2"
+        className="border-gray-600 border p-2 mr-2 rounded"
       />
       <Button
         onClick={() => {
           addVariable();
         }}
         text="Add variable"
-        className="bg-blue-700 ml-auto mr-3 px-5"
+        className="bg-blue-700 hover:bg-blue-600 ml-auto mr-3 px-5"
       />
     </div>
   );
