@@ -88,6 +88,18 @@ const ShowVariables = ({
                 remove={remove}
               />
             );
+          } else if (variable.type === "int[]") {
+            const data = variable.data as IntegerListVariable;
+
+            return (
+              <ColRow
+                key={variable.name}
+                name={variable.name}
+                type="Integer[]"
+                value={`[${data.min}, ${data.max}] * ${data.size}`}
+                remove={remove}
+              />
+            );
           }
           return <></>;
         })}

@@ -12,8 +12,20 @@ type StringVariable = {
   options: string[];
 };
 
-type Variable = {
-  data: IntegerVariable | DecimalVariable | StringVariable;
-  name: string;
-  type: "str" | "int" | "dec";
+type IntegerListVariable = {
+  min: number;
+  max: number;
+  size: number;
 };
+
+type Variable = {
+  data:
+    | IntegerVariable
+    | DecimalVariable
+    | StringVariable
+    | IntegerListVariable;
+  name: string;
+  type: "str" | "int" | "dec" | "int[]";
+};
+
+declare module "*.png";

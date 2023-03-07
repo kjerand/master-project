@@ -148,12 +148,11 @@ const CodeSubmission = () => {
         if (loadingSolution) {
           setQuestionSolution(decode(response.data.stdout));
           setLoading(false);
-          return;
         }
 
         if (submission) setProcessingSubmit(false);
         else setProcessing(false);
-        setOutputDetails(response.data);
+        if (!loadingSolution) setOutputDetails(response.data);
         if (submission) evaluateSubmission(response.data);
 
         setLoading(false);

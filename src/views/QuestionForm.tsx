@@ -33,7 +33,15 @@ import { encode } from "js-base64";
 import ShowVariables from "../components/QuestionForm/ShowVariables";
 import Container from "../components/base/Container";
 import Card from "../components/base/Card";
-const options = ["Add variable", "Text", "Integer", "Decimal"];
+import AddIntegerListVariable from "../components/QuestionForm/AddIntegerListVariable";
+import { generateIntegerListVariable } from "../utils/generateIntegerListVariable";
+const options = [
+  "Add variable",
+  "Text",
+  "Integer",
+  "Decimal",
+  "List of integers",
+];
 
 const QuestionForm = () => {
   const [language, setLanguage] = useState<Language>(languages[0]);
@@ -101,7 +109,7 @@ const QuestionForm = () => {
   const generate = async (currentState: EditorState) => {
     for (let i = 0; i < numberOfTasks; i++) {
       let values = [];
-      let types: ("str" | "num")[] = [];
+      let types: ("str" | "num" | "num[]")[] = [];
       let state = EditorState.createWithContent(
         currentState.getCurrentContent()
       );
@@ -121,6 +129,10 @@ const QuestionForm = () => {
           const data = variable.data as DecimalVariable;
           value = generateDecimalVariable(data.min, data.max, 2);
           type = "num";
+        } else if (variable.type === "int[]") {
+          const data = variable.data as IntegerListVariable;
+          value = generateIntegerListVariable(data.min, data.max, data.size);
+          type = "num[]";
         }
         values.push(value);
         types.push(type);
@@ -154,12 +166,13 @@ const QuestionForm = () => {
   };
   const addInputData = (
     values: (string | number)[],
-    types: ("str" | "num")[]
+    types: ("str" | "num" | "num[]")[]
   ) => {
     let val = "\nconsole.log(solution(";
     for (let i = 0; i < values.length; i++) {
       if (types[i] === "str") val += "'" + values[i] + "'" + ",";
       else if (types[i] === "num") val += values[i] + ",";
+      else if (types[i] === "num[]") val += values[i] + ",";
     }
     if (values.length > 0) val = val.substring(0, val.length - 1);
     val += "))";
@@ -189,6 +202,15 @@ const QuestionForm = () => {
       case "Decimal":
         return (
           <AddDecimalVariable
+            editorState={solutionEditorState}
+            setEditorState={setSolutionEditorState}
+            variables={variables}
+            setVariables={setVariables}
+          />
+        );
+      case "List of integers":
+        return (
+          <AddIntegerListVariable
             editorState={solutionEditorState}
             setEditorState={setSolutionEditorState}
             variables={variables}

@@ -3,29 +3,12 @@ import axios from "axios";
 import { decode, encode } from "js-base64";
 import { useState } from "react";
 import { generateDecimalVariable } from "../../utils/generateDecimalVariable";
+import { generateIntegerListVariable } from "../../utils/generateIntegerListVariable";
 import { generateIntegerVariable } from "../../utils/generateIntegerVariable";
 import { generateStringVariable } from "../../utils/generateStringVariable";
 import { Language } from "../../utils/languages";
 import Button from "../base/Button";
 import Header from "../base/Header";
-
-/*export const addInputData = (code: string, values: (string | number)[], type: ("str" | "num")[]) => {
-  let val = "\nconsole.log(solution(";
-
-  for (let i = 0; i < values.length; i++) {
- 
-    if (type[i] === "str") {
-        val += "'" +values[i]+  "'" + ",";
-      
-    } else if (type[i] === "num") {
-        val += values[i]+ ",";
-  }
-
-  if (values.length > 0) val = val.substring(0, val.length - 1);
-  val += "))";
-
-  return code + val;
-};*/
 
 const CodeSolution = ({
   onChange,
@@ -66,6 +49,9 @@ const CodeSolution = ({
       } else if (variable.type === "dec") {
         const data = variable.data as DecimalVariable;
         value = generateDecimalVariable(data.min, data.max, 2);
+      } else if (variable.type === "int[]") {
+        const data = variable.data as IntegerListVariable;
+        value = generateIntegerListVariable(data.min, data.max, data.size);
       }
       names.push(variable.name);
       values.push(value);
@@ -84,7 +70,6 @@ const CodeSolution = ({
   const handleCompile = (submission: boolean = false) => {
     setOutputDetails(null);
     let codeWithInput = addInputData(variables);
-    console.log(codeWithInput);
     const formData = {
       language_id: language.id,
       source_code: encode(codeWithInput),
@@ -183,11 +168,9 @@ const CodeSolution = ({
   const generateInitialValue = (): string => {
     let val = "function solution(";
     for (let variable of variables) {
-      if (variable.type === "str") {
-        val += variable.name + ": string, ";
-      } else {
-        val += variable.name + ": number, ";
-      }
+      if (variable.type === "str") val += variable.name + ": string, ";
+      else if (variable.type === "int") val += variable.name + ": number, ";
+      else if (variable.type === "int[]") val += variable.name + ": number[], ";
     }
     if (variables.length > 0) val = val.substring(0, val.length - 2);
 
@@ -198,7 +181,7 @@ const CodeSolution = ({
 
   return (
     <div className="mb-4">
-      <div className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl">
+      <div className="overlay rounded-md w-full h-full shadow-4xl">
         <Editor
           height="60vh"
           width={`100%`}
