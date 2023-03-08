@@ -5,9 +5,11 @@ import { RootState } from "../../app/store";
 const QuestionDropdown = ({
   taskIndex,
   setTaskIndex,
+  className = "",
 }: {
   taskIndex: number;
   setTaskIndex: Function;
+  className?: string;
 }) => {
   const questionList = useSelector((state: RootState) => state.questions);
 
@@ -20,14 +22,16 @@ const QuestionDropdown = ({
     }
   );
   return (
-    <Select
-      placeholder={`Choose question`}
-      defaultValue={indices[0]}
-      options={indices}
-      onChange={(selectedOption) => setTaskIndex(selectedOption.value)}
-      menuPlacement="top"
-      className="w-1/4"
-    />
+    <div className={className}>
+      <Select
+        placeholder={`Choose question`}
+        options={indices}
+        value={indices[taskIndex]}
+        onChange={(selectedOption) => setTaskIndex(selectedOption.value)}
+        menuPlacement="top"
+        className="font-mono"
+      />
+    </div>
   );
 };
 

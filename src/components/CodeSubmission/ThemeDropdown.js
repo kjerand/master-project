@@ -15,6 +15,7 @@ const ThemeDropdown = ({ handleThemeChange, theme }) => {
       value={theme}
       onChange={handleThemeChange}
       menuPlacement="top"
+      className="font-mono"
     />
   );
 };

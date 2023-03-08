@@ -52,7 +52,7 @@ const AddDecimalVariable = ({
         onChange={(event) => {
           setDecimalVariable({ ...decimalVariable, name: event.target.value });
         }}
-        className="w-24 border-gray-600 border p-2 mr-2 rounded"
+        className="w-24 border-gray-600 border p-2 mr-2 rounded font-mono"
       />
       <input
         type={"number"}
@@ -67,7 +67,7 @@ const AddDecimalVariable = ({
           });
         }}
         step={0.01}
-        className="border-gray-600 border p-2 mr-2 rounded"
+        className="border-gray-600 border p-2 mr-2 rounded font-mono"
       />
       <input
         type={"number"}
@@ -82,7 +82,7 @@ const AddDecimalVariable = ({
           });
         }}
         step={0.01}
-        className="border-gray-600 border p-2 mr-2 rounded"
+        className="border-gray-600 border p-2 mr-2 rounded font-mono"
       />
       <Button
         onClick={() => {

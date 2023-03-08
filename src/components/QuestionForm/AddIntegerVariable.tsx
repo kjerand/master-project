@@ -56,7 +56,7 @@ const AddIntegerVariable = ({
             name: event.target.value.trim(),
           });
         }}
-        className="w-24 border-gray-600 border p-2 mr-2 rounded"
+        className="w-24 border-gray-600 border p-2 mr-2 rounded font-mono"
       />
       <input
         type={"number"}
@@ -70,7 +70,7 @@ const AddIntegerVariable = ({
             },
           });
         }}
-        className="border-gray-600 border p-2 mr-2 rounded"
+        className="border-gray-600 border p-2 mr-2 rounded font-mono"
       />
       <input
         type={"number"}
@@ -84,7 +84,7 @@ const AddIntegerVariable = ({
             },
           });
         }}
-        className="border-gray-600 border p-2 mr-2 rounded"
+        className="border-gray-600 border p-2 mr-2 rounded font-mono"
       />
       <Button
         onClick={() => {

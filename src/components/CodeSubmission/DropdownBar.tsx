@@ -1,5 +1,3 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../../app/store";
 import LanguagesDropdown from "./LanguagesDropdown";
 import QuestionDropdown from "./QuestionDropdown";
 import ThemeDropdown from "./ThemeDropdown";
@@ -13,7 +11,11 @@ const DropdownBar = ({
 }) => {
   return (
     <div className="flex mt-3">
-      <QuestionDropdown taskIndex={taskIndex} setTaskIndex={setTaskIndex} />
+      <QuestionDropdown
+        taskIndex={taskIndex}
+        setTaskIndex={setTaskIndex}
+        className="w-1/4"
+      />
       <LanguagesDropdown onSelectChange={onSelectChange} />
       <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />
     </div>

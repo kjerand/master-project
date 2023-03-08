@@ -6,21 +6,21 @@ const EvaluationOutput = ({ evaluation }: { evaluation: number }) => {
       }
       case 1: {
         return (
-          <p className="px-2 py-1 font-normal text-md text-green-700">
-            Correct!
+          <p className="px-2 py-1 font-normal text-lg font-mono text-green-700">
+            Correct answer!
           </p>
         );
       }
       case 2: {
         return (
-          <p className="px-2 py-1 font-normal text-md text-red-500">
+          <p className="px-2 py-1 font-normal text-lg font-mono text-red-500">
             Wrong answer!
           </p>
         );
       }
       case 3: {
         return (
-          <p className="px-2 py-1 font-normal text-md text-red-500">
+          <p className="px-2 py-1 font-normal text-md font-mono text-red-500">
             You can't just print the solution!
           </p>
         );

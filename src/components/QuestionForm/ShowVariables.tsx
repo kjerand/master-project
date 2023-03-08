@@ -12,17 +12,17 @@ const ColRow = ({
 }) => {
   return (
     <>
-      <p className="col-span-2 font-normal text-md text-gray-700 m-auto">
+      <p className="col-span-2 font-normal text-md text-gray-700 m-auto font-mono">
         {name}
       </p>
-      <p className="col-span-2 font-normal text-md text-gray-700 m-auto">
+      <p className="col-span-2 font-normal text-md text-gray-700 m-auto font-mono">
         {type}
       </p>
-      <p className="col-span-5 font-normal text-md text-gray-700 m-auto">
+      <p className="col-span-5 font-normal text-md text-gray-700 m-auto font-mono">
         {value}{" "}
       </p>
       <p
-        className="col-span-1 font-normal text-sm text-gray-700 m-auto cursor-pointer"
+        className="col-span-1 font-normal text-sm text-gray-700 m-auto cursor-pointer font-mono"
         onClick={() => remove(name)}
       >
         Remove
@@ -96,7 +96,7 @@ const ShowVariables = ({
                 key={variable.name}
                 name={variable.name}
                 type="Integer[]"
-                value={`[${data.min}, ${data.max}] * ${data.size}`}
+                value={`[${data.min}, ${data.max}] x ${data.size}`}
                 remove={remove}
               />
             );

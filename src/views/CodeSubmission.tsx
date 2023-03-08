@@ -13,6 +13,8 @@ import DropdownBar from "../components/CodeSubmission/DropdownBar";
 import Sidebar from "../components/CodeSubmission/Sidebar";
 import { encode, decode } from "js-base64";
 import { FadeLoader } from "react-spinners";
+import GuessCodeOutput from "../components/QuestionForm/GuessCodeOutput";
+import Loading from "../components/base/Loading";
 
 const CodeSubmission = () => {
   const [theme, setTheme] = useState<Theme>();
@@ -221,53 +223,75 @@ const CodeSubmission = () => {
     setOutputDetails(null);
   }, [taskIndex]);
 
-  return (
-    <Container>
-      <Card width="w-4/5 min-h-44">
-        {!loading && questionList.questions.length > 0 && theme ? (
-          <>
-            <Header title="Programming questions" size="4xl" />
-            <DisplayQuestion
-              questions={questionList.questions}
-              taskIndex={taskIndex}
-            />
-            <Container>
-              <CodeEditor
-                code={code}
-                theme={theme.value}
-                language={language.value}
-                onChange={onChange}
-                initialCode={questionList.questions[taskIndex].initialCode}
+  const variant = () => {
+    if (!loading && questionList.questions.length > 0 && theme) {
+      switch (questionList.questions[taskIndex].variant) {
+        case "code":
+          return (
+            <>
+              <Header
+                title={questionList.questions[taskIndex].title}
+                size="4xl"
               />
-              <Sidebar
-                handleSubmit={handleSubmit}
-                handleCompile={handleCompile}
-                evaluation={answerEvaluation}
-                processing={processing}
-                processingSubmit={processingSubmit}
-                output={getOutput}
-                nextStage={() => {
-                  setTaskIndex(taskIndex + 1);
-                  setAnswerEvaluation(0);
-                }}
+              <DisplayQuestion question={questionList.questions[taskIndex]} />
+              <Container>
+                <CodeEditor
+                  code={code}
+                  theme={theme.value}
+                  language={language.value}
+                  onChange={onChange}
+                  initialCode={questionList.questions[taskIndex].initialCode}
+                />
+                <Sidebar
+                  handleSubmit={handleSubmit}
+                  handleCompile={handleCompile}
+                  evaluation={answerEvaluation}
+                  processing={processing}
+                  processingSubmit={processingSubmit}
+                  output={getOutput}
+                  nextStage={() => {
+                    setTaskIndex(taskIndex + 1);
+                    setAnswerEvaluation(0);
+                  }}
+                />
+              </Container>
+              <DropdownBar
+                handleThemeChange={handleThemeChange}
+                theme={theme}
+                onSelectChange={onSelectChange}
+                taskIndex={taskIndex}
+                setTaskIndex={setTaskIndex}
               />
-            </Container>
-            <DropdownBar
-              handleThemeChange={handleThemeChange}
-              theme={theme}
-              onSelectChange={onSelectChange}
+            </>
+          );
+        case "text":
+          return (
+            <GuessCodeOutput
+              solution={questionSolution}
+              question={questionList.questions[taskIndex]}
+              theme={theme.value}
+              language={language.value}
+              nextStage={() => {
+                setTaskIndex(taskIndex + 1);
+              }}
               taskIndex={taskIndex}
               setTaskIndex={setTaskIndex}
             />
-          </>
-        ) : (
-          <div>
-            <div className="flex justify-center mt-10">
-              <FadeLoader className="" />
-            </div>
-            <Header title="Loading..." size="lg" className="my-10" />
-          </div>
-        )}
+          );
+      }
+    } else return <Loading />;
+  };
+
+  return (
+    <Container>
+      <Card
+        width={`${
+          questionList.questions[taskIndex].variant === "code"
+            ? "w-3/4"
+            : "w-1/2"
+        } min-h-44`}
+      >
+        {variant()}
       </Card>
     </Container>
   );

@@ -8,6 +8,7 @@ export type Question = {
   initialCode?: string;
   codeSolution: string;
   title: string;
+  variant: "code" | "text";
 };
 
 export interface QuestionState {
@@ -22,6 +23,7 @@ const initialState: QuestionState = {
       solution: "",
       codeSolution: "",
       title: "Empty question",
+      variant: "code",
     },
   ],
 };

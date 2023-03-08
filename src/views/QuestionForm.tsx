@@ -70,6 +70,7 @@ const QuestionForm = () => {
   const [codeCheckbox, setCodeCheckbox] = useState<boolean>(false);
   const [codeSolutionCheckbox, setCodeSolutionCheckbox] =
     useState<boolean>(false);
+  const [variantCheckbox, setVariantCheckbox] = useState<boolean>(false);
 
   const dispatch = useDispatch();
 
@@ -95,14 +96,6 @@ const QuestionForm = () => {
       ContentState.createFromText(replacedText)
     );
 
-    const selectionState = newState.getSelection();
-    const newSelection = selectionState.merge({
-      anchorOffset: 0,
-      focusOffset: replacedText.length,
-    });
-    newState = EditorState.forceSelection(newState, newSelection);
-    newState = RichUtils.toggleInlineStyle(newState, "CODE");
-    newState = EditorState.forceSelection(newState, selectionState);
     return newState;
   };
 
@@ -151,6 +144,7 @@ const QuestionForm = () => {
       if (questionTitle === "") title = "Question" + " (" + (i + 1) + ")";
       else title = questionTitle + " (" + (i + 1) + ")";
 
+      const variant = variantCheckbox ? "text" : "code";
       questions.push({
         questionBody: editorState,
         solutionBody: state,
@@ -158,6 +152,7 @@ const QuestionForm = () => {
         initialCode: code,
         codeSolution: solution,
         title: title,
+        variant: variant,
       });
     }
 
@@ -168,13 +163,13 @@ const QuestionForm = () => {
     values: (string | number)[],
     types: ("str" | "num" | "num[]")[]
   ) => {
-    let val = "\nconsole.log(solution(";
+    let val = "\n\nconsole.log(solution(";
     for (let i = 0; i < values.length; i++) {
-      if (types[i] === "str") val += "'" + values[i] + "'" + ",";
-      else if (types[i] === "num") val += values[i] + ",";
-      else if (types[i] === "num[]") val += values[i] + ",";
+      if (types[i] === "str") val += "'" + values[i] + "'" + ", ";
+      else if (types[i] === "num") val += values[i] + ", ";
+      else if (types[i] === "num[]") val += values[i] + ", ";
     }
-    if (values.length > 0) val = val.substring(0, val.length - 1);
+    if (values.length > 0) val = val.substring(0, val.length - 2);
     val += "))";
     return code + val;
   };
@@ -233,13 +228,11 @@ const QuestionForm = () => {
             if (submit) generate(solutionEditorState);
           }}
         >
-          <h3 className="font-medium leading-tight text-4xl mt-0 mb-2 text-gray-700 mb-12 text-center">
-            Genererate variants of question
-          </h3>
+          <Header title="Genererate variants of question" size="4xl" />
 
           <div className="my-8 grid grid-cols-2 w-full gap-3">
             <div className="flex">
-              <h3 className="font-medium leading-tight text-lg text-gray-700 mr-4 my-auto">
+              <h3 className="font-medium font-mono leading-tight text-base text-gray-700 mr-4 my-auto">
                 Question title:
               </h3>
               <input
@@ -249,12 +242,12 @@ const QuestionForm = () => {
                 onChange={(event) => {
                   setQuestionTitle(event.target.value);
                 }}
-                className="border-gray-600 border px-2 my-auto rounded"
+                className="border-gray-600 border px-2 my-auto rounded font-mono"
                 required
               />
             </div>
             <div className="flex">
-              <h3 className="font-medium leading-tight text-lg text-gray-700 mr-4 my-auto">
+              <h3 className="font-medium font-mono leading-tight text-base text-gray-700 mr-4 my-auto">
                 Number of variants:
               </h3>
               <input
@@ -264,7 +257,7 @@ const QuestionForm = () => {
                 onChange={(event) => {
                   setNumberOfTasks(parseInt(event.target.value));
                 }}
-                className="border-gray-600 border px-2 my-auto rounded"
+                className="border-gray-600 border px-2 my-auto rounded font-mono"
                 required
               />
             </div>
@@ -280,7 +273,7 @@ const QuestionForm = () => {
                 editorState={editorState}
                 toolbarClassName="toolbarClassName"
                 wrapperClassName="wrapperClassName"
-                editorClassName="editorClassName"
+                editorClassName="editorClassName font-mono"
                 onEditorStateChange={setEditorState}
                 style={{
                   fontFamily: '"Fira code", "Fira Mono", monospace',
@@ -295,7 +288,7 @@ const QuestionForm = () => {
                   editorState={codeEditorState}
                   toolbarClassName="hidden"
                   wrapperClassName="wrapperClassName"
-                  editorClassName="editorClassName"
+                  editorClassName="editorClassName font-mono"
                   onEditorStateChange={setCodeEditorState}
                   style={{
                     fontFamily: '"Fira code", "Fira Mono", monospace',
@@ -311,7 +304,7 @@ const QuestionForm = () => {
                 editorState={solutionEditorState}
                 toolbarClassName="hidden"
                 wrapperClassName="wrapperClassName"
-                editorClassName="border-1"
+                editorClassName="border-1 font-mono"
                 onEditorStateChange={setSolutionEditorState}
                 style={{
                   fontFamily: '"Fira code", "Fira Mono", monospace',
@@ -328,13 +321,13 @@ const QuestionForm = () => {
             }}
             value={options[0]}
             placeholder="Add variable"
-            className="mb-5 border-t-4 border-gray-700 pt-4"
+            className="mb-5 border-t-4 border-gray-700 pt-4 font-mono"
           />
           {variableForm()}
 
           <ShowVariables variables={variables} setVariables={setVariables} />
 
-          <div className="grid grid-cols-2 mb-5 m-auto">
+          <div className="grid grid-cols-3 mb-5 m-auto">
             <div className="flex m-auto items-center">
               <input
                 onChange={(e) => setCodeSolutionCheckbox(!codeSolutionCheckbox)}
@@ -342,7 +335,7 @@ const QuestionForm = () => {
                 className="w-4 h-4 mr-4 pt-2"
                 checked={codeSolutionCheckbox}
               />
-              <div className="text-md font-medium leading-tight text-gray-700">
+              <div className="text-md font-medium leading-tight text-gray-700 font-mono">
                 {"Add code solution"}
               </div>
             </div>
@@ -352,9 +345,22 @@ const QuestionForm = () => {
                 type={"checkbox"}
                 className="w-4 h-4 mr-4 pt-2"
                 checked={codeCheckbox}
+                disabled={variantCheckbox}
               />
-              <div className="text-md font-medium leading-tight text-gray-700">
+              <div className="text-md font-medium leading-tight text-gray-700 font-mono">
                 {"Attach question code"}
+              </div>
+            </div>
+            <div className="flex m-auto items-center">
+              <input
+                onChange={(e) => setVariantCheckbox(!variantCheckbox)}
+                type={"checkbox"}
+                className="w-4 h-4 mr-4 pt-2"
+                checked={variantCheckbox}
+                disabled={!codeSolutionCheckbox}
+              />
+              <div className="text-md font-medium leading-tight text-gray-700 font-mono">
+                {"Answer with text"}
               </div>
             </div>
           </div>
