@@ -2,6 +2,7 @@ import React from "react";
 import CodeSubmission from "./views/CodeSubmission";
 import QuestionForm from "./views/QuestionForm";
 import Menu from "./views/Menu";
+import QuestionBank from "./views/QuestionBank";
 
 const ROUTES = {
   menu: {
@@ -19,6 +20,11 @@ const ROUTES = {
     exact: true,
     path: "submit",
     element: <CodeSubmission />,
+  },
+  questionBank: {
+    exact: true,
+    path: "bank",
+    element: <QuestionBank />,
   },
 };
 

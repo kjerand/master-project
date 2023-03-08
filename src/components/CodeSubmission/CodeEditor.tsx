@@ -23,7 +23,7 @@ const CodeEditor = ({
   const empty = (value: string) => value !== undefined && value !== "";
 
   return (
-    <div className="overlay rounded-md overflow-hidden w-full h-full shadow-4xl">
+    <div className="overlay rounded-md w-full h-full shadow-4xl">
       <Editor
         height="60vh"
         width={`100%`}

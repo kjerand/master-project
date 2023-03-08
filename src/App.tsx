@@ -14,6 +14,7 @@ const App = () => {
           <Route {...ROUTES.menu} />
           <Route {...ROUTES.create} />
           <Route {...ROUTES.submitCode} />
+          <Route {...ROUTES.questionBank} />
         </Routes>
       </Router>
     </Provider>
