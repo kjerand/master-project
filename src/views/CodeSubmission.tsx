@@ -227,11 +227,12 @@ const CodeSubmission = () => {
     if (questionList.questions.length > 0) {
       setCode(questionList.questions[taskIndex].initialCode);
       setOutputDetails(null);
+      setAnswerEvaluation(0);
     }
   }, [taskIndex]);
 
   const variant = () => {
-    if (!loading && questionList.questions.length > 0 && theme) {
+    if (questionList.questions.length > 0 && theme) {
       switch (questionList.questions[taskIndex].variant) {
         case "code":
           return (
@@ -262,6 +263,7 @@ const CodeSubmission = () => {
                     );
                     setAnswerEvaluation(0);
                   }}
+                  loading={loading}
                 />
               </Container>
               <DropdownBar
@@ -284,9 +286,13 @@ const CodeSubmission = () => {
                 setTaskIndex(
                   Math.floor(Math.random() * questionList.questions.length)
                 );
+                setAnswerEvaluation(0);
               }}
               taskIndex={taskIndex}
               setTaskIndex={setTaskIndex}
+              loading={loading}
+              answerEvaluation={answerEvaluation}
+              setAnswerEvaluation={setAnswerEvaluation}
             />
           );
       }

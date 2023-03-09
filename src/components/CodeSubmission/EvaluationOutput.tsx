@@ -1,5 +1,17 @@
-const EvaluationOutput = ({ evaluation }: { evaluation: number }) => {
+const EvaluationOutput = ({
+  evaluation,
+  loading,
+}: {
+  evaluation: number;
+  loading: boolean;
+}) => {
   const getEvaluation = () => {
+    if (loading)
+      return (
+        <p className="px-2 py-1 font-normal text-lg font-mono text-yellow-700">
+          Loading...
+        </p>
+      );
     switch (evaluation) {
       case 0: {
         return <></>;

@@ -1,5 +1,5 @@
 import Editor from "@monaco-editor/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Question } from "../../app/questions";
 import Button from "../base/Button";
 import Header from "../base/Header";
@@ -15,6 +15,9 @@ const GuessCodeOutput = ({
   nextStage,
   taskIndex,
   setTaskIndex,
+  loading,
+  answerEvaluation,
+  setAnswerEvaluation,
 }: {
   solution: string;
   question: Question;
@@ -23,14 +26,18 @@ const GuessCodeOutput = ({
   nextStage: Function;
   taskIndex: number;
   setTaskIndex: Function;
+  loading: boolean;
+  answerEvaluation: number;
+  setAnswerEvaluation: Function;
 }) => {
-  const [answerEvaluation, setAnswerEvaluation] = useState<number>(0);
   const [answer, setAnswer] = useState<string>("");
 
   const evaluate = () => {
     if (answer.trim() == solution.trim()) setAnswerEvaluation(1);
     else setAnswerEvaluation(2);
   };
+
+  useEffect(() => setAnswer(""), [taskIndex]);
   return (
     <>
       <Header title={question.title} size="text-4xl" />
@@ -63,18 +70,21 @@ const GuessCodeOutput = ({
           <Button
             text={`${answerEvaluation === 1 ? "Next stage" : "Submit"}`}
             onClick={() => {
-              if (answerEvaluation !== 1) evaluate();
-              else nextStage();
+              if (answerEvaluation === 1) nextStage();
+              else evaluate();
             }}
             className={`${
-              answerEvaluation === 1
+              loading
+                ? "bg-gray-600"
+                : answerEvaluation === 1
                 ? "bg-green-600 hover:bg-green-500"
                 : "bg-yellow-600 hover:bg-yellow-500"
             } w-1/3`}
+            disabled={loading}
           />
         </div>
         <div className="m-auto">
-          <EvaluationOutput evaluation={answerEvaluation} />
+          <EvaluationOutput evaluation={answerEvaluation} loading={loading} />
         </div>
       </div>
     </>

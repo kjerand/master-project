@@ -7,6 +7,7 @@ const CompileButton = ({
   processingSubmit,
   evaluation,
   nextStage,
+  loading,
 }: {
   handleCompile: Function;
   handleSubmit: Function;
@@ -14,6 +15,7 @@ const CompileButton = ({
   processingSubmit: boolean;
   evaluation: number;
   nextStage: Function;
+  loading: boolean;
 }) => {
   return (
     <div className="mt-auto flex flex-col">
@@ -21,10 +23,11 @@ const CompileButton = ({
         text={processing ? "Running..." : "Compile and run"}
         onClick={handleCompile}
         className={`${
-          processing
-            ? "bg-gray-600 hover:bg-gray-500"
+          processing || loading
+            ? "bg-gray-400"
             : "bg-blue-600 hover:bg-blue-500"
         } w-full mb-2`}
+        disabled={loading}
       />
       <Button
         text={
@@ -39,12 +42,13 @@ const CompileButton = ({
           else nextStage();
         }}
         className={`${
-          processingSubmit
-            ? "bg-gray-600 hover:bg-gray-500"
+          processingSubmit || loading
+            ? "bg-gray-600 "
             : evaluation === 1
             ? "bg-green-600 hover:bg-green-500"
             : "bg-yellow-600 hover:bg-yellow-500"
         } w-full `}
+        disabled={loading}
       />
     </div>
   );

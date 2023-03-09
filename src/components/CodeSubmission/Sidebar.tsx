@@ -10,6 +10,7 @@ const Sidebar = ({
   processing,
   processingSubmit,
   nextStage,
+  loading,
 }: {
   handleCompile: Function;
   handleSubmit: Function;
@@ -18,11 +19,12 @@ const Sidebar = ({
   processing: boolean;
   processingSubmit: boolean;
   nextStage: Function;
+  loading: boolean;
 }) => {
   return (
     <div className="w-2/5 flex-row flex flex-col ml-2">
       <CodeOutput output={output} />
-      <EvaluationOutput evaluation={evaluation} />
+      <EvaluationOutput evaluation={evaluation} loading={loading} />
       <CompileButton
         handleSubmit={handleSubmit}
         handleCompile={handleCompile}
@@ -30,6 +32,7 @@ const Sidebar = ({
         processingSubmit={processingSubmit}
         evaluation={evaluation}
         nextStage={nextStage}
+        loading={loading}
       />
     </div>
   );
