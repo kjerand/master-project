@@ -17,21 +17,21 @@ const Menu = () => {
             onClick={() => {
               navigate(ROUTES.create.path);
             }}
-            className="bg-blue-700 hover:bg-blue-600 w-1/3"
+            className="bg-[#00509e] hover:bg-blue-700 w-1/3"
           />
           <Button
             text="Answer questions"
             onClick={() => {
               navigate(ROUTES.submitCode.path);
             }}
-            className="bg-blue-700 hover:bg-blue-600 w-1/3"
+            className="bg-[#00509e] hover:bg-blue-700 w-1/3"
           />
           <Button
             text="Question bank"
             onClick={() => {
               navigate(ROUTES.questionBank.path);
             }}
-            className="bg-blue-700 hover:bg-blue-600 w-1/3"
+            className="bg-[#00509e] hover:bg-blue-700 w-1/3"
           />
         </div>
       </Card>

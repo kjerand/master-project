@@ -1,9 +1,12 @@
 import Editor from "@monaco-editor/react";
-import { Question } from "../../app/questions";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 import { languages } from "../../utils/languages";
 import Header from "../base/Header";
 import DisplayQuestion from "../CodeSubmission/DisplayQuestion";
 import QuestionDropdown from "../CodeSubmission/QuestionDropdown";
+
+import { addQuestion, deleteQuestion, Question } from "../../app/questions";
 
 const QuestionDetails = ({
   question,
@@ -14,6 +17,15 @@ const QuestionDetails = ({
   taskIndex: number;
   setTaskIndex: Function;
 }) => {
+  const dispatch = useDispatch();
+
+  const handleDelete = () => {
+    dispatch(deleteQuestion(taskIndex));
+
+    if (taskIndex - 1 > 0) setTaskIndex(taskIndex - 1);
+    else setTaskIndex(0);
+  };
+
   return (
     <div>
       <div className="grid grid-cols-2 my-4">
@@ -26,7 +38,7 @@ const QuestionDetails = ({
             <p className="text-blue-700 mr-1">{`Variant:`}</p>
             <p> {question.variant}</p>
           </p>
-          <p className="flex">
+          <p className="flex" onClick={handleDelete}>
             <p className="text-red-700 mr-1 cursor-pointer">{`Delete`}</p>
           </p>
         </div>

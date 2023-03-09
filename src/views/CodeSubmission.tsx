@@ -26,7 +26,9 @@ const CodeSubmission = () => {
   const [answerEvaluation, setAnswerEvaluation] = useState<number>(0);
 
   const questionList = useSelector((state: RootState) => state.questions);
-  const [taskIndex, setTaskIndex] = useState<number>(0);
+  const [taskIndex, setTaskIndex] = useState<number>(
+    Math.floor(Math.random() * questionList.questions.length)
+  );
   const [code, setCode] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
   const [questionSolution, setQuestionSolution] = useState<string>("");
@@ -255,7 +257,9 @@ const CodeSubmission = () => {
                   processingSubmit={processingSubmit}
                   output={getOutput}
                   nextStage={() => {
-                    setTaskIndex(taskIndex + 1);
+                    setTaskIndex(
+                      Math.floor(Math.random() * questionList.questions.length)
+                    );
                     setAnswerEvaluation(0);
                   }}
                 />
@@ -277,7 +281,9 @@ const CodeSubmission = () => {
               theme={theme.value}
               language={language.value}
               nextStage={() => {
-                setTaskIndex(taskIndex + 1);
+                setTaskIndex(
+                  Math.floor(Math.random() * questionList.questions.length)
+                );
               }}
               taskIndex={taskIndex}
               setTaskIndex={setTaskIndex}

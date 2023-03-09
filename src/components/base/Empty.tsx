@@ -14,7 +14,7 @@ const Empty = () => {
           }}
         />
       </div>
-      <Header title="No questions added yet" size="text-2xl" />
+      <Header title="No questions added yet" size="text-xl" />
     </Card>
   );
 };

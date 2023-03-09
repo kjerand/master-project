@@ -61,6 +61,7 @@ const QuestionForm = () => {
   const [numberOfTasks, setNumberOfTasks] = useState<number>(10);
   const [questionTitle, setQuestionTitle] = useState<string>("Example");
   const [questions, setQuestions] = useState<Question[]>([]);
+  const questionList = useSelector((state: RootState) => state.questions);
   const navigate = useNavigate();
 
   const [dropdownOption, setDropdownOption] = useState<string>("");
@@ -143,8 +144,12 @@ const QuestionForm = () => {
       else textSolution = state.getCurrentContent().getPlainText();
 
       let title;
-      if (questionTitle === "") title = "Question" + " (" + (i + 1) + ")";
-      else title = questionTitle + " (" + (i + 1) + ")";
+      if (questionTitle === "")
+        title =
+          "Question" + " (" + (i + 1 + questionList.questions.length) + ")";
+      else
+        title =
+          questionTitle + " (" + (i + 1 + questionList.questions.length) + ")";
 
       const variant = variantCheckbox ? "text" : "code";
       questions.push({
@@ -230,7 +235,7 @@ const QuestionForm = () => {
             if (submit) generate(solutionEditorState);
           }}
         >
-          <Header title="Genererate variants of question" size="text-4xl" />
+          <Header title="Genererate variants of question" size="text-3xl" />
 
           <div className="my-8 grid grid-cols-2 w-full gap-3">
             <div className="flex">
@@ -382,7 +387,7 @@ const QuestionForm = () => {
             onClick={() => {
               setSumbit(true);
             }}
-            className="bg-blue-800 hover:bg-blue-700 px-5 w-full"
+            className="bg-[#00509e] hover:bg-blue-700 px-5 w-full"
           />
         </form>
       </Card>
