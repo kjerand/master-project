@@ -10,8 +10,8 @@ const Menu = () => {
   return (
     <Container>
       <Card>
-        <Header title="Main menu" size="4xl" />
-        <div className="flex grid grid-cols-1 gap-y-5 mt-8">
+        <Header title="Main menu" size="text-4xl" />
+        <div className="grid grid-cols-1 gap-y-5 mt-8 mb-4">
           <Button
             text="Create questions"
             onClick={() => {

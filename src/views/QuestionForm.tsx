@@ -137,8 +137,10 @@ const QuestionForm = () => {
       if (codeCheckbox)
         code = codeEditorState.getCurrentContent().getPlainText();
 
-      let solution = "";
-      if (codeSolutionCheckbox) solution = addInputData(values, types);
+      let textSolution = "";
+      let codeSolution = "";
+      if (codeSolutionCheckbox) codeSolution = addInputData(values, types);
+      else textSolution = state.getCurrentContent().getPlainText();
 
       let title;
       if (questionTitle === "") title = "Question" + " (" + (i + 1) + ")";
@@ -146,11 +148,11 @@ const QuestionForm = () => {
 
       const variant = variantCheckbox ? "text" : "code";
       questions.push({
-        questionBody: editorState,
-        solutionBody: state,
-        solution: state.getCurrentContent().getPlainText(),
+        questionBody: editorState.getCurrentContent().getPlainText(),
+        solutionBody: state.getCurrentContent().getPlainText(),
         initialCode: code,
-        codeSolution: solution,
+        textSolution: textSolution,
+        codeSolution: codeSolution,
         title: title,
         variant: variant,
       });
@@ -221,14 +223,14 @@ const QuestionForm = () => {
 
   return (
     <Container>
-      <Card>
+      <Card width="w-3/4">
         <form
           onSubmit={(event) => {
             event.preventDefault();
             if (submit) generate(solutionEditorState);
           }}
         >
-          <Header title="Genererate variants of question" size="4xl" />
+          <Header title="Genererate variants of question" size="text-4xl" />
 
           <div className="my-8 grid grid-cols-2 w-full gap-3">
             <div className="flex">
@@ -265,7 +267,7 @@ const QuestionForm = () => {
 
           <div className="items-center m-auto">
             <div className="bg-gray-100 rounded-md p-3 mb-4">
-              <Header title="Question description" size="lg" />
+              <Header title="Question description" size="text-lg" />
               <Editor
                 toolbar={{
                   options: ["inline", "list", "textAlign", "history"],
@@ -283,7 +285,7 @@ const QuestionForm = () => {
             </div>
             {codeCheckbox && (
               <div className="w-2/3 items-center m-auto bg-gray-100 p-3 rounded-md my-4 border-dashed border-2 border-gray-400">
-                <Header title="Attached question code" size="lg" />
+                <Header title="Attached question code" size="text-lg" />
                 <Editor
                   editorState={codeEditorState}
                   toolbarClassName="hidden"
@@ -299,7 +301,7 @@ const QuestionForm = () => {
             )}
 
             <div className="bg-gray-100 rounded-md p-3 mt-4">
-              <Header title="Variable question solution" size="lg" />
+              <Header title="Variable question solution" size="text-lg" />
               <Editor
                 editorState={solutionEditorState}
                 toolbarClassName="hidden"

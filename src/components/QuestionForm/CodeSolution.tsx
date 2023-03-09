@@ -212,10 +212,11 @@ const CodeSolution = ({
       {(exampleSolutionVariableNames.length > 0 || outputDetails !== null) && (
         <div className="flex">
           <div className="bg-gray-200 rounded-md p-3">
-            <Header title="Variables" size="sm" /> {printSolutionVariables()}
+            <Header title="Variables" size="text-sm" />{" "}
+            {printSolutionVariables()}
           </div>
           <div className="ml-4 bg-gray-200 rounded-md p-3 px-6">
-            <Header title="Solution" size="sm" />
+            <Header title="Solution" size="text-sm" />
             {getOutput()}
           </div>
         </div>

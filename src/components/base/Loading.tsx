@@ -7,7 +7,7 @@ const Loading = () => {
       <div className="flex justify-center mt-10">
         <FadeLoader className="" />
       </div>
-      <Header title="Loading..." size="lg" className="my-10" />
+      <Header title="Loading..." size="text-lg" className="my-10" />
     </div>
   );
 };

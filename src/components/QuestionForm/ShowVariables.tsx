@@ -43,9 +43,9 @@ const ShowVariables = ({
 
   return variables.length > 0 ? (
     <div className="grid w-full grid-cols-10 gap-4 my-5 m-auto bg-gray-100 rounded-md p-3">
-      <Header title="Name" size="sm" className="col-span-2" />
-      <Header title="Type" size="sm" className="col-span-2" />
-      <Header title="Values" size="sm" className="col-span-5" />
+      <Header title="Name" size="text-sm" className="col-span-2" />
+      <Header title="Type" size="text-sm" className="col-span-2" />
+      <Header title="Values" size="text-sm" className="col-span-5" />
       <div className="col-span-1"></div>
       {variables &&
         variables.map((variable) => {

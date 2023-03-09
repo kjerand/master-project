@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { EditorState } from "draft-js";
+
 export type Question = {
-  questionBody: EditorState;
-  solutionBody: EditorState;
-  solution: string;
+  questionBody: string;
+  solutionBody: string;
+  textSolution: string;
   initialCode?: string;
   codeSolution: string;
   title: string;
@@ -16,16 +16,7 @@ export interface QuestionState {
 }
 
 const initialState: QuestionState = {
-  questions: [
-    {
-      questionBody: EditorState.createEmpty(),
-      solutionBody: EditorState.createEmpty(),
-      solution: "",
-      codeSolution: "",
-      title: "Empty question",
-      variant: "code",
-    },
-  ],
+  questions: [],
 };
 
 export const questionsSlice = createSlice({

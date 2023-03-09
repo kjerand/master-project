@@ -15,6 +15,7 @@ import { encode, decode } from "js-base64";
 import { FadeLoader } from "react-spinners";
 import GuessCodeOutput from "../components/QuestionForm/GuessCodeOutput";
 import Loading from "../components/base/Loading";
+import Empty from "../components/base/Empty";
 
 const CodeSubmission = () => {
   const [theme, setTheme] = useState<Theme>();
@@ -31,11 +32,13 @@ const CodeSubmission = () => {
   const [questionSolution, setQuestionSolution] = useState<string>("");
 
   useEffect(() => {
-    if (questionList.questions[taskIndex].codeSolution !== "") {
-      handleCompile(false, true);
-    } else {
-      setQuestionSolution(questionList.questions[taskIndex].solution);
-      setLoading(false);
+    if (questionList.questions.length > 0) {
+      if (questionList.questions[taskIndex].codeSolution !== "") {
+        handleCompile(false, true);
+      } else {
+        setQuestionSolution(questionList.questions[taskIndex].textSolution);
+        setLoading(false);
+      }
     }
   }, [taskIndex]);
 
@@ -219,8 +222,10 @@ const CodeSubmission = () => {
   };
 
   useEffect(() => {
-    setCode(questionList.questions[taskIndex].initialCode);
-    setOutputDetails(null);
+    if (questionList.questions.length > 0) {
+      setCode(questionList.questions[taskIndex].initialCode);
+      setOutputDetails(null);
+    }
   }, [taskIndex]);
 
   const variant = () => {
@@ -231,7 +236,7 @@ const CodeSubmission = () => {
             <>
               <Header
                 title={questionList.questions[taskIndex].title}
-                size="4xl"
+                size="text-2xl"
               />
               <DisplayQuestion question={questionList.questions[taskIndex]} />
               <Container>
@@ -284,15 +289,19 @@ const CodeSubmission = () => {
 
   return (
     <Container>
-      <Card
-        width={`${
-          questionList.questions[taskIndex].variant === "code"
-            ? "w-3/4"
-            : "w-1/2"
-        } min-h-44`}
-      >
-        {variant()}
-      </Card>
+      {questionList.questions.length === 0 ? (
+        <Empty />
+      ) : (
+        <Card
+          width={`${
+            questionList.questions[taskIndex].variant === "code"
+              ? "w-3/4"
+              : "w-1/2"
+          }`}
+        >
+          {variant()}
+        </Card>
+      )}
     </Container>
   );
 };

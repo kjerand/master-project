@@ -22,16 +22,19 @@ const QuestionDetails = ({
             <p className="text-blue-700 mr-1">{`Title:`}</p>
             <p> {question.title}</p>
           </p>
-          <p className="flex">
+          <p className="mr-6 flex">
             <p className="text-blue-700 mr-1">{`Variant:`}</p>
             <p> {question.variant}</p>
+          </p>
+          <p className="flex">
+            <p className="text-red-700 mr-1 cursor-pointer">{`Delete`}</p>
           </p>
         </div>
         <QuestionDropdown taskIndex={taskIndex} setTaskIndex={setTaskIndex} />
       </div>
 
       <DisplayQuestion question={question} />
-      <Header title="Attached code" size="lg" />
+      <Header title="Attached code" size="text-lg" />
       <div className="overlay rounded-md w-full h-full shadow-4xl">
         <Editor
           height="30vh"
@@ -41,7 +44,7 @@ const QuestionDetails = ({
           options={{ readOnly: true }}
         />
       </div>
-      <Header title="Code solution" size="lg" />
+      <Header title="Code solution" size="text-lg" />
       <div className="overlay rounded-md w-full h-full shadow-4xl">
         <Editor
           height="30vh"

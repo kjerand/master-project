@@ -33,7 +33,7 @@ const GuessCodeOutput = ({
   };
   return (
     <>
-      <Header title={question.title} size="4xl" />
+      <Header title={question.title} size="text-4xl" />
       <DisplayQuestion question={question} />
       <div className="overlay rounded-md shadow-4xl">
         <Editor
