@@ -93,10 +93,13 @@ const CodeSubmission = () => {
     };
     const options = {
       method: "POST",
-      url: "http://localhost:2358/submissions",
+      url: 'https://judge0-ce.p.rapidapi.com/submissions',
       params: { base64_encoded: "true", fields: "*" },
       headers: {
-        "Content-Type": "application/json;charset=utf-8",
+        'content-type': 'application/json;charset=utf-8',
+        'Content-Type': 'application/json;charset=utf-8',
+        'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
+        'X-RapidAPI-Host': process.env.REACT_APP_API_HOST
       },
       data: formData,
     };
@@ -108,6 +111,7 @@ const CodeSubmission = () => {
         checkStatus(token, submission, loadingSolution);
       })
       .catch((err) => {
+        console.log(err)
         if (submission) setProcessingSubmit(false);
         else if (!submission && !loadingSolution) setProcessing(false);
       });
@@ -137,8 +141,12 @@ const CodeSubmission = () => {
   const checkStatus = async (token, submission, loadingSolution) => {
     const options = {
       method: "GET",
-      url: "http://localhost:2358/submissions/" + token,
+      url: "https://judge0-ce.p.rapidapi.com/submissions/"+ token,
       params: { base64_encoded: "true", fields: "*" },
+      headers: {
+        'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
+        'X-RapidAPI-Host': process.env.REACT_APP_API_HOST
+      }
     };
     try {
       let response = await axios.request(options);
@@ -166,6 +174,7 @@ const CodeSubmission = () => {
         return;
       }
     } catch (err) {
+      console.log(err)
       if (submission) setProcessingSubmit(false);
       else setProcessing(false);
     }
@@ -174,6 +183,8 @@ const CodeSubmission = () => {
   const getOutput = () => {
     if (outputDetails === null) return;
     let statusId = outputDetails?.status?.id;
+
+    console.log("HAHAHAHAH")
 
     if (statusId === 6) {
       // compilation error

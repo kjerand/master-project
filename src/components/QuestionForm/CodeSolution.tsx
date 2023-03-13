@@ -76,10 +76,13 @@ const CodeSolution = ({
     };
     const options = {
       method: "POST",
-      url: "http://localhost:2358/submissions",
+      url: 'https://judge0-ce.p.rapidapi.com/submissions',
       params: { base64_encoded: "true", fields: "*" },
       headers: {
-        "Content-Type": "application/json;charset=utf-8",
+        'content-type': 'application/json;charset=utf-8',
+        'Content-Type': 'application/json;charset=utf-8',
+        'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
+        'X-RapidAPI-Host': process.env.REACT_APP_API_HOST
       },
       data: formData,
     };
@@ -109,8 +112,12 @@ const CodeSolution = ({
   const checkStatus = async (token, submission) => {
     const options = {
       method: "GET",
-      url: "http://localhost:2358/submissions/" + token,
+      url: "https://judge0-ce.p.rapidapi.com/submissions/"+ token,
       params: { base64_encoded: "true", fields: "*" },
+      headers: {
+        'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
+        'X-RapidAPI-Host': process.env.REACT_APP_API_HOST
+      }
     };
     try {
       let response = await axios.request(options);
