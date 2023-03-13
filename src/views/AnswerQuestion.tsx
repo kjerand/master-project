@@ -21,7 +21,6 @@ import ROUTES from "../ROUTES";
 
 const AnswerQuestion = () => {
   const { subject } = useParams();
-  console.log(subject);
   const [theme, setTheme] = useState<Theme>();
   const [processing, setProcessing] = useState(null);
   const [processingSubmit, setProcessingSubmit] = useState(null);
@@ -72,7 +71,8 @@ const AnswerQuestion = () => {
       .trim();
     if (
       compressedCode.includes(`console.log("${compressedSolution}")`) ||
-      compressedCode.includes(`console.log('${compressedSolution}')`)
+      compressedCode.includes(`console.log('${compressedSolution}')`) ||
+      compressedCode.includes("console.log(`" + compressedSolution + "`)")
     ) {
       setAnswerEvaluation(3);
       return true;
