@@ -174,7 +174,6 @@ const CodeSubmission = () => {
         return;
       }
     } catch (err) {
-      console.log(err)
       if (submission) setProcessingSubmit(false);
       else setProcessing(false);
     }
