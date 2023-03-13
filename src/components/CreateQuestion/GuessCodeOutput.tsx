@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { Question } from "../../app/questions";
 import Button from "../base/Button";
 import Header from "../base/Header";
-import DisplayQuestion from "../CodeSubmission/DisplayQuestion";
-import EvaluationOutput from "../CodeSubmission/EvaluationOutput";
-import QuestionDropdown from "../CodeSubmission/QuestionDropdown";
+import DisplayQuestion from "../AnswerQuestion/DisplayQuestion";
+import EvaluationOutput from "../AnswerQuestion/EvaluationOutput";
+import QuestionDropdown from "../AnswerQuestion/QuestionDropdown";
 
 const GuessCodeOutput = ({
   solution,
@@ -18,6 +18,7 @@ const GuessCodeOutput = ({
   loading,
   answerEvaluation,
   setAnswerEvaluation,
+  questionList,
 }: {
   solution: string;
   question: Question;
@@ -29,6 +30,7 @@ const GuessCodeOutput = ({
   loading: boolean;
   answerEvaluation: number;
   setAnswerEvaluation: Function;
+  questionList: Question[];
 }) => {
   const [answer, setAnswer] = useState<string>("");
 
@@ -55,6 +57,7 @@ const GuessCodeOutput = ({
         />
       </div>
       <QuestionDropdown
+        questionList={questionList}
         taskIndex={taskIndex}
         setTaskIndex={setTaskIndex}
         className="w-full my-2"

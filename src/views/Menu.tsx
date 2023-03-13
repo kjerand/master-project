@@ -22,7 +22,7 @@ const Menu = () => {
           <Button
             text="Answer questions"
             onClick={() => {
-              navigate(ROUTES.submitCode.path);
+              navigate(ROUTES.subjects.path);
             }}
             className="bg-[#00509e] hover:bg-blue-700 w-1/3"
           />

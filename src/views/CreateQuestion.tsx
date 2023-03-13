@@ -9,11 +9,12 @@ import {
   ContentState,
   RichUtils,
 } from "draft-js";
+import Select from "react-select";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import AddIntegerVariable from "../components/QuestionForm/AddIntegerVariable";
+import AddIntegerVariable from "../components/CreateQuestion/AddIntegerVariable";
 import Button from "../components/base/Button";
-import AddTextVariable from "../components/QuestionForm/AddTextVariable";
-import AddDecimalVariable from "../components/QuestionForm/AddDecimalVariable";
+import AddTextVariable from "../components/CreateQuestion/AddTextVariable";
+import AddDecimalVariable from "../components/CreateQuestion/AddDecimalVariable";
 import { generateIntegerVariable } from "../utils/generateIntegerVariable";
 import Immutable from "immutable";
 import { generateStringVariable } from "../utils/generateStringVariable";
@@ -23,18 +24,19 @@ import { RootState } from "../app/store";
 import { addQuestions, Question } from "../app/questions";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../ROUTES";
-import CodeEditor from "../components/CodeSubmission/CodeEditor";
+import CodeEditor from "../components/AnswerQuestion/CodeEditor";
 import { Language, languages } from "../utils/languages";
 import { defineTheme, Theme } from "../utils/defineTheme";
-import CodeSolution from "../components/QuestionForm/CodeSolution";
+import CodeSolution from "../components/CreateQuestion/CodeSolution";
 import Header from "../components/base/Header";
 import axios from "axios";
 import { encode } from "js-base64";
-import ShowVariables from "../components/QuestionForm/ShowVariables";
+import ShowVariables from "../components/CreateQuestion/ShowVariables";
 import Container from "../components/base/Container";
 import Card from "../components/base/Card";
-import AddIntegerListVariable from "../components/QuestionForm/AddIntegerListVariable";
+import AddIntegerListVariable from "../components/CreateQuestion/AddIntegerListVariable";
 import { generateIntegerListVariable } from "../utils/generateIntegerListVariable";
+import { subjects } from "../utils/subjects";
 const options = [
   "Add variable",
   "Text",
@@ -43,7 +45,7 @@ const options = [
   "List of integers",
 ];
 
-const QuestionForm = () => {
+const CreateQuestion = () => {
   const [language, setLanguage] = useState<Language>(languages[0]);
   const [theme, setTheme] = useState<Theme>();
   const [code, setCode] = useState<string>();
@@ -72,12 +74,13 @@ const QuestionForm = () => {
   const [codeSolutionCheckbox, setCodeSolutionCheckbox] =
     useState<boolean>(false);
   const [variantCheckbox, setVariantCheckbox] = useState<boolean>(false);
+  const [subject, setSubject] = useState<string>("general");
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    defineTheme("brilliance-black").then((_) =>
-      setTheme({ value: "brilliance-black", label: "Brilliance Black" })
+    defineTheme("iplastic").then((_) =>
+      setTheme({ value: "iplastic", label: "iPlastic" })
     );
   }, []);
 
@@ -160,6 +163,7 @@ const QuestionForm = () => {
         codeSolution: codeSolution,
         title: title,
         variant: variant,
+        subject: subject,
       });
     }
 
@@ -228,7 +232,7 @@ const QuestionForm = () => {
 
   return (
     <Container>
-      <Card width="w-3/4">
+      <Card width="w-3/5" goBack={() => navigate(ROUTES.menu.path)}>
         <form
           onSubmit={(event) => {
             event.preventDefault();
@@ -237,10 +241,10 @@ const QuestionForm = () => {
         >
           <Header title="Genererate variants of question" size="text-3xl" />
 
-          <div className="my-8 grid grid-cols-2 w-full gap-3">
+          <div className="my-8 grid grid-cols-3 w-full gap-2">
             <div className="flex">
-              <h3 className="font-medium font-mono leading-tight text-base text-gray-700 mr-4 my-auto">
-                Question title:
+              <h3 className="font-medium font-mono leading-tight text-base text-gray-700 mr-3 my-auto">
+                Title:
               </h3>
               <input
                 type={"text"}
@@ -254,8 +258,8 @@ const QuestionForm = () => {
               />
             </div>
             <div className="flex">
-              <h3 className="font-medium font-mono leading-tight text-base text-gray-700 mr-4 my-auto">
-                Number of variants:
+              <h3 className="font-base font-mono leading-tight text-base text-gray-700 mr-3 my-auto">
+                Variants:
               </h3>
               <input
                 type={"number"}
@@ -266,6 +270,18 @@ const QuestionForm = () => {
                 }}
                 className="border-gray-600 border px-2 my-auto rounded font-mono"
                 required
+              />
+            </div>
+            <div className="flex">
+              <h3 className="font-medium font-mono leading-tight text-base text-gray-700 mr-3 my-auto">
+                Subject:
+              </h3>
+              <Select
+                placeholder={`Choose subject...`}
+                options={subjects}
+                onChange={(selectedOption) => setSubject(selectedOption.value)}
+                menuPlacement="top"
+                className="font-mono w-full text-sm"
               />
             </div>
           </div>
@@ -395,4 +411,4 @@ const QuestionForm = () => {
   );
 };
 
-export default QuestionForm;
+export default CreateQuestion;

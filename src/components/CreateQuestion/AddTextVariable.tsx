@@ -30,8 +30,7 @@ const AddTextVariable = ({
       let newContent = Modifier.insertText(
         editorState.getCurrentContent(),
         editorState.getSelection(),
-        `{{${stringVariable.name}}}`,
-        OrderedSet.of("BOLD")
+        `{{${stringVariable.name}}}`
       );
 
       setEditorState(

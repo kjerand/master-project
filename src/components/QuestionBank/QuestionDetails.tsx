@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { languages } from "../../utils/languages";
 import Header from "../base/Header";
-import DisplayQuestion from "../CodeSubmission/DisplayQuestion";
-import QuestionDropdown from "../CodeSubmission/QuestionDropdown";
+import DisplayQuestion from "../AnswerQuestion/DisplayQuestion";
+import QuestionDropdown from "../AnswerQuestion/QuestionDropdown";
 
 import { addQuestion, deleteQuestion, Question } from "../../app/questions";
 
@@ -18,6 +18,10 @@ const QuestionDetails = ({
   setTaskIndex: Function;
 }) => {
   const dispatch = useDispatch();
+
+  const questionList = useSelector(
+    (state: RootState) => state.questions.questions
+  );
 
   const handleDelete = () => {
     dispatch(deleteQuestion(taskIndex));
@@ -38,11 +42,19 @@ const QuestionDetails = ({
             <p className="text-blue-700 mr-1">{`Variant:`}</p>
             <p> {question.variant}</p>
           </p>
+          <p className="mr-6 flex">
+            <p className="text-blue-700 mr-1">{`Subject:`}</p>
+            <p> {question.subject}</p>
+          </p>
           <p className="flex" onClick={handleDelete}>
             <p className="text-red-700 mr-1 cursor-pointer">{`Delete`}</p>
           </p>
         </div>
-        <QuestionDropdown taskIndex={taskIndex} setTaskIndex={setTaskIndex} />
+        <QuestionDropdown
+          questionList={questionList}
+          taskIndex={taskIndex}
+          setTaskIndex={setTaskIndex}
+        />
       </div>
 
       <DisplayQuestion question={question} />

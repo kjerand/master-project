@@ -9,6 +9,7 @@ export type Question = {
   codeSolution: string;
   title: string;
   variant: "code" | "text";
+  subject: string;
 };
 
 export interface QuestionState {

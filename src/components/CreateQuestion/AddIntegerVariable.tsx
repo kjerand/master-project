@@ -29,8 +29,7 @@ const AddIntegerVariable = ({
       let newContent = Modifier.insertText(
         editorState.getCurrentContent(),
         editorState.getSelection(),
-        `{{${integerVariable.name}}}`,
-        OrderedSet.of("BOLD")
+        `{{${integerVariable.name}}}`
       );
 
       setEditorState(

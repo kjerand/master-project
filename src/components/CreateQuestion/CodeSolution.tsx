@@ -76,13 +76,13 @@ const CodeSolution = ({
     };
     const options = {
       method: "POST",
-      url: 'https://judge0-ce.p.rapidapi.com/submissions',
+      url: "https://judge0-ce.p.rapidapi.com/submissions",
       params: { base64_encoded: "true", fields: "*" },
       headers: {
-        'content-type': 'application/json;charset=utf-8',
-        'Content-Type': 'application/json;charset=utf-8',
-        'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
-        'X-RapidAPI-Host': process.env.REACT_APP_API_HOST
+        "content-type": "application/json;charset=utf-8",
+        "Content-Type": "application/json;charset=utf-8",
+        "X-RapidAPI-Key": process.env.REACT_APP_API_KEY,
+        "X-RapidAPI-Host": process.env.REACT_APP_API_HOST,
       },
       data: formData,
     };
@@ -112,12 +112,12 @@ const CodeSolution = ({
   const checkStatus = async (token, submission) => {
     const options = {
       method: "GET",
-      url: "https://judge0-ce.p.rapidapi.com/submissions/"+ token,
+      url: "https://judge0-ce.p.rapidapi.com/submissions/" + token,
       params: { base64_encoded: "true", fields: "*" },
       headers: {
-        'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
-        'X-RapidAPI-Host': process.env.REACT_APP_API_HOST
-      }
+        "X-RapidAPI-Key": process.env.REACT_APP_API_KEY,
+        "X-RapidAPI-Host": process.env.REACT_APP_API_HOST,
+      },
     };
     try {
       let response = await axios.request(options);
@@ -188,7 +188,7 @@ const CodeSolution = ({
 
   return (
     <div className="mb-4">
-      <div className="overlay rounded-md w-full h-full shadow-4xl">
+      <div className="overlay rounded-md w-3/4 h-full shadow-4xl m-auto">
         <Editor
           height="60vh"
           width={`100%`}

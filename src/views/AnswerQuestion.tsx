@@ -2,22 +2,26 @@ import { useEffect, useState } from "react";
 import Card from "../components/base/Card";
 import Container from "../components/base/Container";
 import Header from "../components/base/Header";
-import DisplayQuestion from "../components/CodeSubmission/DisplayQuestion";
+import DisplayQuestion from "../components/AnswerQuestion/DisplayQuestion";
 import axios from "axios";
-import CodeEditor from "../components/CodeSubmission/CodeEditor";
+import CodeEditor from "../components/AnswerQuestion/CodeEditor";
 import { Language, languages } from "../utils/languages";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
 import { defineTheme, Theme } from "../utils/defineTheme";
-import DropdownBar from "../components/CodeSubmission/DropdownBar";
-import Sidebar from "../components/CodeSubmission/Sidebar";
+import DropdownBar from "../components/AnswerQuestion/DropdownBar";
+import Sidebar from "../components/AnswerQuestion/Sidebar";
 import { encode, decode } from "js-base64";
 import { FadeLoader } from "react-spinners";
-import GuessCodeOutput from "../components/QuestionForm/GuessCodeOutput";
+import GuessCodeOutput from "../components/CreateQuestion/GuessCodeOutput";
 import Loading from "../components/base/Loading";
 import Empty from "../components/base/Empty";
+import { useNavigate, useParams } from "react-router-dom";
+import ROUTES from "../ROUTES";
 
-const CodeSubmission = () => {
+const AnswerQuestion = () => {
+  const { subject } = useParams();
+  console.log(subject);
   const [theme, setTheme] = useState<Theme>();
   const [processing, setProcessing] = useState(null);
   const [processingSubmit, setProcessingSubmit] = useState(null);
@@ -25,20 +29,26 @@ const CodeSubmission = () => {
   const [outputDetails, setOutputDetails] = useState(null);
   const [answerEvaluation, setAnswerEvaluation] = useState<number>(0);
 
-  const questionList = useSelector((state: RootState) => state.questions);
+  const questionList = useSelector((state: RootState) =>
+    state.questions.questions.filter(
+      (q) => q.subject === subject || subject === "all"
+    )
+  );
   const [taskIndex, setTaskIndex] = useState<number>(
-    Math.floor(Math.random() * questionList.questions.length)
+    Math.floor(Math.random() * questionList.length)
   );
   const [code, setCode] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
   const [questionSolution, setQuestionSolution] = useState<string>("");
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    if (questionList.questions.length > 0) {
-      if (questionList.questions[taskIndex].codeSolution !== "") {
+    if (questionList.length > 0) {
+      if (questionList[taskIndex].codeSolution !== "") {
         handleCompile(false, true);
       } else {
-        setQuestionSolution(questionList.questions[taskIndex].textSolution);
+        setQuestionSolution(questionList[taskIndex].textSolution);
         setLoading(false);
       }
     }
@@ -80,7 +90,7 @@ const CodeSubmission = () => {
     if (submission) if (checkIfPrintingSolution()) return;
 
     const compilecode = loadingSolution
-      ? questionList.questions[taskIndex].codeSolution
+      ? questionList[taskIndex].codeSolution
       : code;
 
     setAnswerEvaluation(0);
@@ -93,13 +103,13 @@ const CodeSubmission = () => {
     };
     const options = {
       method: "POST",
-      url: 'https://judge0-ce.p.rapidapi.com/submissions',
+      url: "https://judge0-ce.p.rapidapi.com/submissions",
       params: { base64_encoded: "true", fields: "*" },
       headers: {
-        'content-type': 'application/json;charset=utf-8',
-        'Content-Type': 'application/json;charset=utf-8',
-        'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
-        'X-RapidAPI-Host': process.env.REACT_APP_API_HOST
+        "content-type": "application/json;charset=utf-8",
+        "Content-Type": "application/json;charset=utf-8",
+        "X-RapidAPI-Key": process.env.REACT_APP_API_KEY,
+        "X-RapidAPI-Host": process.env.REACT_APP_API_HOST,
       },
       data: formData,
     };
@@ -111,7 +121,7 @@ const CodeSubmission = () => {
         checkStatus(token, submission, loadingSolution);
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         if (submission) setProcessingSubmit(false);
         else if (!submission && !loadingSolution) setProcessing(false);
       });
@@ -141,12 +151,12 @@ const CodeSubmission = () => {
   const checkStatus = async (token, submission, loadingSolution) => {
     const options = {
       method: "GET",
-      url: "https://judge0-ce.p.rapidapi.com/submissions/"+ token,
+      url: "https://judge0-ce.p.rapidapi.com/submissions/" + token,
       params: { base64_encoded: "true", fields: "*" },
       headers: {
-        'X-RapidAPI-Key': process.env.REACT_APP_API_KEY,
-        'X-RapidAPI-Host': process.env.REACT_APP_API_HOST
-      }
+        "X-RapidAPI-Key": process.env.REACT_APP_API_KEY,
+        "X-RapidAPI-Host": process.env.REACT_APP_API_HOST,
+      },
     };
     try {
       let response = await axios.request(options);
@@ -183,7 +193,7 @@ const CodeSubmission = () => {
     if (outputDetails === null) return;
     let statusId = outputDetails?.status?.id;
 
-    console.log("HAHAHAHAH")
+    console.log("HAHAHAHAH");
 
     if (statusId === 6) {
       // compilation error
@@ -234,31 +244,28 @@ const CodeSubmission = () => {
   };
 
   useEffect(() => {
-    if (questionList.questions.length > 0) {
-      setCode(questionList.questions[taskIndex].initialCode);
+    if (questionList.length > 0) {
+      setCode(questionList[taskIndex].initialCode);
       setOutputDetails(null);
       setAnswerEvaluation(0);
     }
   }, [taskIndex]);
 
   const variant = () => {
-    if (questionList.questions.length > 0 && theme) {
-      switch (questionList.questions[taskIndex].variant) {
+    if (questionList.length > 0 && theme) {
+      switch (questionList[taskIndex].variant) {
         case "code":
           return (
             <>
-              <Header
-                title={questionList.questions[taskIndex].title}
-                size="text-2xl"
-              />
-              <DisplayQuestion question={questionList.questions[taskIndex]} />
+              <Header title={questionList[taskIndex].title} size="text-2xl" />
+              <DisplayQuestion question={questionList[taskIndex]} />
               <Container>
                 <CodeEditor
                   code={code}
                   theme={theme.value}
                   language={language.value}
                   onChange={onChange}
-                  initialCode={questionList.questions[taskIndex].initialCode}
+                  initialCode={questionList[taskIndex].initialCode}
                 />
                 <Sidebar
                   handleSubmit={handleSubmit}
@@ -269,7 +276,7 @@ const CodeSubmission = () => {
                   output={getOutput}
                   nextStage={() => {
                     setTaskIndex(
-                      Math.floor(Math.random() * questionList.questions.length)
+                      Math.floor(Math.random() * questionList.length)
                     );
                     setAnswerEvaluation(0);
                   }}
@@ -282,6 +289,7 @@ const CodeSubmission = () => {
                 onSelectChange={onSelectChange}
                 taskIndex={taskIndex}
                 setTaskIndex={setTaskIndex}
+                questionList={questionList}
               />
             </>
           );
@@ -289,13 +297,11 @@ const CodeSubmission = () => {
           return (
             <GuessCodeOutput
               solution={questionSolution}
-              question={questionList.questions[taskIndex]}
+              question={questionList[taskIndex]}
               theme={theme.value}
               language={language.value}
               nextStage={() => {
-                setTaskIndex(
-                  Math.floor(Math.random() * questionList.questions.length)
-                );
+                setTaskIndex(Math.floor(Math.random() * questionList.length));
                 setAnswerEvaluation(0);
               }}
               taskIndex={taskIndex}
@@ -303,6 +309,7 @@ const CodeSubmission = () => {
               loading={loading}
               answerEvaluation={answerEvaluation}
               setAnswerEvaluation={setAnswerEvaluation}
+              questionList={questionList}
             />
           );
       }
@@ -311,15 +318,14 @@ const CodeSubmission = () => {
 
   return (
     <Container>
-      {questionList.questions.length === 0 ? (
-        <Empty />
+      {questionList.length === 0 ? (
+        <Empty goBack={() => navigate(ROUTES.subjects.path)} />
       ) : (
         <Card
           width={`${
-            questionList.questions[taskIndex].variant === "code"
-              ? "w-3/4"
-              : "w-1/2"
+            questionList[taskIndex].variant === "code" ? "w-3/4" : "w-1/2"
           }`}
+          goBack={() => navigate(ROUTES.subjects.path)}
         >
           {variant()}
         </Card>
@@ -328,4 +334,4 @@ const CodeSubmission = () => {
   );
 };
 
-export default CodeSubmission;
+export default AnswerQuestion;

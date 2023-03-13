@@ -1,8 +1,9 @@
 import React from "react";
-import CodeSubmission from "./views/CodeSubmission";
-import QuestionForm from "./views/QuestionForm";
+import AnswerQuestion from "./views/AnswerQuestion";
+import CreateQuestion from "./views/CreateQuestion";
 import Menu from "./views/Menu";
 import QuestionBank from "./views/QuestionBank";
+import SubjectMenu from "./views/SubjectMenu";
 
 const ROUTES = {
   menu: {
@@ -13,18 +14,22 @@ const ROUTES = {
   create: {
     exact: true,
     path: "/create",
-    //component: Dashboard,
-    element: <QuestionForm />,
+    element: <CreateQuestion />,
   },
   submitCode: {
     exact: true,
-    path: "submit",
-    element: <CodeSubmission />,
+    path: "/subjects/:subject",
+    element: <AnswerQuestion />,
   },
   questionBank: {
     exact: true,
-    path: "bank",
+    path: "/bank",
     element: <QuestionBank />,
+  },
+  subjects: {
+    exact: true,
+    path: "/subjects",
+    element: <SubjectMenu />,
   },
 };
 

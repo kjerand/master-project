@@ -8,6 +8,7 @@ const DropdownBar = ({
   onSelectChange,
   taskIndex,
   setTaskIndex,
+  questionList,
 }) => {
   return (
     <div className="flex mt-3">
@@ -15,6 +16,7 @@ const DropdownBar = ({
         taskIndex={taskIndex}
         setTaskIndex={setTaskIndex}
         className="w-1/4"
+        questionList={questionList}
       />
       <LanguagesDropdown onSelectChange={onSelectChange} />
       <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />

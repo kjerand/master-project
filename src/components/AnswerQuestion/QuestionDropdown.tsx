@@ -1,26 +1,25 @@
 import { useSelector } from "react-redux";
 import Select from "react-select";
+import { Question } from "../../app/questions";
 import { RootState } from "../../app/store";
 
 const QuestionDropdown = ({
+  questionList,
   taskIndex,
   setTaskIndex,
   className = "",
 }: {
+  questionList: Question[];
   taskIndex: number;
   setTaskIndex: Function;
   className?: string;
 }) => {
-  const questionList = useSelector((state: RootState) => state.questions);
-
-  const indices = Array.from(Array(questionList.questions.length)).map(
-    (v, index) => {
-      return {
-        label: questionList.questions[index].title,
-        value: index,
-      };
-    }
-  );
+  const indices = Array.from(Array(questionList.length)).map((v, index) => {
+    return {
+      label: questionList[index].title,
+      value: index,
+    };
+  });
   return (
     <div className={className}>
       <Select

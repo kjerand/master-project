@@ -29,8 +29,7 @@ const AddDecimalVariable = ({
       let newContent = Modifier.insertText(
         editorState.getCurrentContent(),
         editorState.getSelection(),
-        `{{${decimalVariable.name}}}`,
-        OrderedSet.of("BOLD")
+        `{{${decimalVariable.name}}}`
       );
 
       setEditorState(
