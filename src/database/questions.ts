@@ -13,7 +13,7 @@ const createQuestions = async (questions: Question[]) => {
   const container = await database.container(questionContainerName);
 
   for (let question of questions) {
-    const { resource } = await container.items.create(question);
+    await container.items.create(question);
   }
 };
 

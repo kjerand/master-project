@@ -1,5 +1,7 @@
 import React from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { ArrowBackIos } from "@mui/icons-material";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 const Card = ({
   children,
@@ -23,12 +25,16 @@ const Card = ({
             goBack();
           }}
         >
-          <ArrowBackIcon
-            style={{
-              width: 30,
-              height: 30,
-            }}
-          />
+          <div className="flex justify-center">
+            <ArrowBackIos
+              style={{
+                width: 25,
+                height: 25,
+              }}
+            />
+
+            <p className="font-mono text-base my-auto">Return</p>
+          </div>
         </div>
       )}
 

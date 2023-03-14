@@ -18,6 +18,7 @@ import Loading from "../components/base/Loading";
 import Empty from "../components/base/Empty";
 import { useNavigate, useParams } from "react-router-dom";
 import ROUTES from "../ROUTES";
+import { courses } from "../utils/courses";
 
 const AnswerQuestion = () => {
   const { subject } = useParams();
@@ -29,9 +30,12 @@ const AnswerQuestion = () => {
   const [answerEvaluation, setAnswerEvaluation] = useState<number>(0);
 
   const questionList = useSelector((state: RootState) =>
-    state.questions.questions.filter(
-      (q) => q.subject === subject || subject === "all"
-    )
+    state.questions.questions.filter((q) => {
+      if (courses[subject]) {
+        return courses[subject].includes(q.subject);
+      }
+      return q.subject === subject;
+    })
   );
   const [taskIndex, setTaskIndex] = useState<number>(
     Math.floor(Math.random() * questionList.length)

@@ -36,8 +36,8 @@ import Container from "../components/base/Container";
 import Card from "../components/base/Card";
 import AddIntegerListVariable from "../components/CreateQuestion/AddIntegerListVariable";
 import { generateIntegerListVariable } from "../utils/generateIntegerListVariable";
-import { subjects } from "../utils/subjects";
-import { createQuestion, createQuestions } from "../database/questions";
+import { createQuestions } from "../database/questions";
+import { courses, getSubjects } from "../utils/courses";
 const options = [
   "Add variable",
   "Text",
@@ -280,7 +280,7 @@ const CreateQuestion = () => {
               </h3>
               <Select
                 placeholder={`Choose subject...`}
-                options={subjects}
+                options={getSubjects()}
                 onChange={(selectedOption) => setSubject(selectedOption.value)}
                 menuPlacement="top"
                 className="font-mono w-full text-sm"
