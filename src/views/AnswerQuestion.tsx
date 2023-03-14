@@ -323,13 +323,13 @@ const AnswerQuestion = () => {
   return (
     <Container>
       {questionList.length === 0 ? (
-        <Empty goBack={() => navigate(ROUTES.subjects.path)} />
+        <Empty goBack={() => navigate(ROUTES.menu.path)} />
       ) : (
         <Card
           width={`${
             questionList[taskIndex].variant === "code" ? "w-3/4" : "w-1/2"
           }`}
-          goBack={() => navigate(ROUTES.subjects.path)}
+          goBack={() => navigate(ROUTES.menu.path)}
         >
           {variant()}
         </Card>

@@ -1,16 +1,13 @@
 import React from "react";
+import AdminLogin from "./views/Admin";
 import AnswerQuestion from "./views/AnswerQuestion";
 import CreateQuestion from "./views/CreateQuestion";
-import Menu from "./views/Menu";
+import Menu from "./views/AdminMenu";
 import QuestionBank from "./views/QuestionBank";
 import SubjectMenu from "./views/SubjectMenu";
+import Admin from "./views/Admin";
 
 const ROUTES = {
-  menu: {
-    exact: true,
-    path: "/",
-    element: <Menu />,
-  },
   create: {
     exact: true,
     path: "/create",
@@ -26,10 +23,15 @@ const ROUTES = {
     path: "/bank",
     element: <QuestionBank />,
   },
-  subjects: {
+  menu: {
     exact: true,
-    path: "/subjects",
+    path: "/",
     element: <SubjectMenu />,
+  },
+  admin: {
+    exact: true,
+    path: "/admin",
+    element: <Admin />,
   },
 };
 

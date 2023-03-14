@@ -234,7 +234,7 @@ const CreateQuestion = () => {
 
   return (
     <Container>
-      <Card width="w-3/5" goBack={() => navigate(ROUTES.menu.path)}>
+      <Card width="w-3/5" goBack={() => navigate(ROUTES.admin.path)}>
         <form
           onSubmit={(event) => {
             event.preventDefault();

@@ -3,6 +3,7 @@ const courses = {
     { label: "Complex numbers", value: "complex" },
     ,
     { label: "Functional algorithms", value: "functional" },
+    { label: "General questions", value: "general" },
   ],
   DCST1007: [
     { label: "Classes", value: "classes" },

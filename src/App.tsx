@@ -2,22 +2,14 @@ import React from "react";
 import NavBar from "./components/base/NavBar";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ROUTES from "./ROUTES";
-import { store } from "./app/store";
-import { Provider } from "react-redux";
+import { RootState, store } from "./app/store";
+import { Provider, useSelector } from "react-redux";
+import Wrapper from "./Wrapper";
 
 const App = () => {
   return (
     <Provider store={store}>
-      <Router>
-        <NavBar />
-        <Routes>
-          <Route {...ROUTES.menu} />
-          <Route {...ROUTES.create} />
-          <Route {...ROUTES.submitCode} />
-          <Route {...ROUTES.questionBank} />
-          <Route {...ROUTES.subjects} />
-        </Routes>
-      </Router>
+      <Wrapper />
     </Provider>
   );
 };

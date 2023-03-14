@@ -8,17 +8,16 @@ import { useEffect } from "react";
 import { initDatabase } from "../database/database";
 import { useDispatch } from "react-redux";
 import { setQuestions } from "../app/questions";
+import { setAdmin } from "../app/admin";
 
-const Menu = () => {
+const AdminMenu = () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    initDatabase().then((questions) => dispatch(setQuestions(questions)));
-  }, []);
   const navigate = useNavigate();
+
   return (
     <Container>
       <Card>
-        <Header title="Main menu" size="text-4xl" />
+        <Header title="Admin" size="text-4xl" />
         <div className="grid grid-cols-1 gap-y-5 mt-8 mb-4">
           <Button
             text="Create questions"
@@ -27,13 +26,7 @@ const Menu = () => {
             }}
             className="bg-[#00509e] hover:bg-blue-700 w-1/3"
           />
-          <Button
-            text="Answer questions"
-            onClick={() => {
-              navigate(ROUTES.subjects.path);
-            }}
-            className="bg-[#00509e] hover:bg-blue-700 w-1/3"
-          />
+
           <Button
             text="Question bank"
             onClick={() => {
@@ -41,10 +34,18 @@ const Menu = () => {
             }}
             className="bg-[#00509e] hover:bg-blue-700 w-1/3"
           />
+
+          <Button
+            text="Log out"
+            onClick={() => {
+              dispatch(setAdmin(false));
+            }}
+            className="bg-gray-700 hover:bg-gray-600 w-1/3"
+          />
         </div>
       </Card>
     </Container>
   );
 };
 
-export default Menu;
+export default AdminMenu;

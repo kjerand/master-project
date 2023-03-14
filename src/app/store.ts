@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import questionsReducer from "./questions";
+import adminReducer from "./admin";
 
 export const store = configureStore({
   reducer: {
     questions: questionsReducer,
+    admin: adminReducer,
   },
 });
 

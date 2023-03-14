@@ -12,6 +12,12 @@ const NavBar = () => {
       >
         <img src={logo} width="180px" />
       </div>
+      <div
+        onClick={() => navigate(ROUTES.admin.path)}
+        className="ml-auto text-white font-mono cursor-pointer"
+      >
+        Admin
+      </div>
     </nav>
   );
 };
