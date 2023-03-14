@@ -7,30 +7,31 @@ import QuestionBank from "./views/QuestionBank";
 import SubjectMenu from "./views/SubjectMenu";
 import Admin from "./views/Admin";
 
+const prefix = "/master-project";
 const ROUTES = {
   create: {
     exact: true,
-    path: "/create",
+    path: prefix + "/create",
     element: <CreateQuestion />,
   },
   submitCode: {
     exact: true,
-    path: "/subjects/:subject",
+    path: prefix + "/subjects/:subject",
     element: <AnswerQuestion />,
   },
   questionBank: {
     exact: true,
-    path: "/bank",
+    path: prefix + "/bank",
     element: <QuestionBank />,
   },
   menu: {
     exact: true,
-    path: "/",
+    path: prefix + "/",
     element: <SubjectMenu />,
   },
   admin: {
     exact: true,
-    path: "/admin",
+    path: prefix + "/admin",
     element: <Admin />,
   },
 };

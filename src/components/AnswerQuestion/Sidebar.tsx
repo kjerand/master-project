@@ -22,7 +22,7 @@ const Sidebar = ({
   loading: boolean;
 }) => {
   return (
-    <div className="w-2/5 flex-row flex flex-col ml-2">
+    <div className="w-2/5 flex flex-col ml-2">
       <CodeOutput output={output} />
       <EvaluationOutput evaluation={evaluation} loading={loading} />
       <CompileButton
