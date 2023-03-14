@@ -37,6 +37,7 @@ import Card from "../components/base/Card";
 import AddIntegerListVariable from "../components/CreateQuestion/AddIntegerListVariable";
 import { generateIntegerListVariable } from "../utils/generateIntegerListVariable";
 import { subjects } from "../utils/subjects";
+import { createQuestion, createQuestions } from "../database/questions";
 const options = [
   "Add variable",
   "Text",
@@ -167,6 +168,7 @@ const CreateQuestion = () => {
       });
     }
 
+    await createQuestions(questions);
     dispatch(addQuestions(questions));
     navigate(ROUTES.menu.path);
   };

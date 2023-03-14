@@ -4,8 +4,16 @@ import Container from "../components/base/Container";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../ROUTES";
 import Header from "../components/base/Header";
+import { useEffect } from "react";
+import { initDatabase } from "../database/database";
+import { useDispatch } from "react-redux";
+import { setQuestions } from "../app/questions";
 
 const Menu = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    initDatabase().then((questions) => dispatch(setQuestions(questions)));
+  }, []);
   const navigate = useNavigate();
   return (
     <Container>

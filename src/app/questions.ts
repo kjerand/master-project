@@ -35,11 +35,14 @@ export const questionsSlice = createSlice({
     deleteQuestion: (state, action: PayloadAction<number>) => {
       state.questions.splice(action.payload, 1);
     },
+    setQuestions: (state, action: PayloadAction<Question[]>) => {
+      state.questions = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addQuestion, addQuestions, deleteQuestion } =
+export const { addQuestion, addQuestions, deleteQuestion, setQuestions } =
   questionsSlice.actions;
 
 export default questionsSlice.reducer;

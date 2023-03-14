@@ -34,21 +34,21 @@ const QuestionDetails = ({
     <div>
       <div className="grid grid-cols-2 my-4">
         <div className="flex m-auto font-mono">
-          <p className="mr-6 flex">
+          <div className="mr-6 flex">
             <p className="text-blue-700 mr-1">{`Title:`}</p>
             <p> {question.title}</p>
-          </p>
-          <p className="mr-6 flex">
+          </div>
+          <div className="mr-6 flex">
             <p className="text-blue-700 mr-1">{`Variant:`}</p>
             <p> {question.variant}</p>
-          </p>
-          <p className="mr-6 flex">
+          </div>
+          <div className="mr-6 flex">
             <p className="text-blue-700 mr-1">{`Subject:`}</p>
             <p> {question.subject}</p>
-          </p>
-          <p className="flex" onClick={handleDelete}>
+          </div>
+          <div className="flex" onClick={handleDelete}>
             <p className="text-red-700 mr-1 cursor-pointer">{`Delete`}</p>
-          </p>
+          </div>
         </div>
         <QuestionDropdown
           questionList={questionList}

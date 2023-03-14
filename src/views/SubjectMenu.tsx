@@ -23,6 +23,7 @@ const SubjectMenu = () => {
           {subjects.map((subject) => {
             return (
               <Button
+                key={subject.value}
                 text={subject.label}
                 onClick={() => {
                   navigate(ROUTES.subjects.path + "/" + subject.value);
