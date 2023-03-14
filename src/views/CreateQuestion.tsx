@@ -20,8 +20,8 @@ import Immutable from "immutable";
 import { generateStringVariable } from "../utils/generateStringVariable";
 import { generateDecimalVariable } from "../utils/generateDecimalVariable";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../app/store";
-import { addQuestions, Question } from "../app/questions";
+import { RootState } from "../store/store";
+import { addQuestions, Question } from "../store/questions";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../ROUTES";
 import CodeEditor from "../components/AnswerQuestion/CodeEditor";
@@ -61,7 +61,7 @@ const CreateQuestion = () => {
     EditorState.createEmpty()
   );
   const { OrderedSet } = Immutable;
-  const [numberOfTasks, setNumberOfTasks] = useState<number>(10);
+  const [numberOfTasks, setNumberOfTasks] = useState<number>(5);
   const [questionTitle, setQuestionTitle] = useState<string>("Example");
   const [questions, setQuestions] = useState<Question[]>([]);
   const questionList = useSelector((state: RootState) => state.questions);

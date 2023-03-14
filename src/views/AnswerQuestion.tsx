@@ -7,12 +7,11 @@ import axios from "axios";
 import CodeEditor from "../components/AnswerQuestion/CodeEditor";
 import { Language, languages } from "../utils/languages";
 import { useSelector } from "react-redux";
-import { RootState } from "../app/store";
+import { RootState } from "../store/store";
 import { defineTheme, Theme } from "../utils/defineTheme";
 import DropdownBar from "../components/AnswerQuestion/DropdownBar";
 import Sidebar from "../components/AnswerQuestion/Sidebar";
 import { encode, decode } from "js-base64";
-import { FadeLoader } from "react-spinners";
 import GuessCodeOutput from "../components/CreateQuestion/GuessCodeOutput";
 import Loading from "../components/base/Loading";
 import Empty from "../components/base/Empty";
@@ -32,7 +31,9 @@ const AnswerQuestion = () => {
   const questionList = useSelector((state: RootState) =>
     state.questions.questions.filter((q) => {
       if (courses[subject]) {
-        return courses[subject].includes(q.subject);
+        const values = courses[subject].map((v) => v.value);
+        console.log(values);
+        return values.includes(q.subject);
       }
       return q.subject === subject;
     })
@@ -47,7 +48,12 @@ const AnswerQuestion = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    setLoading(true);
     if (questionList.length > 0) {
+      setCode(questionList[taskIndex].initialCode);
+      setOutputDetails(null);
+      setAnswerEvaluation(0);
+
       if (questionList[taskIndex].codeSolution !== "") {
         handleCompile(false, true);
       } else {
@@ -98,8 +104,10 @@ const AnswerQuestion = () => {
       : code;
 
     setAnswerEvaluation(0);
-    if (submission) setProcessingSubmit(true);
-    else if (!submission && !loadingSolution) setProcessing(true);
+    if (submission) {
+      setProcessingSubmit(true);
+      setLoading(true);
+    } else if (!submission && !loadingSolution) setProcessing(true);
 
     const formData = {
       language_id: language.id,
@@ -166,7 +174,6 @@ const AnswerQuestion = () => {
       let response = await axios.request(options);
       let statusId = response.data.status?.id;
 
-      // Processed - we have a result
       if (statusId === 1 || statusId === 2) {
         // still processing
         setTimeout(() => {
@@ -196,8 +203,6 @@ const AnswerQuestion = () => {
   const getOutput = () => {
     if (outputDetails === null) return;
     let statusId = outputDetails?.status?.id;
-
-    console.log("HAHAHAHAH");
 
     if (statusId === 6) {
       // compilation error
@@ -247,13 +252,11 @@ const AnswerQuestion = () => {
     setLanguage(sl);
   };
 
-  useEffect(() => {
-    if (questionList.length > 0) {
-      setCode(questionList[taskIndex].initialCode);
-      setOutputDetails(null);
-      setAnswerEvaluation(0);
-    }
-  }, [taskIndex]);
+  const nextQuestion = () => {
+    setTaskIndex(Math.floor(Math.random() * questionList.length));
+    setAnswerEvaluation(0);
+    setLoading(true);
+  };
 
   const variant = () => {
     if (questionList.length > 0 && theme) {
@@ -278,12 +281,7 @@ const AnswerQuestion = () => {
                   processing={processing}
                   processingSubmit={processingSubmit}
                   output={getOutput}
-                  nextStage={() => {
-                    setTaskIndex(
-                      Math.floor(Math.random() * questionList.length)
-                    );
-                    setAnswerEvaluation(0);
-                  }}
+                  nextStage={nextQuestion}
                   loading={loading}
                 />
               </Container>
@@ -304,10 +302,7 @@ const AnswerQuestion = () => {
               question={questionList[taskIndex]}
               theme={theme.value}
               language={language.value}
-              nextStage={() => {
-                setTaskIndex(Math.floor(Math.random() * questionList.length));
-                setAnswerEvaluation(0);
-              }}
+              nextStage={nextQuestion}
               taskIndex={taskIndex}
               setTaskIndex={setTaskIndex}
               loading={loading}
@@ -330,6 +325,7 @@ const AnswerQuestion = () => {
             questionList[taskIndex].variant === "code" ? "w-3/4" : "w-1/2"
           }`}
           goBack={() => navigate(ROUTES.menu.path)}
+          skip={() => (!loading ? nextQuestion() : undefined)}
         >
           {variant()}
         </Card>

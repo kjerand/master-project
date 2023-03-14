@@ -1,12 +1,13 @@
 import Editor from "@monaco-editor/react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../app/store";
+import { RootState } from "../../store/store";
 import { languages } from "../../utils/languages";
 import Header from "../base/Header";
 import DisplayQuestion from "../AnswerQuestion/DisplayQuestion";
 import QuestionDropdown from "../AnswerQuestion/QuestionDropdown";
 
-import { addQuestion, deleteQuestion, Question } from "../../app/questions";
+import { addQuestion, deleteQuestion, Question } from "../../store/questions";
+import { removeQuestion } from "../../database/questions";
 
 const QuestionDetails = ({
   question,
@@ -25,6 +26,8 @@ const QuestionDetails = ({
 
   const handleDelete = () => {
     dispatch(deleteQuestion(taskIndex));
+
+    removeQuestion(questionList[taskIndex].id);
 
     if (taskIndex - 1 > 0) setTaskIndex(taskIndex - 1);
     else setTaskIndex(0);
@@ -63,7 +66,7 @@ const QuestionDetails = ({
         <Editor
           height="30vh"
           width={`100%`}
-          value={question.initialCode}
+          value={question.initialCode ?? ""}
           defaultLanguage={"typescript"}
           options={{ readOnly: true }}
         />

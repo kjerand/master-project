@@ -20,7 +20,7 @@ const CodeEditor = ({
   const handleEditorChange = (value) => {
     onChange(value);
   };
-  const empty = (value: string) => value !== undefined && value !== "";
+  const empty = (value: string) => value !== undefined || value !== "";
 
   return (
     <div className="overlay rounded-md w-full h-full shadow-4xl">
@@ -31,7 +31,7 @@ const CodeEditor = ({
         value={code}
         theme={theme}
         defaultValue={
-          !empty(initialCode) ? initialCode : "// write your code here"
+          !empty(initialCode) ? initialCode : "// Write your code here"
         }
         onChange={handleEditorChange}
       />

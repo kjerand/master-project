@@ -3,7 +3,7 @@ import { DefaultAzureCredential } from "@azure/identity";
 
 // Get Cosmos Client
 import { CosmosClient } from "@azure/cosmos";
-import { deleteQuestion, Question } from "../app/questions";
+import { deleteQuestion, Question } from "../store/questions";
 
 const databaseName = "master-db";
 const questionContainerName = "questions";
@@ -18,14 +18,7 @@ const cosmosClient = new CosmosClient({ endpoint, key });
 
 const initDatabase = async (): Promise<Question[]> => {
   const database = await cosmosClient.database(databaseName);
-
-  //await database.container(questionContainerName).delete();
-  const { container } = await database.containers.createIfNotExists({
-    id: questionContainerName,
-    partitionKey: {
-      paths: partitionKeyPath,
-    },
-  });
+  const container = await database.container(questionContainerName);
 
   const querySpec = {
     query: "select * from questions",

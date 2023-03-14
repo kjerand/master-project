@@ -1,6 +1,6 @@
 import Editor from "@monaco-editor/react";
 import { useEffect, useState } from "react";
-import { Question } from "../../app/questions";
+import { Question } from "../../store/questions";
 import Button from "../base/Button";
 import Header from "../base/Header";
 import DisplayQuestion from "../AnswerQuestion/DisplayQuestion";
@@ -42,7 +42,7 @@ const GuessCodeOutput = ({
   useEffect(() => setAnswer(""), [taskIndex]);
   return (
     <>
-      <Header title={question.title} size="text-4xl" />
+      <Header title={question.title} size="text-2xl" />
       <DisplayQuestion question={question} />
       <div className="overlay rounded-md shadow-4xl">
         <Editor

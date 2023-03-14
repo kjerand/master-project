@@ -10,7 +10,7 @@ const LanguagesDropdown = ({ onSelectChange }) => {
       defaultValue={languages[0]}
       onChange={(selectedOption) => onSelectChange(selectedOption)}
       menuPlacement="top"
-      className="font-mono"
+      className="font-mono text-sm ml-2"
     />
   );
 };

@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import Select from "react-select";
-import { Question } from "../../app/questions";
-import { RootState } from "../../app/store";
+import { Question } from "../../store/questions";
+import { RootState } from "../../store/store";
 
 const QuestionDropdown = ({
   questionList,
@@ -28,7 +28,7 @@ const QuestionDropdown = ({
         value={indices[taskIndex]}
         onChange={(selectedOption) => setTaskIndex(selectedOption.value)}
         menuPlacement="top"
-        className="font-mono"
+        className="font-mono text-sm"
       />
     </div>
   );

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 export type Question = {
+  id?: string;
   questionBody: string;
   solutionBody: string;
   textSolution: string;

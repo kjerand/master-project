@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setQuestions } from "../app/questions";
+import { setQuestions } from "../store/questions";
 import Button from "../components/base/Button";
 import Card from "../components/base/Card";
 import Container from "../components/base/Container";
@@ -19,7 +19,7 @@ const SubjectMenu = () => {
   return (
     <Container>
       <Card>
-        <Header title="Main menu" size="text-4xl" />
+        <Header title="Main menu" size="text-3xl" />
 
         <div className="grid-cols-1 gap-y-5 mt-8 mb-4">
           {Object.keys(courses).map((key, index) => {

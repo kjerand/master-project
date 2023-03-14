@@ -23,11 +23,11 @@ const CompileButton = ({
         text={processing ? "Running..." : "Compile and run"}
         onClick={handleCompile}
         className={`${
-          processing || loading
+          processing || loading || processingSubmit
             ? "bg-gray-400"
             : "bg-blue-600 hover:bg-blue-500"
         } w-full mb-2`}
-        disabled={loading}
+        disabled={loading || processingSubmit}
       />
       <Button
         text={
@@ -42,13 +42,13 @@ const CompileButton = ({
           else nextStage();
         }}
         className={`${
-          processingSubmit || loading
+          processingSubmit || loading || processing
             ? "bg-gray-600 "
             : evaluation === 1
             ? "bg-green-600 hover:bg-green-500"
             : "bg-yellow-600 hover:bg-yellow-500"
         } w-full `}
-        disabled={loading}
+        disabled={loading || processing}
       />
     </div>
   );

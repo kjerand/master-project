@@ -1,4 +1,4 @@
-import { Question } from "../app/questions";
+import { Question } from "../store/questions";
 import { cosmosClient, databaseName, questionContainerName } from "./database";
 
 const createQuestion = async (question: Question) => {
@@ -17,4 +17,10 @@ const createQuestions = async (questions: Question[]) => {
   }
 };
 
-export { createQuestions, createQuestion };
+const removeQuestion = async (id: string) => {
+  const database = await cosmosClient.database(databaseName);
+  const container = await database.container(questionContainerName);
+  await container.item(id).delete();
+};
+
+export { createQuestions, createQuestion, removeQuestion };

@@ -1,4 +1,4 @@
-import { Question } from "../../app/questions";
+import { Question } from "../../store/questions";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Editor } from "react-draft-wysiwyg";
 import { ContentState, EditorState } from "draft-js";

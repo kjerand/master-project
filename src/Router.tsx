@@ -1,14 +1,14 @@
 import { useSelector } from "react-redux";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import admin from "./app/admin";
-import { RootState } from "./app/store";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import admin from "./store/admin";
+import { RootState } from "./store/store";
 import NavBar from "./components/base/NavBar";
 import ROUTES from "./ROUTES";
 
-const Wrapper = () => {
+const Router = () => {
   const admin = useSelector((state: RootState) => state.admin.admin);
   return (
-    <Router>
+    <BrowserRouter>
       <NavBar />
       <Routes>
         {admin && (
@@ -17,13 +17,12 @@ const Wrapper = () => {
             <Route {...ROUTES.questionBank} />
           </>
         )}
-
         <Route {...ROUTES.menu} />
         <Route {...ROUTES.submitCode} />
         <Route {...ROUTES.admin} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 };
 
-export default Wrapper;
+export default Router;

@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../../ROUTES";
 import logo from "../../assets/logo.png";
+import KeyIcon from "@mui/icons-material/Key";
+import { Person } from "@mui/icons-material";
 const NavBar = () => {
   const navigate = useNavigate();
   return (
@@ -13,10 +15,14 @@ const NavBar = () => {
         <img src={logo} width="180px" />
       </div>
       <div
+        className=" text-white ml-auto flex cursor-pointer"
         onClick={() => navigate(ROUTES.admin.path)}
-        className="ml-auto text-white font-mono cursor-pointer"
       >
-        Admin
+        <Person
+          className="items-center flex"
+          style={{ height: 22, width: 22 }}
+        />
+        <div className="font-mono  ml-1">Admin</div>
       </div>
     </nav>
   );

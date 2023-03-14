@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "../app/store";
+import { RootState } from "../store/store";
 import Card from "../components/base/Card";
 import Container from "../components/base/Container";
 import Empty from "../components/base/Empty";

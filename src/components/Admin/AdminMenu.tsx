@@ -1,14 +1,14 @@
-import Button from "../components/base/Button";
-import Card from "../components/base/Card";
-import Container from "../components/base/Container";
+import Button from "../base/Button";
+import Card from "../base/Card";
+import Container from "../base/Container";
 import { useNavigate } from "react-router-dom";
-import ROUTES from "../ROUTES";
-import Header from "../components/base/Header";
+import ROUTES from "../../ROUTES";
+import Header from "../base/Header";
 import { useEffect } from "react";
-import { initDatabase } from "../database/database";
+import { initDatabase } from "../../database/database";
 import { useDispatch } from "react-redux";
-import { setQuestions } from "../app/questions";
-import { setAdmin } from "../app/admin";
+import { setQuestions } from "../../store/questions";
+import { setAdmin } from "../../store/admin";
 
 const AdminMenu = () => {
   const dispatch = useDispatch();

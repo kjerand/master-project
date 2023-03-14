@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setAdmin } from "../app/admin";
-import { RootState } from "../app/store";
-import Card from "../components/base/Card";
-import Container from "../components/base/Container";
-import Header from "../components/base/Header";
-import ROUTES from "../ROUTES";
+import { setAdmin } from "../../store/admin";
+import { RootState } from "../../store/store";
+import Card from "../base/Card";
+import Container from "../base/Container";
+import Header from "../base/Header";
+import ROUTES from "../../ROUTES";
 
 const Login = () => {
   const [username, setUsername] = useState<string>("");
@@ -35,7 +35,7 @@ const Login = () => {
     <Container>
       <Card width="w-1/3" goBack={() => navigate(ROUTES.menu.path)}>
         <Header title="Login" size="text-2xl" />
-        <div className="m-auto mt-6 grid-cols-1 w-1/2 mb-4">
+        <div className="m-auto mt-10 grid-cols-1 w-1/2 mb-4">
           <div className="w-full">
             <h3 className="font-medium font-mono leading-tight text-base text-gray-700">
               User:
