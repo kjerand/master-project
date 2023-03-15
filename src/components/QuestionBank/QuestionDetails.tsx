@@ -35,8 +35,8 @@ const QuestionDetails = ({
 
   return (
     <div>
-      <div className="grid grid-cols-2 my-4">
-        <div className="flex m-auto font-mono">
+      <div className="grid grid-cols-2 my-4 gap-y-4">
+        <div className="flex m-auto font-mono col-span-2">
           <div className="mr-6 flex">
             <p className="text-blue-700 mr-1">{`Title:`}</p>
             <p> {question.title}</p>
@@ -53,35 +53,47 @@ const QuestionDetails = ({
             <p className="text-red-700 mr-1 cursor-pointer">{`Delete`}</p>
           </div>
         </div>
-        <QuestionDropdown
-          questionList={questionList}
-          taskIndex={taskIndex}
-          setTaskIndex={setTaskIndex}
-        />
+        <div className="col-span-2">
+          <QuestionDropdown
+            questionList={questionList}
+            taskIndex={taskIndex}
+            setTaskIndex={setTaskIndex}
+          />
+        </div>
       </div>
 
       <DisplayQuestion question={question} />
-      <Header title="Attached code" size="text-lg" />
-      <div className="overlay rounded-md w-full h-full shadow-4xl">
-        <Editor
-          height="30vh"
-          width={`100%`}
-          value={question.initialCode ?? ""}
-          defaultLanguage={"typescript"}
-          options={{ readOnly: true }}
-        />
-      </div>
-      <Header title="Code solution" size="text-lg" />
-      <div className="overlay rounded-md w-full h-full shadow-4xl">
-        <Editor
-          height="30vh"
-          width={`100%`}
-          language={languages[0].value}
-          value={question.codeSolution}
-          defaultLanguage={"typescript"}
-          options={{ readOnly: true }}
-        />
-      </div>
+
+      {question.initialCode !== undefined && (
+        <>
+          <Header title="Attached code" size="text-lg" />{" "}
+          <div className="overlay rounded-md w-full h-full shadow-4xl">
+            <Editor
+              height="30vh"
+              width={`100%`}
+              value={question.initialCode ?? ""}
+              defaultLanguage={"typescript"}
+              options={{ readOnly: true }}
+            />
+          </div>
+        </>
+      )}
+
+      {question.codeSolution !== "" && (
+        <>
+          <Header title="Code solution" size="text-lg" />
+          <div className="overlay rounded-md w-full h-full shadow-4xl">
+            <Editor
+              height="30vh"
+              width={`100%`}
+              language={languages[0].value}
+              value={question.codeSolution}
+              defaultLanguage={"typescript"}
+              options={{ readOnly: true }}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -234,17 +234,17 @@ const CreateQuestion = () => {
 
   return (
     <Container>
-      <Card width="w-3/5" goBack={() => navigate(ROUTES.admin.path)}>
+      <Card width="w-1/2" goBack={() => navigate(ROUTES.admin.path)}>
         <form
           onSubmit={(event) => {
             event.preventDefault();
             if (submit) generate(solutionEditorState);
           }}
         >
-          <Header title="Genererate variants of question" size="text-3xl" />
+          <Header title="Genererate variants of question" size="text-2xl" />
 
-          <div className="my-8 grid grid-cols-3 w-full gap-2">
-            <div className="flex">
+          <div className="my-8 grid grid-cols-5 w-full gap-5">
+            <div className="flex col-span-2">
               <h3 className="font-medium font-mono leading-tight text-base text-gray-700 mr-3 my-auto">
                 Title:
               </h3>
@@ -255,7 +255,7 @@ const CreateQuestion = () => {
                 onChange={(event) => {
                   setQuestionTitle(event.target.value);
                 }}
-                className="border-gray-600 border px-2 my-auto rounded font-mono"
+                className="border-gray-600 border px-2 my-auto rounded font-mono w-full"
                 required
               />
             </div>
@@ -270,11 +270,11 @@ const CreateQuestion = () => {
                 onChange={(event) => {
                   setNumberOfTasks(parseInt(event.target.value));
                 }}
-                className="border-gray-600 border px-2 my-auto rounded font-mono"
+                className="border-gray-600 border px-2 my-auto rounded font-mono w-1/2"
                 required
               />
             </div>
-            <div className="flex">
+            <div className="flex col-span-2">
               <h3 className="font-medium font-mono leading-tight text-base text-gray-700 mr-3 my-auto">
                 Subject:
               </h3>
@@ -355,7 +355,10 @@ const CreateQuestion = () => {
           <div className="grid grid-cols-3 mb-5 m-auto">
             <div className="flex m-auto items-center">
               <input
-                onChange={(e) => setCodeSolutionCheckbox(!codeSolutionCheckbox)}
+                onChange={(e) => {
+                  if (codeSolutionCheckbox) setVariantCheckbox(false);
+                  setCodeSolutionCheckbox(!codeSolutionCheckbox);
+                }}
                 type={"checkbox"}
                 className="w-4 h-4 mr-4 pt-2"
                 checked={codeSolutionCheckbox}
@@ -364,6 +367,23 @@ const CreateQuestion = () => {
                 {"Add code solution"}
               </div>
             </div>
+
+            <div className="flex m-auto items-center">
+              <input
+                onChange={(e) => {
+                  setVariantCheckbox(!variantCheckbox);
+                  setCodeCheckbox(false);
+                }}
+                type={"checkbox"}
+                className="w-4 h-4 mr-4 pt-2"
+                checked={variantCheckbox}
+                disabled={!codeSolutionCheckbox}
+              />
+              <div className="text-md font-medium leading-tight text-gray-700 font-mono">
+                {"Answer with text"}
+              </div>
+            </div>
+
             <div className="flex m-auto items-center">
               <input
                 onChange={(e) => setCodeCheckbox(!codeCheckbox)}
@@ -374,18 +394,6 @@ const CreateQuestion = () => {
               />
               <div className="text-md font-medium leading-tight text-gray-700 font-mono">
                 {"Attach question code"}
-              </div>
-            </div>
-            <div className="flex m-auto items-center">
-              <input
-                onChange={(e) => setVariantCheckbox(!variantCheckbox)}
-                type={"checkbox"}
-                className="w-4 h-4 mr-4 pt-2"
-                checked={variantCheckbox}
-                disabled={!codeSolutionCheckbox}
-              />
-              <div className="text-md font-medium leading-tight text-gray-700 font-mono">
-                {"Answer with text"}
               </div>
             </div>
           </div>

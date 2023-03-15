@@ -32,7 +32,6 @@ const AnswerQuestion = () => {
     state.questions.questions.filter((q) => {
       if (courses[subject]) {
         const values = courses[subject].map((v) => v.value);
-        console.log(values);
         return values.includes(q.subject);
       }
       return q.subject === subject;

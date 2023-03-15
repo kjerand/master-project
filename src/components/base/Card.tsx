@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
@@ -14,10 +14,23 @@ const Card = ({
   goBack?: Function;
   skip?: Function;
 }) => {
+  const [windowWidth, setWidth] = useState<number>(window.innerWidth);
+
+  function handleWindowSizeChange() {
+    setWidth(window.innerWidth);
+  }
+  useEffect(() => {
+    window.addEventListener("resize", handleWindowSizeChange);
+    return () => {
+      window.removeEventListener("resize", handleWindowSizeChange);
+    };
+  }, []);
+
+  const isMobile = windowWidth <= 768;
   return (
     <div
       className={`py-4 relative px-8 bg-white shadow-lg rounded-lg my-3 ${
-        width ? width : "w-1/2"
+        isMobile ? "w-full" : width ? width : "w-1/2"
       }`}
     >
       {goBack && (

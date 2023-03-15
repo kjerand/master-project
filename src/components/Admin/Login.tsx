@@ -35,7 +35,7 @@ const Login = () => {
     <Container>
       <Card width="w-1/3" goBack={() => navigate(ROUTES.menu.path)}>
         <Header title="Login" size="text-2xl" />
-        <div className="m-auto mt-10 grid-cols-1 w-1/2 mb-4">
+        <div className="m-auto mt-10 grid-cols-1 w-1/2 mb-3">
           <div className="w-full">
             <h3 className="font-medium font-mono leading-tight text-base text-gray-700">
               User:
@@ -66,7 +66,7 @@ const Login = () => {
           />
         </div>
         <p
-          className={`font-mono text-center text-red-700 ${
+          className={`font-mono text-sm text-center text-red-700 ${
             message === "" && "text-opacity-0"
           }`}
         >

@@ -20,7 +20,7 @@ const QuestionBank = () => {
       {questionList.questions.length === 0 ? (
         <Empty goBack={() => navigate(ROUTES.admin.path)} />
       ) : (
-        <Card width="w-3/4" goBack={() => navigate(ROUTES.admin.path)}>
+        <Card width="w-1/2" goBack={() => navigate(ROUTES.admin.path)}>
           <Header title="Question bank" size="text-3xl" />
 
           <QuestionDetails

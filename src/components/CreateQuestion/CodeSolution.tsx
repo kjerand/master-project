@@ -188,7 +188,7 @@ const CodeSolution = ({
 
   return (
     <div className="mb-4">
-      <div className="overlay rounded-md w-3/4 h-full shadow-4xl m-auto">
+      <div className="overlay rounded-md w-4/5 h-full shadow-4xl m-auto">
         <Editor
           height="60vh"
           width={`100%`}
@@ -205,7 +205,7 @@ const CodeSolution = ({
           onClick={() => {
             handleCompile();
           }}
-          className="bg-blue-700 hover:bg-blue-600 px-3 my-2"
+          className="bg-blue-700 hover:bg-blue-600 px-2 my-2 text-sm"
         />
 
         <Button
@@ -213,7 +213,7 @@ const CodeSolution = ({
           onClick={() => {
             handleEditorChange(generateInitialValue());
           }}
-          className="bg-gray-800 hover:bg-gray-700 px-3 my-2 ml-4"
+          className="bg-gray-800 hover:bg-gray-700 px-2 my-2 ml-4 text-sm"
         />
       </div>
       {(exampleSolutionVariableNames.length > 0 || outputDetails !== null) && (
