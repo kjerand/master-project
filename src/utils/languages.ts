@@ -18,6 +18,7 @@ export const languages: Language[] = [
     label: "JavaScript (Node.js 12.14.0)",
     value: "javascript",
   },
+  /*
   {
     id: 70,
     name: "Python (2.7.17)",
@@ -29,5 +30,5 @@ export const languages: Language[] = [
     name: "Java (OpenJDK 13.0.1)",
     label: "Java (OpenJDK 13.0.1)",
     value: "java",
-  },
+  },*/
 ];

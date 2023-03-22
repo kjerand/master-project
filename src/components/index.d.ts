@@ -1,3 +1,26 @@
+type UsageData = {
+  id?: string;
+  timestamp: string;
+  type: string;
+  userID: string;
+  questionID: string;
+  code?: string;
+  subject: string;
+  variant: string;
+};
+
+type Question = {
+  id?: string;
+  questionBody: string;
+  solutionBody: string;
+  textSolution: string;
+  initialCode?: string;
+  codeSolution: string;
+  title: string;
+  variant: "code" | "text";
+  subject: string;
+};
+
 type IntegerVariable = {
   min: number;
   max: number;

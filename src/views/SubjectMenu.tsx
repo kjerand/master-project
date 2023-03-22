@@ -11,10 +11,6 @@ import { courses } from "../utils/courses";
 
 const SubjectMenu = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  useEffect(() => {
-    initDatabase().then((questions) => dispatch(setQuestions(questions)));
-  }, []);
 
   return (
     <Container>

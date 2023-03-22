@@ -1,12 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from "uuid";
 
 export interface AdminState {
   admin: boolean;
+  userID: string;
 }
 
 const initialState: AdminState = {
   admin: false,
+  userID: uuidv4(),
 };
 
 export const adminSlice = createSlice({

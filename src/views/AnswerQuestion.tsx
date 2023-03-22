@@ -18,6 +18,7 @@ import Empty from "../components/base/Empty";
 import { useNavigate, useParams } from "react-router-dom";
 import ROUTES from "../ROUTES";
 import { courses } from "../utils/courses";
+import { uploadUsageData } from "../database/usage";
 
 const AnswerQuestion = () => {
   const { subject } = useParams();
@@ -27,6 +28,7 @@ const AnswerQuestion = () => {
   const [language, setLanguage] = useState<Language>(languages[0]);
   const [outputDetails, setOutputDetails] = useState(null);
   const [answerEvaluation, setAnswerEvaluation] = useState<number>(0);
+  const userID = useSelector((state: RootState) => state.admin.userID);
 
   const questionList = useSelector((state: RootState) =>
     state.questions.questions.filter((q) => {
@@ -89,6 +91,11 @@ const AnswerQuestion = () => {
     return false;
   };
 
+  const handleCompileClick = async () => {
+    handleCompile();
+    await uploadActionData("compile");
+  };
+
   const handleCompile = (
     submission: boolean = false,
     loadingSolution: boolean = false
@@ -138,9 +145,12 @@ const AnswerQuestion = () => {
       });
   };
 
-  const handleSubmit = () => handleCompile(true, false);
+  const handleSubmitClick = async () => {
+    handleCompile(true, false);
+    await uploadActionData("submit");
+  };
 
-  const evaluateSubmission = (outputData) => {
+  const evaluateSubmission = async (outputData) => {
     if (outputData?.stdout !== null) {
       let output = decode(outputData.stdout)
         .replace(/ /g, "")
@@ -153,10 +163,12 @@ const AnswerQuestion = () => {
 
       if (output === solution) {
         setAnswerEvaluation(1);
+        await uploadActionData("correct");
         return;
       }
     }
     setAnswerEvaluation(2);
+    await uploadActionData("wrong");
   };
 
   const checkStatus = async (token, submission, loadingSolution) => {
@@ -251,11 +263,26 @@ const AnswerQuestion = () => {
     setLanguage(sl);
   };
 
-  const nextQuestion = () => {
-    setTaskIndex(Math.floor(Math.random() * questionList.length));
+  const nextQuestion = async () => {
+    const newTaskIndex = Math.floor(Math.random() * questionList.length);
+    setTaskIndex(newTaskIndex);
     setAnswerEvaluation(0);
-    setLoading(true);
+    await uploadActionData("load");
   };
+
+  const skipQuestion = async () => {
+    await uploadActionData("skip");
+    nextQuestion();
+  };
+
+  const uploadActionData = async (type: string) =>
+    await uploadUsageData(
+      type,
+      userID,
+      questionList[taskIndex].id,
+      questionList[taskIndex].subject,
+      questionList[taskIndex].variant
+    );
 
   const variant = () => {
     if (questionList.length > 0 && theme) {
@@ -274,8 +301,8 @@ const AnswerQuestion = () => {
                   initialCode={questionList[taskIndex].initialCode}
                 />
                 <Sidebar
-                  handleSubmit={handleSubmit}
-                  handleCompile={handleCompile}
+                  handleSubmit={handleSubmitClick}
+                  handleCompile={handleCompileClick}
                   evaluation={answerEvaluation}
                   processing={processing}
                   processingSubmit={processingSubmit}
@@ -308,6 +335,7 @@ const AnswerQuestion = () => {
               answerEvaluation={answerEvaluation}
               setAnswerEvaluation={setAnswerEvaluation}
               questionList={questionList}
+              uploadActionData={uploadActionData}
             />
           );
       }
@@ -324,7 +352,7 @@ const AnswerQuestion = () => {
             questionList[taskIndex].variant === "code" ? "w-3/4" : "w-1/2"
           }`}
           goBack={() => navigate(ROUTES.menu.path)}
-          skip={() => (!loading ? nextQuestion() : undefined)}
+          skip={() => (!loading ? skipQuestion() : undefined)}
         >
           {variant()}
         </Card>

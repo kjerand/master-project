@@ -21,7 +21,7 @@ import { generateStringVariable } from "../utils/generateStringVariable";
 import { generateDecimalVariable } from "../utils/generateDecimalVariable";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { addQuestions, Question } from "../store/questions";
+import { addQuestions } from "../store/questions";
 import { useNavigate } from "react-router-dom";
 import ROUTES from "../ROUTES";
 import CodeEditor from "../components/AnswerQuestion/CodeEditor";

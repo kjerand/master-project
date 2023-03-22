@@ -12,14 +12,15 @@ const DropdownBar = ({
 }) => {
   return (
     <div className="flex mt-3">
-      <QuestionDropdown
+      {/* <QuestionDropdown
         taskIndex={taskIndex}
         setTaskIndex={setTaskIndex}
         className="w-1/4"
         questionList={questionList}
       />
+       <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />*/}
+
       <LanguagesDropdown onSelectChange={onSelectChange} />
-      <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />
     </div>
   );
 };

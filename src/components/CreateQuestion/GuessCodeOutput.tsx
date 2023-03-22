@@ -1,6 +1,5 @@
 import Editor from "@monaco-editor/react";
 import { useEffect, useState } from "react";
-import { Question } from "../../store/questions";
 import Button from "../base/Button";
 import Header from "../base/Header";
 import DisplayQuestion from "../AnswerQuestion/DisplayQuestion";
@@ -19,6 +18,7 @@ const GuessCodeOutput = ({
   answerEvaluation,
   setAnswerEvaluation,
   questionList,
+  uploadActionData,
 }: {
   solution: string;
   question: Question;
@@ -31,12 +31,18 @@ const GuessCodeOutput = ({
   answerEvaluation: number;
   setAnswerEvaluation: Function;
   questionList: Question[];
+  uploadActionData: Function;
 }) => {
   const [answer, setAnswer] = useState<string>("");
 
-  const evaluate = () => {
-    if (answer.trim() == solution.trim()) setAnswerEvaluation(1);
-    else setAnswerEvaluation(2);
+  const evaluate = async () => {
+    if (answer.trim() == solution.trim()) {
+      await uploadActionData("correct");
+      setAnswerEvaluation(1);
+    } else {
+      await uploadActionData("wrong");
+      setAnswerEvaluation(2);
+    }
   };
 
   useEffect(() => setAnswer(""), [taskIndex]);
@@ -56,12 +62,13 @@ const GuessCodeOutput = ({
           options={{ readOnly: true }}
         />
       </div>
-      <QuestionDropdown
+      {/*    <QuestionDropdown
         questionList={questionList}
         taskIndex={taskIndex}
         setTaskIndex={setTaskIndex}
         className="w-full my-2"
-      />
+  />*/}
+
       <div className="grid grid-cols-2 my-4">
         <div className="w-full flex m-auto">
           <input

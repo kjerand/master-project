@@ -6,7 +6,7 @@ import Header from "../base/Header";
 import DisplayQuestion from "../AnswerQuestion/DisplayQuestion";
 import QuestionDropdown from "../AnswerQuestion/QuestionDropdown";
 
-import { addQuestion, deleteQuestion, Question } from "../../store/questions";
+import { addQuestion, deleteQuestion } from "../../store/questions";
 import { removeQuestion } from "../../database/questions";
 
 const QuestionDetails = ({

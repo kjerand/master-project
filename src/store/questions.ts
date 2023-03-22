@@ -1,18 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export type Question = {
-  id?: string;
-  questionBody: string;
-  solutionBody: string;
-  textSolution: string;
-  initialCode?: string;
-  codeSolution: string;
-  title: string;
-  variant: "code" | "text";
-  subject: string;
-};
-
 export interface QuestionState {
   questions: Question[];
 }

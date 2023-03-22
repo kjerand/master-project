@@ -1,8 +1,5 @@
 const courses = {
-  IDATT2104: [
-    { label: "General questions", value: "general" },
-    { label: "Functional algorithms", value: "functional" },
-  ],
+  IDATT2104: [{ label: "General questions", value: "general" }],
   DCST1007: [{ label: "Classes", value: "classes" }],
 };
 

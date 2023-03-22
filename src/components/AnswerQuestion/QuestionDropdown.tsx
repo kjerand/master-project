@@ -1,7 +1,4 @@
-import { useSelector } from "react-redux";
 import Select from "react-select";
-import { Question } from "../../store/questions";
-import { RootState } from "../../store/store";
 
 const QuestionDropdown = ({
   questionList,
