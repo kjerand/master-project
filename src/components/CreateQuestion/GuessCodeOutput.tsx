@@ -37,11 +37,11 @@ const GuessCodeOutput = ({
 
   const evaluate = async () => {
     if (answer.trim() == solution.trim()) {
-      await uploadActionData("correct");
       setAnswerEvaluation(1);
+      await uploadActionData("correct");
     } else {
-      await uploadActionData("wrong");
       setAnswerEvaluation(2);
+      await uploadActionData("wrong");
     }
   };
 

@@ -8,9 +8,12 @@ import Container from "../components/base/Container";
 import Header from "../components/base/Header";
 import { initDatabase } from "../database/database";
 import { courses } from "../utils/courses";
+import useMobile from "../utils/useMobile";
 
 const SubjectMenu = () => {
   const navigate = useNavigate();
+
+  const isMobile: boolean = useMobile() <= 750;
 
   return (
     <Container>
@@ -27,7 +30,9 @@ const SubjectMenu = () => {
                   onClick={() => {
                     navigate("subjects/" + key);
                   }}
-                  className="bg-[#00509e] hover:bg-blue-700 w-1/3"
+                  className={`bg-[#00509e] hover:bg-blue-700 ${
+                    isMobile ? "w-4/5" : "w-2/5"
+                  }`}
                 />
                 {courses[key].map((subject) => {
                   return (
@@ -37,7 +42,9 @@ const SubjectMenu = () => {
                       onClick={() => {
                         navigate("subjects/" + subject.value);
                       }}
-                      className="bg-[#00509e] hover:bg-blue-700 w-1/3 col-span-1"
+                      className={`bg-[#00509e] hover:bg-blue-700 col-span-1 ${
+                        isMobile ? "w-4/5" : "w-2/5"
+                      }`}
                     />
                   );
                 })}

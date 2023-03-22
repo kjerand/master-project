@@ -243,9 +243,9 @@ const CreateQuestion = () => {
         >
           <Header title="Genererate variants of question" size="text-2xl" />
 
-          <div className="my-8 grid grid-cols-5 w-full gap-5">
-            <div className="flex col-span-2">
-              <h3 className="font-medium font-mono leading-tight text-base text-gray-700 mr-3 my-auto">
+          <div className="my-8 grid grid-cols-12 w-full gap-3">
+            <div className="flex col-span-4">
+              <h3 className="font-medium font-mono leading-tight text-base text-gray-700 mr-2 my-auto">
                 Title:
               </h3>
               <input
@@ -259,8 +259,8 @@ const CreateQuestion = () => {
                 required
               />
             </div>
-            <div className="flex">
-              <h3 className="font-base font-mono leading-tight text-base text-gray-700 mr-3 my-auto">
+            <div className="flex col-span-3">
+              <h3 className="font-base font-mono leading-tight text-base text-gray-700 mr-2 my-auto">
                 Variants:
               </h3>
               <input
@@ -274,8 +274,8 @@ const CreateQuestion = () => {
                 required
               />
             </div>
-            <div className="flex col-span-2">
-              <h3 className="font-medium font-mono leading-tight text-base text-gray-700 mr-3 my-auto">
+            <div className="flex col-span-5">
+              <h3 className="font-medium font-mono leading-tight text-base text-gray-700 mr-2 my-auto">
                 Subject:
               </h3>
               <Select

@@ -263,23 +263,24 @@ const AnswerQuestion = () => {
     setLanguage(sl);
   };
 
-  const nextQuestion = async () => {
+  const nextQuestion = async (skip: boolean = false) => {
+    const prevQuestionID = questionList[taskIndex].id;
     const newTaskIndex = Math.floor(Math.random() * questionList.length);
     setTaskIndex(newTaskIndex);
     setAnswerEvaluation(0);
+    if (skip) await uploadActionData("skip", prevQuestionID);
     await uploadActionData("load");
   };
 
   const skipQuestion = async () => {
-    await uploadActionData("skip");
-    nextQuestion();
+    nextQuestion(true);
   };
 
-  const uploadActionData = async (type: string) =>
+  const uploadActionData = async (type: string, questionID?: string) =>
     await uploadUsageData(
       type,
       userID,
-      questionList[taskIndex].id,
+      questionID ? questionID : questionList[taskIndex].id,
       questionList[taskIndex].subject,
       questionList[taskIndex].variant
     );
@@ -352,7 +353,8 @@ const AnswerQuestion = () => {
             questionList[taskIndex].variant === "code" ? "w-3/4" : "w-1/2"
           }`}
           goBack={() => navigate(ROUTES.menu.path)}
-          skip={() => (!loading ? skipQuestion() : undefined)}
+          skip={skipQuestion}
+          loading={loading}
         >
           {variant()}
         </Card>
