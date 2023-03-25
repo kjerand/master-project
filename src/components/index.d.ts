@@ -5,8 +5,6 @@ type UsageData = {
   userID: string;
   questionID: string;
   code?: string;
-  subject: string;
-  variant: string;
 };
 
 type Question = {

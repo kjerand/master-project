@@ -1,6 +1,8 @@
 const courses = {
+  TDT4900: [{ label: "General questions", value: "general" }],
+  /*
   IDATT2104: [{ label: "General questions", value: "general" }],
-  DCST1007: [{ label: "Classes", value: "classes" }],
+  DCST1007: [{ label: "Classes", value: "classes" }],*/
 };
 
 const getSubjects = () => {

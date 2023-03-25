@@ -45,11 +45,13 @@ const AnswerQuestion = () => {
   const [code, setCode] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
   const [questionSolution, setQuestionSolution] = useState<string>("");
+  const [firstLoad, setFirstLoad] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
+    console.log(questionList[taskIndex].id);
     if (questionList.length > 0) {
       setCode(questionList[taskIndex].initialCode);
       setOutputDetails(null);
@@ -163,12 +165,12 @@ const AnswerQuestion = () => {
 
       if (output === solution) {
         setAnswerEvaluation(1);
-        await uploadActionData("correct");
+        await uploadActionData("correct", questionList[taskIndex].id, code);
         return;
       }
     }
     setAnswerEvaluation(2);
-    await uploadActionData("wrong");
+    await uploadActionData("wrong", questionList[taskIndex].id, code);
   };
 
   const checkStatus = async (token, submission, loadingSolution) => {
@@ -269,20 +271,27 @@ const AnswerQuestion = () => {
     setTaskIndex(newTaskIndex);
     setAnswerEvaluation(0);
     if (skip) await uploadActionData("skip", prevQuestionID);
-    await uploadActionData("load");
+    await uploadActionData("load", questionList[newTaskIndex].id);
   };
 
   const skipQuestion = async () => {
     nextQuestion(true);
   };
 
-  const uploadActionData = async (type: string, questionID?: string) =>
+  useEffect(() => {
+    uploadActionData("load");
+  }, []);
+
+  const uploadActionData = async (
+    type: string,
+    questionID?: string,
+    code?: string
+  ) =>
     await uploadUsageData(
       type,
       userID,
       questionID ? questionID : questionList[taskIndex].id,
-      questionList[taskIndex].subject,
-      questionList[taskIndex].variant
+      code
     );
 
   const variant = () => {

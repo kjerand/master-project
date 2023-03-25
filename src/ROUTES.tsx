@@ -6,6 +6,7 @@ import Menu from "./components/Admin/AdminMenu";
 import QuestionBank from "./views/QuestionBank";
 import SubjectMenu from "./views/SubjectMenu";
 import Admin from "./views/Admin";
+import UserLogin from "./components/Admin/UserLogin";
 
 const prefix = "/master-project";
 const ROUTES = {
@@ -33,6 +34,11 @@ const ROUTES = {
     exact: true,
     path: prefix + "/admin",
     element: <Admin />,
+  },
+  userLogin: {
+    exact: false,
+    path: prefix + "/",
+    element: <UserLogin />,
   },
 };
 

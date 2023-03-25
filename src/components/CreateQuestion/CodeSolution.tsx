@@ -175,9 +175,14 @@ const CodeSolution = ({
   const generateInitialValue = (): string => {
     let val = "function solution(";
     for (let variable of variables) {
-      if (variable.type === "str") val += variable.name + ": string, ";
-      else if (variable.type === "int") val += variable.name + ": number, ";
-      else if (variable.type === "int[]") val += variable.name + ": number[], ";
+      if (language.value === "typescript") {
+        if (variable.type === "str") val += variable.name + ": string, ";
+        else if (variable.type === "int") val += variable.name + ": number, ";
+        else if (variable.type === "int[]")
+          val += variable.name + ": number[], ";
+      } else if (language.value === "javascript") {
+        val += variable.name + ", ";
+      }
     }
     if (variables.length > 0) val = val.substring(0, val.length - 2);
 

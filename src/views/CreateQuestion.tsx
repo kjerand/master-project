@@ -38,6 +38,7 @@ import AddIntegerListVariable from "../components/CreateQuestion/AddIntegerListV
 import { generateIntegerListVariable } from "../utils/generateIntegerListVariable";
 import { createQuestions } from "../database/questions";
 import { courses, getSubjects } from "../utils/courses";
+import LanguagesDropdown from "../components/AnswerQuestion/LanguagesDropdown";
 const options = [
   "Add variable",
   "Text",
@@ -399,13 +400,18 @@ const CreateQuestion = () => {
           </div>
 
           {theme && codeSolutionCheckbox && (
-            <CodeSolution
-              code={code}
-              theme={theme.value}
-              language={language}
-              onChange={onChange}
-              variables={variables}
-            />
+            <>
+              <div className="mb-4">
+                <LanguagesDropdown onSelectChange={setLanguage} />
+              </div>
+              <CodeSolution
+                code={code}
+                theme={theme.value}
+                language={language}
+                onChange={onChange}
+                variables={variables}
+              />
+            </>
           )}
 
           <Button

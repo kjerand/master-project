@@ -20,6 +20,8 @@ const cosmosClient = new CosmosClient({ endpoint, key });
 const initDatabase = async () => {
   const database = await cosmosClient.database(databaseName);
 
+  //database.container(usageDataContainerName).delete();
+
   const { container } = await database.containers.createIfNotExists({
     id: usageDataContainerName,
     partitionKey: {

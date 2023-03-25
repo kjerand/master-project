@@ -4,8 +4,6 @@ const uploadUsageData = async (
   actionType: string,
   userID: string,
   questionID: string,
-  subject: string,
-  variant: string,
   code?: string
 ) => {
   var d = new Date();
@@ -15,8 +13,6 @@ const uploadUsageData = async (
     questionID: questionID,
     timestamp: d.toLocaleString(),
     code: code,
-    variant: variant,
-    subject: subject,
   };
 
   const database = await cosmosClient.database(databaseName);
