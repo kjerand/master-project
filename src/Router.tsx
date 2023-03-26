@@ -23,26 +23,30 @@ const Router = () => {
     if (!experimentMode) dispatch(setUserID(uuidv4()));
   }, []);
 
+  if (experimentMode && userID === "") {
+    return (
+      <BrowserRouter>
+        <Routes>
+          <Route {...ROUTES.userLogin} />
+        </Routes>
+      </BrowserRouter>
+    );
+  }
+
   return (
     <BrowserRouter>
       <NavBar />
 
       <Routes>
-        {experimentMode && userID === "" ? (
-          <Route {...ROUTES.userLogin} />
-        ) : (
+        {admin && (
           <>
-            {admin && (
-              <>
-                <Route {...ROUTES.create} />
-                <Route {...ROUTES.questionBank} />
-              </>
-            )}
-            <Route {...ROUTES.menu} />
-            <Route {...ROUTES.submitCode} />
-            <Route {...ROUTES.admin} />
+            <Route {...ROUTES.create} />
+            <Route {...ROUTES.questionBank} />
           </>
         )}
+        <Route {...ROUTES.menu} />
+        <Route {...ROUTES.submitCode} />
+        <Route {...ROUTES.admin} />
       </Routes>
     </BrowserRouter>
   );

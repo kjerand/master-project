@@ -29,8 +29,8 @@ const UserLogin = () => {
     }
   };
   return (
-    <Container>
-      <Card width="w-1/3">
+    <div className="flex justify-center h-screen items-center">
+      <Card width="w-1/3 my-auto items-center">
         <Header title="Login" size="text-2xl" />
         <div className="m-auto mt-10 grid-cols-1 w-1/2 mb-3">
           <h3 className="font-base font-mono leading-tight text-base text-gray-700 mt-2">
@@ -60,7 +60,7 @@ const UserLogin = () => {
           {message === "" ? "-" : message}
         </p>
       </Card>
-    </Container>
+    </div>
   );
 };
 

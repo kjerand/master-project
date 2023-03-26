@@ -8,7 +8,7 @@ const uploadUsageData = async (
 ) => {
   var d = new Date();
   const data: UsageData = {
-    type: actionType,
+    action: actionType,
     userID: userID,
     questionID: questionID,
     timestamp: d.toLocaleString(),

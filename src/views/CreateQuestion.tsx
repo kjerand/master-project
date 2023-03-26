@@ -39,6 +39,8 @@ import { generateIntegerListVariable } from "../utils/generateIntegerListVariabl
 import { createQuestions } from "../database/questions";
 import { courses, getSubjects } from "../utils/courses";
 import LanguagesDropdown from "../components/AnswerQuestion/LanguagesDropdown";
+import { v4 as uuidv4 } from "uuid";
+
 const options = [
   "Add variable",
   "Text",
@@ -106,6 +108,7 @@ const CreateQuestion = () => {
   };
 
   const generate = async (currentState: EditorState) => {
+    const questionVariantID = uuidv4();
     for (let i = 0; i < numberOfTasks; i++) {
       let values = [];
       let types: ("str" | "num" | "num[]")[] = [];
@@ -166,6 +169,7 @@ const CreateQuestion = () => {
         title: title,
         variant: variant,
         subject: subject,
+        questionVariantID: questionVariantID,
       });
     }
 

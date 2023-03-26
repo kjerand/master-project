@@ -1,5 +1,9 @@
 const courses = {
-  TDT4900: [{ label: "General questions", value: "general" }],
+  TDT4900: [
+    { label: "Easy", value: "easy" },
+    { label: "Medium", value: "medium" },
+    { label: "Hard", value: "hard" },
+  ],
   /*
   IDATT2104: [{ label: "General questions", value: "general" }],
   DCST1007: [{ label: "Classes", value: "classes" }],*/

@@ -45,21 +45,22 @@ const AnswerQuestion = () => {
   const [code, setCode] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
   const [questionSolution, setQuestionSolution] = useState<string>("");
-  const [firstLoad, setFirstLoad] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
-    console.log(questionList[taskIndex].id);
+
     if (questionList.length > 0) {
       setCode(questionList[taskIndex].initialCode);
       setOutputDetails(null);
       setAnswerEvaluation(0);
-
+      console.log(questionList[taskIndex].codeSolution);
       if (questionList[taskIndex].codeSolution !== "") {
+        console.log("GAKLLs");
         handleCompile(false, true);
       } else {
+        console.log("GAKLL");
         setQuestionSolution(questionList[taskIndex].textSolution);
         setLoading(false);
       }
@@ -153,6 +154,7 @@ const AnswerQuestion = () => {
   };
 
   const evaluateSubmission = async (outputData) => {
+    console.log(questionSolution);
     if (outputData?.stdout !== null) {
       let output = decode(outputData.stdout)
         .replace(/ /g, "")
@@ -267,7 +269,9 @@ const AnswerQuestion = () => {
 
   const nextQuestion = async (skip: boolean = false) => {
     const prevQuestionID = questionList[taskIndex].id;
-    const newTaskIndex = Math.floor(Math.random() * questionList.length);
+    let newTaskIndex = Math.floor(Math.random() * questionList.length);
+    while (newTaskIndex === taskIndex)
+      newTaskIndex = Math.floor(Math.random() * questionList.length);
     setTaskIndex(newTaskIndex);
     setAnswerEvaluation(0);
     if (skip) await uploadActionData("skip", prevQuestionID);

@@ -1,7 +1,7 @@
 type UsageData = {
   id?: string;
   timestamp: string;
-  type: string;
+  action: string;
   userID: string;
   questionID: string;
   code?: string;
@@ -17,6 +17,7 @@ type Question = {
   title: string;
   variant: "code" | "text";
   subject: string;
+  questionVariantID: string;
 };
 
 type IntegerVariable = {
