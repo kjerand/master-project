@@ -1,8 +1,8 @@
 const courses = {
-  TDT4900: [
-    { label: "Easy", value: "easy" },
-    { label: "Medium", value: "medium" },
-    { label: "Hard", value: "hard" },
+  "functional-methods": [
+    { label: "filter", value: "filter" },
+    { label: "reduce", value: "reduce" },
+    { label: "map", value: "map" },
   ],
   /*
   IDATT2104: [{ label: "General questions", value: "general" }],

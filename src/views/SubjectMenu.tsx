@@ -18,7 +18,7 @@ const SubjectMenu = () => {
   return (
     <Container>
       <Card>
-        <Header title="Main menu" size="text-3xl" />
+        <Header title="Menu" size="text-3xl" />
 
         <div className="grid-cols-1 gap-y-5 mt-8 mb-4">
           {Object.keys(courses).map((key, index) => {
@@ -30,8 +30,8 @@ const SubjectMenu = () => {
                   onClick={() => {
                     navigate("subjects/" + key);
                   }}
-                  className={`bg-[#00509e] hover:bg-blue-700 ${
-                    isMobile ? "w-4/5" : "w-2/5"
+                  className={`bg-blue-900 hover:bg-blue-700 ${
+                    isMobile ? "w-4/5" : "w-1/2"
                   }`}
                 />
                 {courses[key].map((subject) => {
@@ -43,7 +43,7 @@ const SubjectMenu = () => {
                         navigate("subjects/" + subject.value);
                       }}
                       className={`bg-[#00509e] hover:bg-blue-700 col-span-1 ${
-                        isMobile ? "w-4/5" : "w-2/5"
+                        isMobile ? "w-4/5" : "w-1/2"
                       }`}
                     />
                   );

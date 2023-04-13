@@ -46,21 +46,29 @@ const AnswerQuestion = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [questionSolution, setQuestionSolution] = useState<string>("");
 
+  const [time, setTime] = useState(0);
+
+  useEffect(() => {
+    let intervalId;
+    intervalId = setInterval(() => setTime(time + 1), 1000);
+
+    return () => clearInterval(intervalId);
+  }, [time]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
+    setTime(0);
 
     if (questionList.length > 0) {
       setCode(questionList[taskIndex].initialCode);
       setOutputDetails(null);
       setAnswerEvaluation(0);
-      console.log(questionList[taskIndex].codeSolution);
+
       if (questionList[taskIndex].codeSolution !== "") {
-        console.log("GAKLLs");
         handleCompile(false, true);
       } else {
-        console.log("GAKLL");
         setQuestionSolution(questionList[taskIndex].textSolution);
         setLoading(false);
       }
@@ -70,6 +78,10 @@ const AnswerQuestion = () => {
   const onChange = (data) => {
     setCode(data);
   };
+
+  useEffect(() => {
+    uploadActionData("load");
+  }, []);
 
   useEffect(() => {
     defineTheme("brilliance-black").then((_) =>
@@ -119,9 +131,10 @@ const AnswerQuestion = () => {
     } else if (!submission && !loadingSolution) setProcessing(true);
 
     const formData = {
-      language_id: language.id,
+      language_id: questionList[taskIndex].languageID,
       source_code: encode(compilecode),
     };
+
     const options = {
       method: "POST",
       url: "https://judge0-ce.p.rapidapi.com/submissions",
@@ -154,7 +167,6 @@ const AnswerQuestion = () => {
   };
 
   const evaluateSubmission = async (outputData) => {
-    console.log(questionSolution);
     if (outputData?.stdout !== null) {
       let output = decode(outputData.stdout)
         .replace(/ /g, "")
@@ -282,10 +294,6 @@ const AnswerQuestion = () => {
     nextQuestion(true);
   };
 
-  useEffect(() => {
-    uploadActionData("load");
-  }, []);
-
   const uploadActionData = async (
     type: string,
     questionID?: string,
@@ -295,6 +303,7 @@ const AnswerQuestion = () => {
       type,
       userID,
       questionID ? questionID : questionList[taskIndex].id,
+      type === "load" ? 0 : time,
       code
     );
 
@@ -363,7 +372,7 @@ const AnswerQuestion = () => {
       ) : (
         <Card
           width={`${
-            questionList[taskIndex].variant === "code" ? "w-3/4" : "w-1/2"
+            questionList[taskIndex].variant === "code" ? "w-4/5" : "w-3/5"
           }`}
           goBack={() => navigate(ROUTES.menu.path)}
           skip={skipQuestion}

@@ -170,6 +170,7 @@ const CreateQuestion = () => {
         variant: variant,
         subject: subject,
         questionVariantID: questionVariantID,
+        languageID: language.id,
       });
     }
 
@@ -239,14 +240,14 @@ const CreateQuestion = () => {
 
   return (
     <Container>
-      <Card width="w-1/2" goBack={() => navigate(ROUTES.admin.path)}>
+      <Card width="w-2/3" goBack={() => navigate(ROUTES.admin.path)}>
         <form
           onSubmit={(event) => {
             event.preventDefault();
             if (submit) generate(solutionEditorState);
           }}
         >
-          <Header title="Genererate variants of question" size="text-2xl" />
+          <Header title="Generate variants of question" size="text-2xl" />
 
           <div className="my-8 grid grid-cols-12 w-full gap-3">
             <div className="flex col-span-4">

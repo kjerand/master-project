@@ -18,18 +18,4 @@ export const languages: Language[] = [
     label: "TypeScript (3.7.4)",
     value: "typescript",
   },
-
-  /*
-  {
-    id: 70,
-    name: "Python (2.7.17)",
-    label: "Python (2.7.17)",
-    value: "python",
-  },
-  {
-    id: 62,
-    name: "Java (OpenJDK 13.0.1)",
-    label: "Java (OpenJDK 13.0.1)",
-    value: "java",
-  },*/
 ];

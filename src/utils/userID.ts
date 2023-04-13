@@ -1,3 +1,3 @@
-const validID = ["5555588888", "4444466666"];
+const validID = ["10123", "10212"];
 
 export { validID };

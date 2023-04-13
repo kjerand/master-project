@@ -4,6 +4,7 @@ type UsageData = {
   action: string;
   userID: string;
   questionID: string;
+  timeUsed: number;
   code?: string;
 };
 
@@ -13,6 +14,7 @@ type Question = {
   solutionBody: string;
   textSolution: string;
   initialCode?: string;
+  languageID?: number;
   codeSolution: string;
   title: string;
   variant: "code" | "text";
