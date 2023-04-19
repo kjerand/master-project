@@ -1,8 +1,7 @@
 const courses = {
   "functional-methods": [
-    { label: "filter", value: "filter" },
-    { label: "reduce", value: "reduce" },
-    { label: "map", value: "map" },
+    { label: "Standard questions", value: "easy" },
+    { label: "Intermediate questions", value: "intermediate" },
   ],
   /*
   IDATT2104: [{ label: "General questions", value: "general" }],

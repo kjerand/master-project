@@ -316,13 +316,15 @@ const AnswerQuestion = () => {
               <Header title={questionList[taskIndex].title} size="text-2xl" />
               <DisplayQuestion question={questionList[taskIndex]} />
               <Container>
-                <CodeEditor
-                  code={code}
-                  theme={theme.value}
-                  language={language.value}
-                  onChange={onChange}
-                  initialCode={questionList[taskIndex].initialCode}
-                />
+                <div className="w-9/12">
+                  <CodeEditor
+                    code={code}
+                    theme={theme.value}
+                    language={language.value}
+                    onChange={onChange}
+                    initialCode={questionList[taskIndex].initialCode}
+                  />
+                </div>
                 <Sidebar
                   handleSubmit={handleSubmitClick}
                   handleCompile={handleCompileClick}

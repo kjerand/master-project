@@ -25,7 +25,7 @@ const CodeEditor = ({
   return (
     <div className="overlay rounded-md w-full h-full shadow-4xl">
       <Editor
-        height="60vh"
+        height="55vh"
         width={`100%`}
         language={language || "typecript"}
         value={code}

@@ -9,6 +9,7 @@ import { generateStringVariable } from "../../utils/generateStringVariable";
 import { Language } from "../../utils/languages";
 import Button from "../base/Button";
 import Header from "../base/Header";
+import { sortVariableList } from "../../utils/sortVariableList";
 
 const CodeSolution = ({
   onChange,
@@ -38,7 +39,10 @@ const CodeSolution = ({
     let val = "\nconsole.log(solution(";
     let names = [];
     let values = [];
-    for (let variable of variables) {
+
+    let sortedVariables = sortVariableList(variables);
+
+    for (let variable of sortedVariables) {
       let value;
       if (variable.type === "str") {
         const data = variable.data as StringVariable;
@@ -74,6 +78,7 @@ const CodeSolution = ({
       language_id: language.id,
       source_code: encode(codeWithInput),
     };
+
     const options = {
       method: "POST",
       url: "https://judge0-ce.p.rapidapi.com/submissions",
@@ -174,7 +179,9 @@ const CodeSolution = ({
 
   const generateInitialValue = (): string => {
     let val = "function solution(";
-    for (let variable of variables) {
+    let sortedVariables = sortVariableList(variables);
+
+    for (let variable of sortedVariables) {
       if (language.value === "typescript") {
         if (variable.type === "str") val += variable.name + ": string, ";
         else if (variable.type === "int") val += variable.name + ": number, ";

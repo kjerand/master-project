@@ -40,6 +40,7 @@ import { createQuestions } from "../database/questions";
 import { courses, getSubjects } from "../utils/courses";
 import LanguagesDropdown from "../components/AnswerQuestion/LanguagesDropdown";
 import { v4 as uuidv4 } from "uuid";
+import { sortVariableList } from "../utils/sortVariableList";
 
 const options = [
   "Add variable",
@@ -109,6 +110,8 @@ const CreateQuestion = () => {
 
   const generate = async (currentState: EditorState) => {
     const questionVariantID = uuidv4();
+    let sortedVariables = sortVariableList(variables);
+
     for (let i = 0; i < numberOfTasks; i++) {
       let values = [];
       let types: ("str" | "num" | "num[]")[] = [];
@@ -116,7 +119,7 @@ const CreateQuestion = () => {
         currentState.getCurrentContent()
       );
 
-      for (let variable of variables) {
+      for (let variable of sortedVariables) {
         let value;
         let type;
         if (variable.type === "str") {

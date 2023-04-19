@@ -38,8 +38,9 @@ const ShowVariables = ({
   variables: Variable[];
   setVariables: Function;
 }) => {
-  const remove = (name: string) =>
+  const remove = (name: string) => {
     setVariables(variables.filter((v) => v.name !== name));
+  };
 
   return variables.length > 0 ? (
     <div className="grid w-full grid-cols-10 gap-4 my-5 m-auto bg-gray-100 rounded-md p-3">
