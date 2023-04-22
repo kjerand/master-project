@@ -52,7 +52,7 @@ const GuessCodeOutput = ({
       <DisplayQuestion question={question} />
       <div className="overlay rounded-md shadow-4xl">
         <Editor
-          height="50vh"
+          height="70vh"
           width={`100%`}
           language={language}
           value={question.codeSolution}
@@ -78,7 +78,7 @@ const GuessCodeOutput = ({
             className="w-2/3 border-gray-600 border p-2 mr-2 rounded font-mono"
           />
           <Button
-            text={`${answerEvaluation === 1 ? "Next stage" : "Submit"}`}
+            text={`${answerEvaluation === 1 ? "Next question" : "Submit"}`}
             onClick={() => {
               if (answerEvaluation === 1) nextStage();
               else evaluate();

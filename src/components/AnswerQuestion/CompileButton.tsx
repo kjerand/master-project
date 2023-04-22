@@ -34,7 +34,7 @@ const CompileButton = ({
           processingSubmit
             ? "Submitting..."
             : evaluation === 1
-            ? "Next stage"
+            ? "Next question"
             : "Submit"
         }
         onClick={() => {
