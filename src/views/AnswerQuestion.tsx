@@ -20,6 +20,8 @@ import ROUTES from "../ROUTES";
 import { courses } from "../utils/courses";
 import { uploadUsageData } from "../database/usage";
 
+const randomQuestion = true;
+
 const AnswerQuestion = () => {
   const { subject } = useParams();
   const [theme, setTheme] = useState<Theme>();
@@ -40,7 +42,7 @@ const AnswerQuestion = () => {
     })
   );
   const [taskIndex, setTaskIndex] = useState<number>(
-    Math.floor(Math.random() * questionList.length)
+    randomQuestion ? Math.floor(Math.random() * questionList.length) : 0
   );
   const [code, setCode] = useState<string>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -281,7 +283,9 @@ const AnswerQuestion = () => {
 
   const nextQuestion = async (skip: boolean = false) => {
     const prevQuestionID = questionList[taskIndex].id;
-    let newTaskIndex = Math.floor(Math.random() * questionList.length);
+    let newTaskIndex = randomQuestion
+      ? Math.floor(Math.random() * questionList.length)
+      : taskIndex + 1;
     while (newTaskIndex === taskIndex)
       newTaskIndex = Math.floor(Math.random() * questionList.length);
     setTaskIndex(newTaskIndex);
