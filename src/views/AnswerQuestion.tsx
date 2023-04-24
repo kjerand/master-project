@@ -52,14 +52,6 @@ const AnswerQuestion = () => {
   const [time, setTime] = useState(0);
 
   useEffect(() => {
-    console.log(questionSolution);
-  }, [questionSolution]);
-
-  useEffect(() => {
-    console.log(prevQuestionIndex);
-  }, [prevQuestionIndex]);
-
-  useEffect(() => {
     let intervalId;
     intervalId = setInterval(() => setTime(time + 1), 1000);
 
