@@ -10,7 +10,7 @@ import { setQuestions } from "./store/questions";
 import { fetchQuestions } from "./database/questions";
 import { v4 as uuidv4 } from "uuid";
 
-const experimentMode = false;
+const experimentMode = true;
 
 const Router = () => {
   const admin = useSelector((state: RootState) => state.admin.admin);

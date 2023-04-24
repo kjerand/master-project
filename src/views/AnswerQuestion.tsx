@@ -31,6 +31,7 @@ const AnswerQuestion = () => {
   const [outputDetails, setOutputDetails] = useState(null);
   const [answerEvaluation, setAnswerEvaluation] = useState<number>(0);
   const userID = useSelector((state: RootState) => state.admin.userID);
+  const [prevQuestionIndex, setPrevQuestionIndex] = useState<number[]>([]);
 
   const questionList = useSelector((state: RootState) =>
     state.questions.questions.filter((q) => {
@@ -41,7 +42,7 @@ const AnswerQuestion = () => {
       return q.subject === subject;
     })
   );
-  const [taskIndex, setTaskIndex] = useState<number>(
+  const [questionIndex, setQuestionIndex] = useState<number>(
     randomQuestion ? Math.floor(Math.random() * questionList.length) : 0
   );
   const [code, setCode] = useState<string>();
@@ -49,6 +50,14 @@ const AnswerQuestion = () => {
   const [questionSolution, setQuestionSolution] = useState<string>("");
 
   const [time, setTime] = useState(0);
+
+  useEffect(() => {
+    console.log(questionSolution);
+  }, [questionSolution]);
+
+  useEffect(() => {
+    console.log(prevQuestionIndex);
+  }, [prevQuestionIndex]);
 
   useEffect(() => {
     let intervalId;
@@ -64,28 +73,22 @@ const AnswerQuestion = () => {
     setTime(0);
 
     if (questionList.length > 0) {
-      setCode(questionList[taskIndex].initialCode);
+      setCode(questionList[questionIndex].initialCode);
       setOutputDetails(null);
       setAnswerEvaluation(0);
 
-      if (questionList[taskIndex].codeSolution !== "") {
+      if (questionList[questionIndex].codeSolution !== "") {
         handleCompile(false, true);
       } else {
-        setQuestionSolution(questionList[taskIndex].textSolution);
+        setQuestionSolution(questionList[questionIndex].textSolution);
         setLoading(false);
       }
     }
-  }, [taskIndex]);
-
-  const onChange = (data) => {
-    setCode(data);
-  };
+  }, [questionIndex]);
 
   useEffect(() => {
     uploadActionData("load");
-  }, []);
 
-  useEffect(() => {
     defineTheme("brilliance-black").then((_) =>
       setTheme({ value: "brilliance-black", label: "Brilliance Black" })
     );
@@ -123,7 +126,7 @@ const AnswerQuestion = () => {
     if (submission) if (checkIfPrintingSolution()) return;
 
     const compilecode = loadingSolution
-      ? questionList[taskIndex].codeSolution
+      ? questionList[questionIndex].codeSolution
       : code;
 
     setAnswerEvaluation(0);
@@ -133,7 +136,7 @@ const AnswerQuestion = () => {
     } else if (!submission && !loadingSolution) setProcessing(true);
 
     const formData = {
-      language_id: questionList[taskIndex].languageID,
+      language_id: questionList[questionIndex].languageID,
       source_code: encode(compilecode),
     };
 
@@ -181,12 +184,12 @@ const AnswerQuestion = () => {
 
       if (output === solution) {
         setAnswerEvaluation(1);
-        await uploadActionData("correct", questionList[taskIndex].id, code);
+        await uploadActionData("correct", questionList[questionIndex].id, code);
         return;
       }
     }
     setAnswerEvaluation(2);
-    await uploadActionData("wrong", questionList[taskIndex].id, code);
+    await uploadActionData("wrong", questionList[questionIndex].id, code);
   };
 
   const checkStatus = async (token, submission, loadingSolution) => {
@@ -282,16 +285,27 @@ const AnswerQuestion = () => {
   };
 
   const nextQuestion = async (skip: boolean = false) => {
-    const prevQuestionID = questionList[taskIndex].id;
-    let newTaskIndex = randomQuestion
+    setPrevQuestionIndex([...prevQuestionIndex, questionIndex]);
+
+    const prevQuestionID = questionList[questionIndex].id;
+    let newQuestionIndex = randomQuestion
       ? Math.floor(Math.random() * questionList.length)
-      : taskIndex + 1;
-    while (newTaskIndex === taskIndex)
-      newTaskIndex = Math.floor(Math.random() * questionList.length);
-    setTaskIndex(newTaskIndex);
+      : questionIndex + 1;
+    if (newQuestionIndex >= questionList.length) newQuestionIndex = 0;
+    var count = 0;
+    while (
+      (newQuestionIndex === questionIndex ||
+        prevQuestionIndex.includes(newQuestionIndex)) &&
+      count < 100
+    ) {
+      newQuestionIndex = Math.floor(Math.random() * questionList.length);
+      count++;
+    }
+
+    setQuestionIndex(newQuestionIndex);
     setAnswerEvaluation(0);
     if (skip) await uploadActionData("skip", prevQuestionID);
-    await uploadActionData("load", questionList[newTaskIndex].id);
+    await uploadActionData("load", questionList[newQuestionIndex].id);
   };
 
   const skipQuestion = async () => {
@@ -306,27 +320,30 @@ const AnswerQuestion = () => {
     await uploadUsageData(
       type,
       userID,
-      questionID ? questionID : questionList[taskIndex].id,
+      questionID ? questionID : questionList[questionIndex].id,
       type === "load" ? 0 : time,
       code
     );
 
   const variant = () => {
     if (questionList.length > 0 && theme) {
-      switch (questionList[taskIndex].variant) {
+      switch (questionList[questionIndex].variant) {
         case "code":
           return (
             <>
-              <Header title={questionList[taskIndex].title} size="text-2xl" />
-              <DisplayQuestion question={questionList[taskIndex]} />
+              <Header
+                title={questionList[questionIndex].title}
+                size="text-2xl"
+              />
+              <DisplayQuestion question={questionList[questionIndex]} />
               <Container>
                 <div className="w-9/12">
                   <CodeEditor
                     code={code}
                     theme={theme.value}
                     language={language.value}
-                    onChange={onChange}
-                    initialCode={questionList[taskIndex].initialCode}
+                    onChange={(data) => setCode(data)}
+                    initialCode={questionList[questionIndex].initialCode}
                   />
                 </div>
                 <Sidebar
@@ -344,8 +361,8 @@ const AnswerQuestion = () => {
                 handleThemeChange={handleThemeChange}
                 theme={theme}
                 onSelectChange={onSelectChange}
-                taskIndex={taskIndex}
-                setTaskIndex={setTaskIndex}
+                taskIndex={questionIndex}
+                setTaskIndex={setQuestionIndex}
                 questionList={questionList}
               />
             </>
@@ -354,12 +371,12 @@ const AnswerQuestion = () => {
           return (
             <GuessCodeOutput
               solution={questionSolution}
-              question={questionList[taskIndex]}
+              question={questionList[questionIndex]}
               theme={theme.value}
               language={language.value}
               nextStage={nextQuestion}
-              taskIndex={taskIndex}
-              setTaskIndex={setTaskIndex}
+              taskIndex={questionIndex}
+              setTaskIndex={setQuestionIndex}
               loading={loading}
               answerEvaluation={answerEvaluation}
               setAnswerEvaluation={setAnswerEvaluation}
@@ -378,7 +395,7 @@ const AnswerQuestion = () => {
       ) : (
         <Card
           width={`${
-            questionList[taskIndex].variant === "code" ? "w-4/5" : "w-3/5"
+            questionList[questionIndex].variant === "code" ? "w-4/5" : "w-3/5"
           }`}
           goBack={() => navigate(ROUTES.menu.path)}
           skip={skipQuestion}
