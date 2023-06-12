@@ -200,9 +200,9 @@ const CodeSolution = ({
 
   return (
     <div className="mb-4">
-      <div className="overlay rounded-md w-4/5 h-full shadow-4xl m-auto">
+      <div className="overlay rounded-md w-5/5 h-full shadow-4xl m-auto">
         <Editor
-          height="60vh"
+          height="35vh"
           width={`100%`}
           language={language.value || "typecript"}
           value={code}

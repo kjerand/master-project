@@ -128,7 +128,9 @@ const AnswerQuestion = () => {
     } else if (!submission && !loadingSolution) setProcessing(true);
 
     const formData = {
-      language_id: questionList[questionIndex].languageID,
+      language_id: loadingSolution
+        ? questionList[questionIndex].languageID
+        : language.id,
       source_code: encode(compilecode),
     };
 

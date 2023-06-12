@@ -243,7 +243,7 @@ const CreateQuestion = () => {
 
   return (
     <Container>
-      <Card width="w-2/3" goBack={() => navigate(ROUTES.admin.path)}>
+      <Card width="w-1/2" goBack={() => navigate(ROUTES.admin.path)}>
         <form
           onSubmit={(event) => {
             event.preventDefault();
@@ -316,7 +316,7 @@ const CreateQuestion = () => {
               />
             </div>
             {codeCheckbox && (
-              <div className="w-2/3 items-center m-auto bg-gray-100 p-3 rounded-md my-4 border-dashed border-2 border-gray-400">
+              <div className="w-3/3 items-center m-auto bg-gray-100 p-3 rounded-md my-4 border-dashed border-2 border-gray-400">
                 <Header title="Attached question code" size="text-lg" />
                 <Editor
                   editorState={codeEditorState}

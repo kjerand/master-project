@@ -33,7 +33,7 @@ const Login = () => {
   };
   return (
     <Container>
-      <Card width="w-1/3" goBack={() => navigate(ROUTES.menu.path)}>
+      <Card width="w-1/3">
         <Header title="Login" size="text-2xl" />
         <div className="m-auto mt-10 grid-cols-1 w-1/2 mb-3">
           <div className="w-full">

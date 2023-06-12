@@ -24,7 +24,7 @@ const AdminMenu = () => {
             onClick={() => {
               navigate(ROUTES.create.path);
             }}
-            className="bg-[#00509e] hover:bg-blue-700 w-1/3"
+            className="bg-[#00509e] hover:bg-blue-700 w-1/2"
           />
 
           <Button
@@ -32,7 +32,7 @@ const AdminMenu = () => {
             onClick={() => {
               navigate(ROUTES.questionBank.path);
             }}
-            className="bg-[#00509e] hover:bg-blue-700 w-1/3"
+            className="bg-[#00509e] hover:bg-blue-700 w-1/2"
           />
 
           <Button
@@ -40,7 +40,7 @@ const AdminMenu = () => {
             onClick={() => {
               dispatch(setAdmin(false));
             }}
-            className="bg-gray-700 hover:bg-gray-600 w-1/3"
+            className="bg-gray-700 hover:bg-gray-600 w-1/2"
           />
         </div>
       </Card>
